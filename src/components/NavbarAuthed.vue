@@ -16,7 +16,7 @@
           </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
-          <button class="btn btn-outline-light my-2 my-sm-0">Logout</button>
+          <button class="btn btn-outline-light my-2 my-sm-0" @click.prevent="logout">Logout</button>
         </form>
       </div>
       </nav>
@@ -24,16 +24,23 @@
 </template>
 
 <script>
-
+import Api from '@/router/api'
 export default {
   data () {
     return {
-      email: '',
-      password: ''
+
     }
   },
   methods: {
-
+    logout () {
+      Api().get('/logout').then((res) => {
+        if (res.data.success === 'yes') {
+          this.$router.push('/')
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
   }
 }
 </script>

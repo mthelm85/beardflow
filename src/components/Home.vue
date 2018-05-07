@@ -32,7 +32,27 @@
 </template>
 
 <script>
+import Api from '@/router/api'
 export default {
+  data () {
+    return {
+      email: '',
+      password: '',
+      confirmPass: ''
+    }
+  },
+  methods: {
+    signup () {
+      Api().post('/signup', {
+        'email': this.email,
+        'password': this.password
+      }).then((res) => {
+        console.log(res)
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
+  }
 }
 </script>
 

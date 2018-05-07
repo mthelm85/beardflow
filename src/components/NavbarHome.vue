@@ -15,7 +15,7 @@
             <router-link to="/about" class="nav-link">What is BeardFlow?</router-link>
           </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
+        <form class="form-inline my-2 my-lg-0" @submit.prevent="login">
           <input class="form-control mr-sm-2" v-model.trim="email" type="email" name="email" placeholder="E-mail" aria-label="E-mail">
           <input class="form-control mr-sm-2" v-model.trim="password" type="password" name="password" placeholder="Password" aria-label="Password">
           <button class="btn btn-outline-light my-2 my-sm-0">Login</button>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-
+import Api from '@/router/api'
 export default {
   data () {
     return {
@@ -35,7 +35,18 @@ export default {
     }
   },
   methods: {
-
+    login () {
+      Api().post('/login', {
+        email: this.email,
+        password: this.password
+      }).then((res) => {
+        console.log(res)
+        if (res.data.success === 'yes')
+          this.$router.push('/profile')
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
   }
 }
 </script>

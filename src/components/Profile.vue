@@ -43,7 +43,7 @@
       </div>
       <div class="col-3 mt-3">
         <div class="list-group">
-          <p class="list-group-item bg-dark text-white">Cool Beard Stuff</p>
+          <p class="list-group-item bg-dark text-white text-center">Cool Beard Stuff</p>
           <a href="#" class="list-group-item list-group-item-action">Face Analysis</a>
           <a href="#" class="list-group-item list-group-item-action">Beard Time Lapse</a>
           <a href="#" class="list-group-item list-group-item-action">Create/Store Recipes</a>
