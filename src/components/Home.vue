@@ -47,16 +47,23 @@ export default {
         'email': this.email,
         'password': this.password
       }).then((res) => {
-        console.log(res)
+        if (res.data.success === 'yes') {
+          this.$router.push('/profile')
+        } else {
+          this.signupError()
+        }
       }).catch((err) => {
         console.log(err)
-        this.$swal({
-          type: 'error',
-          title: 'Oops...',
-          text: 'We were unable to create your account. If you already have an account and have forgotten your password, contact us to reset it!',
-          confirmButtonClass: 'btn btn-dark',
-          buttonsStyling: false
-        })
+        this.signupError()
+      })
+    },
+    signupError () {
+      this.$swal({
+        type: 'error',
+        title: 'Oops...',
+        text: 'We were unable to create your account. If you already have an account and have forgotten your password, contact us to reset it!',
+        confirmButtonClass: 'btn btn-dark',
+        buttonsStyling: false
       })
     }
   },

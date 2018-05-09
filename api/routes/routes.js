@@ -65,7 +65,7 @@ module.exports = (app, passport, Post, User) => {
   app.get('/api/get-posts', (req, res) => {
     let today = new Date();
     today.setMonth(today.getMonth() -1);
-    Post.find({date: {$gt: today}}, (err, posts) => {
+    Post.find({date: {$gt: today}}, null, {sort: '-date'}, (err, posts) => {
       res.send(posts);
     });
   });

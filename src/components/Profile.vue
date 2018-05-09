@@ -15,9 +15,9 @@
           <a v-for="post in posts" :key="post.date" href="#" class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
               <h5 class="mb-1">{{ post.title }}</h5>
-              <small>{{ post.date }}</small>
+              <small>{{ post.date | relativeTime }}</small>
             </div>
-            <p class="mb-1">{{ `${post.text.substring(0, 70)}...` }}</p>
+            <p class="mb-1">{{ `${post.text.substring(0, 70).trim()}...` }}</p>
             <small>By {{ post.user }}</small>
           </a>
         </div>
@@ -39,6 +39,7 @@
 
 <script>
 import Api from '@/router/api'
+import Moment from 'moment'
 export default {
   data () {
     return {
@@ -57,6 +58,11 @@ export default {
       .catch((err) => {
         console.log(err)
       })
+  },
+  filters: {
+    relativeTime (date) {
+      return Moment(date).fromNow()
+    }
   }
 }
 </script>
