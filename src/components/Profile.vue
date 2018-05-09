@@ -12,29 +12,13 @@
       </div>
       <div class="col-6 mt-3">
         <div class="list-group list-group-flush">
-          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+          <a v-for="post in posts" :key="post.date" href="#" class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">My fav new beard balm recipe</h5>
-              <small>2 days ago</small>
+              <h5 class="mb-1">{{ post.title }}</h5>
+              <small>{{ post.date }}</small>
             </div>
-            <p class="mb-1">I've made a lot of different beard balms and waxes but this...</p>
-            <small>By BairdBeardsley</small>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">How to cut cheek lines</h5>
-              <small class="text-muted">3 days ago</small>
-            </div>
-            <p class="mb-1">You don't need to go to a professional barber to get perfect cheek lin...</p>
-            <small class="text-muted">By GOtee</small>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">Finally, a good homemade beard wash</h5>
-              <small class="text-muted">4 days ago</small>
-            </div>
-            <p class="mb-1">Beard washes/shampoos and conditioners can get costly...</p>
-            <small class="text-muted">By FuManchu</small>
+            <p class="mb-1">{{ `${post.text.substring(0, 70)}...` }}</p>
+            <small>By {{ post.user }}</small>
           </a>
         </div>
         <div class="card-footer">
@@ -54,7 +38,26 @@
 </template>
 
 <script>
+import Api from '@/router/api'
 export default {
+  data () {
+    return {
+      posts: []
+    }
+  },
+  created () {
+    Api().get('/get-posts')
+      .then((res) => {
+        let i = 0
+        for (i = 0; i < res.data.length; i++) {
+          this.posts.push(res.data[i])
+        }
+        console.log(this.posts)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
 }
 </script>
 
