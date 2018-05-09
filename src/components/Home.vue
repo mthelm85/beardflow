@@ -18,10 +18,10 @@
                 </div>
                 <div class="form-group text-center">
                   <label class="lead" for="confirmPass"><strong>Confirm Password</strong></label>
-                  <input type="password" class="form-control form-control-lg" id="confirmPass" placeholder="Confirm password">
+                  <input v-model.trim="confirmPass" type="password" class="form-control form-control-lg" id="confirmPass" placeholder="Confirm password">
                 </div>
                 <div class="row justify-content-center">
-                  <button class="btn btn-lg btn-outline-dark">Submit</button>
+                  <button class="btn btn-lg btn-outline-dark" :disabled="disabled">Submit</button>
                 </div>
               </form>
             </div>
@@ -50,13 +50,32 @@ export default {
         console.log(res)
       }).catch((err) => {
         console.log(err)
+        this.$swal({
+          type: 'error',
+          title: 'Oops...',
+          text: 'We were unable to create your account. If you already have an account and have forgotten your password, contact us to reset it!',
+          confirmButtonClass: 'btn btn-dark',
+          buttonsStyling: false
+        })
       })
+    }
+  },
+  computed: {
+    disabled () {
+      if (this.password && this.confirmPass && this.email && this.password === this.confirmPass) {
+        return false
+      } else {
+        return true
+      }
     }
   }
 }
 </script>
 
 <style scoped lang="css">
+.alert {
+  max-width: 400px
+}
 .container-fluid {
   background-image: url('../assets/1.jpeg');
   background-position: center;

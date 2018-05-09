@@ -34,9 +34,7 @@ export default {
   methods: {
     logout () {
       Api().get('/logout').then((res) => {
-        if (res.data.success === 'yes') {
-          this.$router.push('/')
-        }
+        this.$router.push('/')
       }).catch((err) => {
         console.log(err)
       })

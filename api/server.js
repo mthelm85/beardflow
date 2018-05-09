@@ -13,6 +13,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 const secret = require('./config/secret');
 const User = require('./config/models/user.js');
+const Post = require('./config/models/post.js');
 
 mongoose.connect(configDB.url);
 
@@ -37,7 +38,7 @@ app.use(passport.session());
 app.use(serveStatic("../client/dist"));
 
 require('./config/passport')(passport, User);
-require('./routes/routes.js')(app, passport, User);
+require('./routes/routes.js')(app, passport, Post, User);
 
 app.listen(port, () => {
   console.log(`The server is up on port ${port}`);

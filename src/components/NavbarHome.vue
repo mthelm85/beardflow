@@ -18,7 +18,7 @@
         <form class="form-inline my-2 my-lg-0" @submit.prevent="login">
           <input class="form-control mr-sm-2" v-model.trim="email" type="email" name="email" placeholder="E-mail" aria-label="E-mail">
           <input class="form-control mr-sm-2" v-model.trim="password" type="password" name="password" placeholder="Password" aria-label="Password">
-          <button class="btn btn-outline-light my-2 my-sm-0">Login</button>
+          <button class="btn btn-outline-light my-2 my-sm-0" :disabled="disabled">Login</button>
         </form>
       </div>
       </nav>
@@ -36,20 +36,41 @@ export default {
   },
   methods: {
     login () {
+      if (!this.email || !this.password) {
+        this.loginError()
+      }
       Api().post('/login', {
         email: this.email,
         password: this.password
       }).then((res) => {
         console.log(res)
-        if (res.data.success === 'yes')
+        if (res.data.success === 'yes') {
           this.$router.push('/profile')
+        }
       }).catch((err) => {
         console.log(err)
       })
+    },
+    loginError () {
+      this.$swal({
+        type: 'error',
+        title: 'Oops...',
+        text: 'We were unable to log you in. Please check your credentials and try again!'
+      })
+    }
+  },
+  computed: {
+    disabled () {
+      if (this.email && this.password) {
+        return false
+      } else {
+        return true
+      }
     }
   }
 }
 </script>
 
-<style lang="css">
+<style scoped lang="css">
+
 </style>

@@ -7,7 +7,7 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    minglength: 3,
+    minlength: 3,
     unique: true,
     validate: {
       isAsync: true,

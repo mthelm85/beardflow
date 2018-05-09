@@ -1,4 +1,4 @@
-module.exports = (app, passport, User) => {
+module.exports = (app, passport, Post, User) => {
 
   function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
@@ -45,6 +45,28 @@ module.exports = (app, passport, User) => {
           memberSince: user.memberSince
          });
       }
+    });
+  });
+
+  app.post('/api/post', (req, res) => {
+    let newPost = new Post();
+    newPost.title = req.body.title;
+    newPost.text = req.body.text;
+    newPost.user = req.body.user;
+    newPost.save((err) => {
+      if (err) {
+        throw err;
+      } else {
+        return res.json({ success: 'yes' });
+      }
+    })
+  });
+
+  app.get('/api/get-posts', (req, res) => {
+    let today = new Date();
+    today.setMonth(today.getMonth() -1);
+    Post.find({date: {$gt: today}}, (err, posts) => {
+      res.send(posts);
     });
   });
 
