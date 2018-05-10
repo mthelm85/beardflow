@@ -12,14 +12,14 @@
       </div>
       <div class="col-6 mt-3">
         <div class="list-group list-group-flush">
-          <a v-for="post in posts" :key="post.date" href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+          <router-link v-for="post in posts" :key="post.date" :to="{ name: 'ViewPost', params: { postId: post._id } }" class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
               <h5 class="mb-1">{{ post.title }}</h5>
               <small>{{ post.date | relativeTime }}</small>
             </div>
             <p class="mb-1">{{ `${post.text.substring(0, 70).trim()}...` }}</p>
             <small>By {{ post.user }}</small>
-          </a>
+          </router-link>
         </div>
         <div class="card-footer">
           <router-link to="/post">Post your own story...</router-link>

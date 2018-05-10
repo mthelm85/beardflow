@@ -5,6 +5,7 @@ import NavbarAuthed from '@/components/NavbarAuthed'
 import Home from '@/components/Home'
 import Profile from '@/components/Profile'
 import NewPost from '@/components/NewPost'
+import PostView from '@/components/PostView'
 
 import Api from '@/router/api'
 Vue.use(Router)
@@ -60,6 +61,14 @@ export default new Router({
           .catch((err) => {
             console.log(err)
           })
+      }
+    },
+    {
+      path: '/view-post/:postId',
+      name: 'ViewPost',
+      components: {
+        navbar: NavbarAuthed,
+        body: PostView
       }
     }
   ]

@@ -27,6 +27,14 @@ const userSchema = mongoose.Schema({
   loginCounter: {
     type: Number,
     default: 0
+  },
+  userName: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 3,
+    maxlength: 17,
+    unique: true
   }
 });
 
