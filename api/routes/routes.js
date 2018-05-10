@@ -40,9 +40,7 @@ module.exports = (app, passport, Post, User) => {
         console.log(err);
       } else {
         res.json({
-          userName: user.name,
-          userEmail: user.email,
-          memberSince: user.memberSince
+          userEmail: user.email
          });
       }
     });

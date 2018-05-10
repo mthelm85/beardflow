@@ -18,7 +18,7 @@ const postSchema = mongoose.Schema({
   user: {
     type: String,
     required: true,
-    unique: true
+    unique: false
   },
   date: {
     type: Date,

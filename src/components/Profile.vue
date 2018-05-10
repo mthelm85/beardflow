@@ -22,7 +22,7 @@
           </a>
         </div>
         <div class="card-footer">
-          <a href="#">Post your own story...</a>
+          <router-link to="/post">Post your own story...</router-link>
         </div>
       </div>
       <div class="col-3 mt-3">
