@@ -17,7 +17,14 @@ module.exports = (app, passport, Post, User) => {
   });
 
   app.post('/api/login', passport.authenticate('local-login', {}), (req, res) => {
-    res.json({ success: 'yes' });
+    let query = { email: req.user.email };
+    User.findOneAndUpdate(query, { $inc: { loginCounter: 1 } }, (err, user) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.json({ success: 'yes' });
+      }
+    });
   });
 
   app.get('/api/login-error', (req, res) => {
@@ -35,7 +42,7 @@ module.exports = (app, passport, Post, User) => {
 
   app.get('/api/account', isLoggedIn, (req, res) => {
     let query = { email: req.user.email };
-    User.findOneAndUpdate(query, { $inc: { loginCounter: 1 } }, (err, user) => {
+    User.findOne(query, null, (err, user) => {
       if (err) {
         console.log(err);
       } else {

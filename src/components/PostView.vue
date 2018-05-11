@@ -4,7 +4,7 @@
       <div class="col text-center">
         <h3>{{ post.title }}</h3>
         <small class="text-muted">By {{ post.user }}</small>
-        <p class="mt-3 text-justify">{{ post.text }}</p>
+        <p class="mt-3 text-justify post-body">{{ post.text }}</p>
       </div>
     </div>
   </div>
@@ -39,5 +39,8 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style scoped lang="css">
+.post-body {
+  white-space: pre-wrap;
+}
 </style>
