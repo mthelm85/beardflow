@@ -22,14 +22,19 @@
           </router-link>
         </div>
         <div class="card-footer">
-          <router-link to="/post">Post your own story...</router-link>
+          <router-link to="/post" class="btn btn-warning btn-sm">Post your own story</router-link>
         </div>
       </div>
       <div class="col-3 mt-3">
         <div class="list-group">
-          <p class="list-group-item bg-dark text-white text-center">Cool Beard Stuff</p>
+          <p
+            v-b-popover.hover="'BeardFlow has a collection of cool beard-related apps built in. This list is a portal to our world of bearded awesomeness!'"
+            title="What's this?"
+            class="list-group-item bg-dark text-white text-center">
+            Cool Beard Stuff
+          </p>
           <a href="#" class="list-group-item list-group-item-action">Face Analysis</a>
-          <a href="#" class="list-group-item list-group-item-action">Beard Time Lapse</a>
+          <a href="#" class="list-group-item list-group-item-action">Better My Beard</a>
           <a href="#" class="list-group-item list-group-item-action">Create/Store Recipes</a>
         </div>
       </div>

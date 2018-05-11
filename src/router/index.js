@@ -4,6 +4,7 @@ import NavbarHome from '@/components/NavbarHome'
 import NavbarAuthed from '@/components/NavbarAuthed'
 import Home from '@/components/Home'
 import Profile from '@/components/Profile'
+import ProfileSetup from '@/components/ProfileSetup'
 import NewPost from '@/components/NewPost'
 import PostView from '@/components/PostView'
 
@@ -40,6 +41,14 @@ export default new Router({
           .catch((err) => {
             console.log(err)
           })
+      }
+    },
+    {
+      path: '/setup-profile',
+      name: 'ProfileSetup',
+      components: {
+        navbar: NavbarAuthed,
+        body: ProfileSetup
       }
     },
     {

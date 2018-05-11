@@ -47,7 +47,8 @@ module.exports = (app, passport, Post, User) => {
         console.log(err);
       } else {
         res.json({
-          userEmail: user.email
+          userEmail: user.email,
+          userLogins: user.loginCounter
          });
       }
     });
