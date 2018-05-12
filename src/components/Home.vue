@@ -48,7 +48,7 @@ export default {
         'password': this.password
       }).then((res) => {
         if (res.data.success === 'yes') {
-          this.$router.push('/profile')
+          this.$router.push('/setup-profile')
         } else {
           this.signupError()
         }

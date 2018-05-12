@@ -48,11 +48,32 @@ module.exports = (app, passport, Post, User) => {
       } else {
         res.json({
           userEmail: user.email,
-          userLogins: user.loginCounter
+          userLogins: user.loginCounter,
+          profilePicUrl: user.profilePicUrl
          });
       }
     });
   });
+
+  app.post('/api/account-setup', (req, res) => {
+    console.log(req.body)
+    let query = { email: req.body.userEmail };
+    User.findOneAndUpdate(
+      query,
+      { $set: {
+          userName: req.body.userName,
+          profilePicUrl: req.body.profilePicUrl,
+          userTitle: req.body.userTitle
+        }
+      }, (err, user) => {
+        if (err) {
+          res.json({ error: err })
+        } else {
+          res.json({ success: 'yes' })
+        }
+      }
+    )
+  })
 
   app.post('/api/post', (req, res) => {
     let newPost = new Post();

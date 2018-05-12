@@ -43,7 +43,7 @@ export default {
         email: this.email,
         password: this.password
       }).then((res) => {
-        console.log(res)
+        console.log(res.data)
         if (res.data.success === 'yes') {
           this.$router.push('/profile')
         }

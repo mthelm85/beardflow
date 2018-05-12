@@ -3,7 +3,7 @@
     <div class="row h-100">
       <div class="col-3 mt-3">
         <div class="card">
-          <img class="card-img-top" src="../assets/6.jpeg">
+          <img class="card-img-top" :src="profilePicUrl">
           <div class="card-body">
             <h5 class="card-title">Matt Helm</h5>
             <p>BeardFlow Creator</p>
@@ -48,10 +48,19 @@ import Moment from 'moment'
 export default {
   data () {
     return {
-      posts: []
+      posts: [],
+      profilePicUrl: ''
     }
   },
   created () {
+    Api().get('/account')
+      .then((res) => {
+        console.log(res)
+        this.profilePicUrl = res.data.profilePicUrl
+      })
+      .catch((err) => {
+        console.log(err)
+      })
     Api().get('/get-posts')
       .then((res) => {
         let i = 0

@@ -30,11 +30,18 @@ const userSchema = mongoose.Schema({
   },
   userName: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
     minlength: 3,
     maxlength: 17,
     unique: true
+  },
+  profilePicUrl: {
+    type: String
+  },
+  userTitle: {
+    type: String,
+    maxlength: 30
   }
 });
 
