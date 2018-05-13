@@ -12,10 +12,6 @@ module.exports = (app, passport, Post, User) => {
       res.json({ success: 'yes' })
   });
 
-  app.get('/api/signup-error', (req, res) => {
-    res.json({ error: 'Could not sign you up' });
-  });
-
   app.post('/api/login', passport.authenticate('local-login', {}), (req, res) => {
     let query = { email: req.user.email };
     User.findOneAndUpdate(query, { $inc: { loginCounter: 1 } }, (err, user) => {
@@ -25,10 +21,6 @@ module.exports = (app, passport, Post, User) => {
         res.json({ success: 'yes' });
       }
     });
-  });
-
-  app.get('/api/login-error', (req, res) => {
-    res.json({ error: 'Could not log you in' });
   });
 
   app.get('/api/auth', isLoggedIn, (req, res) => {
@@ -49,13 +41,15 @@ module.exports = (app, passport, Post, User) => {
         res.json({
           userEmail: user.email,
           userLogins: user.loginCounter,
+          userName: user.userName,
+          userTitle: user.userTitle,
           profilePicUrl: user.profilePicUrl
          });
       }
     });
   });
 
-  app.post('/api/account-setup', (req, res) => {
+  app.post('/api/account-setup', isLoggedIn, (req, res) => {
     console.log(req.body)
     let query = { email: req.body.userEmail };
     User.findOneAndUpdate(
@@ -75,7 +69,7 @@ module.exports = (app, passport, Post, User) => {
     )
   })
 
-  app.post('/api/post', (req, res) => {
+  app.post('/api/post', isLoggedIn, (req, res) => {
     let newPost = new Post();
     newPost.title = req.body.title;
     newPost.text = req.body.text;
@@ -89,7 +83,7 @@ module.exports = (app, passport, Post, User) => {
     })
   });
 
-  app.get('/api/get-posts', (req, res) => {
+  app.get('/api/get-posts', isLoggedIn, (req, res) => {
     let today = new Date();
     today.setMonth(today.getMonth() -1);
     Post.find({date: {$gt: today}}, null, {sort: '-date', limit: 10}, (err, posts) => {
@@ -97,7 +91,7 @@ module.exports = (app, passport, Post, User) => {
     });
   });
 
-  app.get('/api/get-one-post', (req, res) => {
+  app.get('/api/get-one-post', isLoggedIn, (req, res) => {
     console.log(req.query.id)
     Post.findById(req.query.id, (err, post) => {
       if (err) {

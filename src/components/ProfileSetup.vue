@@ -42,7 +42,6 @@ import PictureInput from 'vue-picture-input'
 export default {
   created () {
     Api().get('/account').then((res) => {
-      console.log(res.data.userEmail)
       this.userEmail = res.data.userEmail
     }).catch((err) => {
       console.log(err)

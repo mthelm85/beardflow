@@ -7,9 +7,23 @@ import Profile from '@/components/Profile'
 import ProfileSetup from '@/components/ProfileSetup'
 import NewPost from '@/components/NewPost'
 import PostView from '@/components/PostView'
-
 import Api from '@/router/api'
+
 Vue.use(Router)
+
+const auth = (to, from, next) => {
+  Api().get('/auth')
+    .then((res) => {
+      if (res.data.authorized === 'yes') {
+        next()
+      } else if (res.data.authorized === 'no') {
+        next('/')
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
 
 export default new Router({
   mode: 'history',
@@ -29,19 +43,7 @@ export default new Router({
         navbar: NavbarAuthed,
         body: Profile
       },
-      beforeEnter: (to, from, next) => {
-        Api().get('/auth')
-          .then((res) => {
-            if (res.data.authorized === 'yes') {
-              next()
-            } else if (res.data.authorized === 'no') {
-              next('/')
-            }
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-      }
+      beforeEnter: auth
     },
     {
       path: '/setup-profile',
@@ -49,7 +51,8 @@ export default new Router({
       components: {
         navbar: NavbarAuthed,
         body: ProfileSetup
-      }
+      },
+      beforeEnter: auth
     },
     {
       path: '/post',
@@ -58,19 +61,7 @@ export default new Router({
         navbar: NavbarAuthed,
         body: NewPost
       },
-      beforeEnter: (to, from, next) => {
-        Api().get('/auth')
-          .then((res) => {
-            if (res.data.authorized === 'yes') {
-              next()
-            } else if (res.data.authorized === 'no') {
-              next('/')
-            }
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-      }
+      beforeEnter: auth
     },
     {
       path: '/view-post/:postId',
@@ -78,7 +69,8 @@ export default new Router({
       components: {
         navbar: NavbarAuthed,
         body: PostView
-      }
+      },
+      beforeEnter: auth
     }
   ]
 })

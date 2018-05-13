@@ -49,6 +49,8 @@ export default {
         }
       }).catch((err) => {
         console.log(err)
+        this.email = null
+        this.password = null
         this.loginError()
       })
     },

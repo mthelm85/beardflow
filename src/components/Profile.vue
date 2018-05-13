@@ -5,8 +5,8 @@
         <div class="card">
           <img class="card-img-top" :src="profilePicUrl">
           <div class="card-body">
-            <h5 class="card-title">Matt Helm</h5>
-            <p>BeardFlow Creator</p>
+            <h5 class="card-title">{{ userName }}</h5>
+            <p>{{ userTitle }}</p>
           </div>
         </div>
       </div>
@@ -44,23 +44,15 @@
 
 <script>
 import Api from '@/router/api'
+import { getUserInfo } from '@/getUserInfo'
 import Moment from 'moment'
 export default {
   data () {
     return {
-      posts: [],
-      profilePicUrl: ''
+      posts: []
     }
   },
   created () {
-    Api().get('/account')
-      .then((res) => {
-        console.log(res)
-        this.profilePicUrl = res.data.profilePicUrl
-      })
-      .catch((err) => {
-        console.log(err)
-      })
     Api().get('/get-posts')
       .then((res) => {
         let i = 0
@@ -77,7 +69,8 @@ export default {
     relativeTime (date) {
       return Moment(date).fromNow()
     }
-  }
+  },
+  mixins: [getUserInfo]
 }
 </script>
 

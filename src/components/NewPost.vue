@@ -18,21 +18,12 @@
 
 <script>
 import Api from '@/router/api'
+import { getUserInfo } from '@/getUserInfo'
 export default {
-  created () {
-    Api().get('/account')
-      .then((res) => {
-        this.user = res.data.userEmail
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  },
   data () {
     return {
       title: '',
-      text: '',
-      user: ''
+      text: ''
     }
   },
   computed: {
@@ -60,7 +51,8 @@ export default {
         console.log(err)
       })
     }
-  }
+  },
+  mixins: [getUserInfo]
 }
 </script>
 
