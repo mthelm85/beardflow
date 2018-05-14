@@ -49,17 +49,19 @@ export default {
         }
       }).catch((err) => {
         console.log(err)
-        this.email = null
-        this.password = null
         this.loginError()
       })
     },
     loginError () {
       this.$swal({
-        type: 'error',
         title: 'Oops...',
-        text: 'We were unable to log you in. Please check your credentials and try again!'
+        text: 'We were unable to log you in. Please check your credentials and try again!',
+        imageUrl: '/static/beard-black.png',
+        imageWidth: 150,
+        imageHeight: 150
       })
+      this.email = null
+      this.password = null
     }
   },
   computed: {

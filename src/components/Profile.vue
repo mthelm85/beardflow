@@ -12,7 +12,7 @@
       </div>
       <div class="col-6 mt-3">
         <div class="list-group list-group-flush">
-          <router-link v-for="post in posts" :key="post.date" :to="{ name: 'ViewPost', params: { postId: post._id } }" class="list-group-item list-group-item-action flex-column align-items-start">
+          <router-link v-for="post in posts" :key="post._id" :to="{ name: 'ViewPost', params: { postId: post._id } }" class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
               <h5 class="mb-1">{{ post.title }}</h5>
               <small>{{ post.date | relativeTime }}</small>

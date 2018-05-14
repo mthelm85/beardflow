@@ -59,12 +59,17 @@ export default {
     },
     signupError () {
       this.$swal({
-        type: 'error',
         title: 'Oops...',
         text: 'We were unable to create your account. If you already have an account and have forgotten your password, contact us to reset it!',
         confirmButtonClass: 'btn btn-dark',
-        buttonsStyling: false
+        buttonsStyling: false,
+        imageUrl: '/static/beard-black.png',
+        imageWidth: 150,
+        imageHeight: 150
       })
+      this.email = null
+      this.password = null
+      this.confirmPass = null
     }
   },
   computed: {
