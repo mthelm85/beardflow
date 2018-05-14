@@ -4,30 +4,32 @@
       <div class="col-center text-center">
         <div class="card scrollable">
           <h4 class="card-header">Welcome to BeardFlow!</h4>
-          <div class="card-body">
-            <p class="lead text-left">1) Choose a photo of your magnificent mane and/or 'stache:</p>
-            <picture-input
-              ref="pictureInput"
-              @change="onChange"
-              width="250"
-              height="250"
-              margin="16"
-              accept="image/jpeg,image/png"
-              fileName="beard.jpg"
-              size="10"
-              buttonClass="btn btn-outline-dark"
-              hideChangeButton="true"
-              :customStrings="{
-                upload: '<h1>Bummer!</h1>',
-                drag: 'Choose a jpg or png file'
-              }">
-            </picture-input>
-            <p class="lead mt-5 text-left">2) Choose your beardonym (your display name):</p>
-            <input v-model="userName" class="form-control mx-auto mt-4" type="text" placeholder="BairdBeardsley" maxlength="17" style="max-width: 305px">
-            <p class="lead mt-5 text-left">3) Enter a short display title:</p>
-            <input v-model="userTitle" class="form-control mx-auto mt-4" type="text" placeholder="Leader of the bearded brethren" maxlength="34" style="max-width: 305px">
-            <button class="btn btn-dark btn-lg mt-5" @click="upload">Save</button>
-          </div>
+          <form @submit.prevent="upload">
+            <div class="card-body">
+              <p class="lead text-left">1) Choose a photo of your magnificent mane and/or 'stache:</p>
+              <picture-input
+                ref="pictureInput"
+                @change="onChange"
+                width="250"
+                height="250"
+                margin="16"
+                accept="image/jpeg,image/png"
+                fileName="beard.jpg"
+                size="10"
+                buttonClass="btn btn-outline-dark"
+                hideChangeButton="true"
+                :customStrings="{
+                  upload: '<h1>Bummer!</h1>',
+                  drag: 'Choose a jpg or png file'
+                }">
+              </picture-input>
+              <p class="lead mt-5 text-left">2) Choose your beardonym (your display name):</p>
+              <input v-model="userName" class="form-control mx-auto mt-4" type="text" placeholder="BairdBeardsley" maxlength="17" style="max-width: 305px">
+              <p class="lead mt-5 text-left">3) Enter a short display title:</p>
+              <input v-model="userTitle" class="form-control mx-auto mt-4" type="text" placeholder="Leader of the bearded brethren" maxlength="34" style="max-width: 305px">
+              <button class="btn btn-dark btn-lg mt-5">Save</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
