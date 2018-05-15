@@ -2,22 +2,24 @@
   <div class="container h-100">
     <div class="row h-100 mt-3 justify-content-center">
       <div class="col-center text-center">
-        <div class="card scrollable">
+        <div class="card">
           <h4 class="card-header">Welcome to BeardFlow!</h4>
           <form @submit.prevent="upload">
             <div class="card-body">
               <p class="lead text-left">1) Choose a photo of your magnificent mane and/or 'stache:</p>
               <picture-input
+                v-b-tooltip.hover.bottom title="Click the BeardFlow logo to select your photo"
                 ref="pictureInput"
                 @change="onChange"
-                width="250"
-                height="250"
                 margin="16"
+                :width="width"
+                :height="height"
+                :plain="true"
+                prefill="/static/beard-black.png"
+                radius="4"
                 accept="image/jpeg,image/png"
-                fileName="beard.jpg"
                 size="10"
-                buttonClass="btn btn-outline-dark"
-                hideChangeButton="true"
+                :hideChangeButton="true"
                 :customStrings="{
                   upload: '<h1>Bummer!</h1>',
                   drag: 'Choose a jpg or png file'
@@ -69,6 +71,30 @@ export default {
   computed: {
     url () {
       return `https://api.cloudinary.com/v1_1/${this.cloudinary.cloudName}/upload`
+    },
+    width () {
+      switch (this.$mq) {
+        case 'desktop':
+          return '250'
+        case 'laptop':
+          return '150'
+        case 'tablet':
+          return '100'
+        case 'mobile':
+          return '75'
+      }
+    },
+    height () {
+      switch (this.$mq) {
+        case 'desktop':
+          return '250'
+        case 'laptop':
+          return '150'
+        case 'tablet':
+          return '100'
+        case 'mobile':
+          return '75'
+      }
     }
   },
   methods: {
@@ -108,8 +134,5 @@ export default {
 </script>
 
 <style scoped lang="css">
-.scrollable {
-  overflow-y: scroll;
-}
 
 </style>
