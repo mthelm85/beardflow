@@ -4,8 +4,10 @@
       <router-view name="navbar"></router-view>
     </transition>
     <transition name="fade" mode="out-in" appear>
-      <router-view v-if="$mq === 'laptop' || $mq === 'desktop' || $mq === 'tablet'" name="body"></router-view>
-      <router-view v-else name="body-mobile"></router-view>
+      <router-view name="body"></router-view>
+    </transition>
+    <transition name="fade" mode="out-in" appear>
+      <router-view name="footer"></router-view>
     </transition>
   </div>
 </template>
@@ -23,11 +25,12 @@ export default {
 <style>
 body, html {
   height: 100%;
-  overflow: hidden;
+  overflow: auto;
 }
-::-webkit-scrollbar {
+
+/* ::-webkit-scrollbar {
     display: none;
-}
+} */
 
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s ease;

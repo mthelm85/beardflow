@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="container-fluid h-100">
-    <div class="row h-100">
-      <div class="col-3 mt-3">
+    <div class="row h-100 justify-content-center">
+      <div class="col-xs-12 col-md-3 mt-3">
         <div class="card">
           <img class="card-img-top" :src="profilePicUrl">
           <div class="card-body">
@@ -10,7 +10,7 @@
           </div>
         </div>
       </div>
-      <div class="col-6 mt-3">
+      <div class="col-xs-12 col-md-6 mt-3">
         <div class="list-group list-group-flush">
           <router-link v-for="post in posts" :key="post._id" :to="{ name: 'ViewPost', params: { postId: post._id } }" class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
@@ -25,7 +25,7 @@
           <router-link to="/post" class="btn btn-warning btn-sm">Post your own story</router-link>
         </div>
       </div>
-      <div class="col-3 mt-3">
+      <div class="col-xs-12 col-md-3 mt-3">
         <div class="list-group">
           <p
             v-b-popover.hover="'BeardFlow has a collection of cool beard-related apps built in. This list is a portal to our world of bearded awesomeness!'"

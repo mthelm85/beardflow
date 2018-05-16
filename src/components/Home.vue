@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="container-fluid h-100">
+  <div class="container-fluid with-bg-photo h-100">
     <div class="row h-100">
       <div class="col my-auto">
         <div class="card float-right mr-5">
@@ -118,11 +118,7 @@ export default {
   max-width: 400px
 }
 
-.grow {
-  transition: height 1s ease;
-}
-
-.container-fluid {
+.with-bg-photo {
   background-image: url('../assets/1.jpeg');
   background-position: center;
   background-repeat: no-repeat;

@@ -26,10 +26,24 @@
                 }">
               </picture-input>
               <p class="lead mt-5 text-left">2) Choose your beardonym (your display name):</p>
-              <input v-model="userName" class="form-control mx-auto mt-4" type="text" placeholder="BairdBeardsley" maxlength="17" style="max-width: 305px">
+              <input v-model.trim.lazy="userName" id="userNameInput" class="form-control mx-auto mt-4" type="text" placeholder="BairdBeardsley" maxlength="17" style="max-width: 305px">
+              <b-popover
+                target="userNameInput"
+                placement="left"
+                triggers="null"
+                :show.sync="namePopover">
+                <template slot="title">Warning! <span class="float-right"><img src="../assets/beard-black.svg" width="20px"/></span></template>
+                Your beardonym must be at least 5 characters in length</b-popover>
               <p class="lead mt-5 text-left">3) Enter a short display title:</p>
-              <input v-model="userTitle" class="form-control mx-auto mt-4" type="text" placeholder="Leader of the bearded brethren" maxlength="34" style="max-width: 305px">
-              <button class="btn btn-dark btn-lg mt-5">Save</button>
+              <input v-model.lazy="userTitle" id="userTitleInput" class="form-control mx-auto mt-4" type="text" placeholder="Leader of the bearded brethren" maxlength="34" style="max-width: 305px">
+              <b-popover
+                target="userTitleInput"
+                placement="left"
+                triggers="null"
+                :show.sync="titlePopover">
+                <template slot="title">Warning! <span class="float-right"><img src="../assets/beard-black.svg" width="20px"/></span></template>
+                Your title must be at least 5 characters in length</b-popover>
+              <button class="btn btn-dark btn-lg mt-5" :disabled="disabled">Save</button>
             </div>
           </form>
         </div>
@@ -69,6 +83,27 @@ export default {
     PictureInput
   },
   computed: {
+    disabled () {
+      if (this.image !== null && this.userName.length > 4 && this.userTitle.length > 4) {
+        return false
+      } else {
+        return true
+      }
+    },
+    namePopover () {
+      if (this.userName.length > 0 && this.userName.length < 5) {
+        return true
+      } else {
+        return false
+      }
+    },
+    titlePopover () {
+      if (this.userTitle.length > 0 && this.userTitle.length < 5) {
+        return true
+      } else {
+        return false
+      }
+    },
     url () {
       return `https://api.cloudinary.com/v1_1/${this.cloudinary.cloudName}/upload`
     },

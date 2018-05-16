@@ -8,6 +8,7 @@ import ProfileSetup from '@/components/ProfileSetup'
 import NewPost from '@/components/NewPost'
 import PostView from '@/components/PostView'
 import Api from '@/router/api'
+import Footer from '@/components/Footer'
 
 Vue.use(Router)
 
@@ -33,7 +34,8 @@ export default new Router({
       name: 'Home',
       components: {
         navbar: NavbarHome,
-        body: Home
+        body: Home,
+        footer: Footer
       }
     },
     {
