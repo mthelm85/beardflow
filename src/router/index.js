@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import NavbarHome from '@/components/NavbarHome'
 import NavbarAuthed from '@/components/NavbarAuthed'
-import Home from '@/components/Home'
+import HomePage from '@/components/HomePage'
 import Profile from '@/components/Profile'
 import ProfileSetup from '@/components/ProfileSetup'
 import NewPost from '@/components/NewPost'
@@ -34,7 +34,7 @@ export default new Router({
       name: 'Home',
       components: {
         navbar: NavbarHome,
-        body: Home,
+        body: HomePage,
         footer: Footer
       }
     },
@@ -43,7 +43,8 @@ export default new Router({
       name: 'Profile',
       components: {
         navbar: NavbarAuthed,
-        body: Profile
+        body: Profile,
+        footer: Footer
       },
       beforeEnter: auth
     },
@@ -52,7 +53,8 @@ export default new Router({
       name: 'ProfileSetup',
       components: {
         navbar: NavbarAuthed,
-        body: ProfileSetup
+        body: ProfileSetup,
+        footer: Footer
       },
       beforeEnter: (to, from, next) => {
         Api().get('/auth')
@@ -79,7 +81,8 @@ export default new Router({
       name: 'Post',
       components: {
         navbar: NavbarAuthed,
-        body: NewPost
+        body: NewPost,
+        footer: Footer
       },
       beforeEnter: auth
     },
@@ -88,7 +91,8 @@ export default new Router({
       name: 'ViewPost',
       components: {
         navbar: NavbarAuthed,
-        body: PostView
+        body: PostView,
+        footer: Footer
       },
       beforeEnter: auth
     }

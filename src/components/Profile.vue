@@ -26,7 +26,7 @@
         </div>
       </div>
       <div class="col-xs-12 col-md-3 mt-3">
-        <div class="list-group">
+        <div class="list-group" :class="{ 'pb-3': padBottom }">
           <p
             v-b-popover.hover="'BeardFlow has a collection of cool beard-related apps built in. This list is a portal to our world of bearded awesomeness!'"
             title="What's this?"
@@ -50,6 +50,15 @@ export default {
   data () {
     return {
       posts: []
+    }
+  },
+  computed: {
+    padBottom () {
+      if (this.$mq === 'mobile') {
+        return true
+      } else {
+        return false
+      }
     }
   },
   created () {

@@ -114,9 +114,6 @@ export default {
 </script>
 
 <style scoped lang="css">
-.alert {
-  max-width: 400px
-}
 
 .with-bg-photo {
   background-image: url('../assets/1.jpeg');
