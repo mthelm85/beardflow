@@ -3,6 +3,8 @@
     <div class="row h-100 mt-3">
       <div class="col text-center">
         <h3>{{ post.title }}</h3>
+        <b-img :src="post.userPic" width="90" rounded class="mt-3"></b-img>
+        <br>
         <small class="text-muted">By {{ post.user }}</small>
         <p class="mt-3 text-justify post-body">{{ post.text }}</p>
       </div>
@@ -18,10 +20,12 @@ export default {
       post: {
         title: '',
         text: '',
-        user: ''
+        user: '',
+        userPic: ''
       }
     }
   },
+
   created () {
     Api().get('/get-one-post', {
       params: {
@@ -31,6 +35,7 @@ export default {
       this.post.title = res.data.title
       this.post.text = res.data.text
       this.post.user = res.data.user
+      this.post.userPic = res.data.userPic
     }).catch((err) => {
       console.log(err)
     })

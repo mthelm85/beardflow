@@ -12,7 +12,7 @@
             <router-link to="/" class="nav-link">Home</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/about" class="nav-link">What is BeardFlow?</router-link>
+            <router-link to="/profile" class="nav-link">Profile</router-link>
           </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
@@ -31,6 +31,7 @@ export default {
 
     }
   },
+
   methods: {
     logout () {
       Api().get('/logout').then((res) => {

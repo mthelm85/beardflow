@@ -65,6 +65,7 @@ export default {
       console.log(err)
     })
   },
+
   data () {
     return {
       cloudinary: {
@@ -79,9 +80,11 @@ export default {
       userTitle: ''
     }
   },
+
   components: {
     PictureInput
   },
+
   computed: {
     disabled () {
       if (this.image !== null && this.userName.length > 4 && this.userTitle.length > 4) {
@@ -132,6 +135,7 @@ export default {
       }
     }
   },
+
   methods: {
     onChange (image) {
       if (image) {

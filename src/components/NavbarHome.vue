@@ -34,6 +34,7 @@ export default {
       password: ''
     }
   },
+
   methods: {
     login () {
       if (!this.email || !this.password) {
@@ -64,6 +65,7 @@ export default {
       this.password = null
     }
   },
+
   computed: {
     disabled () {
       if (this.email && this.password) {

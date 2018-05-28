@@ -57,6 +57,7 @@ export default {
       imgSrc: '/static/beard-black.png'
     }
   },
+
   methods: {
     signup () {
       Api().post('/signup', {
@@ -88,6 +89,7 @@ export default {
       this.confirmPass = null
     }
   },
+
   computed: {
     disabled () {
       if (this.password.length > 5 && this.password === this.confirmPass && this.email !== '') {

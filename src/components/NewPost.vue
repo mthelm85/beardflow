@@ -26,6 +26,7 @@ export default {
       text: ''
     }
   },
+
   computed: {
     disabled () {
       if (this.title && this.text) {
@@ -35,12 +36,14 @@ export default {
       }
     }
   },
+
   methods: {
     post () {
       Api().post('/post', {
         title: this.title,
         text: this.text,
-        user: this.user
+        user: this.userName,
+        userPic: this.profilePicUrl
       }).then((res) => {
         if (res.data.success === 'yes') {
           this.$router.push('/profile')
@@ -52,6 +55,7 @@ export default {
       })
     }
   },
+
   mixins: [getUserInfo]
 }
 </script>

@@ -13,6 +13,7 @@ export default {
     Home,
     HomeMbl
   },
+
   computed: {
     home () {
       if (this.$mq === 'mobile') {

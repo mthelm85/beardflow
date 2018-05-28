@@ -67,6 +67,7 @@ module.exports = (app, passport, Post, User) => {
     newPost.title = req.body.title;
     newPost.text = req.body.text;
     newPost.user = req.body.user;
+    newPost.userPic = req.body.userPic;
     newPost.save((err) => {
       if (err) {
         throw err;

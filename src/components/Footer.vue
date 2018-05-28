@@ -9,7 +9,7 @@
             <a class="text-secondary px-3" href="#"><i class="fab fa-instagram"></i></a>
             <a class="text-secondary px-3" href="#"><i class="fab fa-pinterest-square"></i></a>
           </div>
-          <div class="float-right py-4">
+          <div class="float-right text-white py-3">
               © {{ year }} BeardFlow
               <img src="../assets/beard.svg" width="30px"/>
           </div>
@@ -39,7 +39,7 @@ export default {
 <style scoped lang="css">
 
 i {
-  font-size: 3em;
+  font-size: 1.5em;
 }
 
 i:hover {
