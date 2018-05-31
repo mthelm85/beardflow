@@ -3,7 +3,7 @@
     <div class="row h-100 mt-3">
       <div class="col text-center">
         <h3>{{ post.title }}</h3>
-        <b-img :src="post.userPic" width="90" rounded class="mt-3"></b-img>
+        <b-img :src="post.userPic" width="90" rounded="circle" class="mt-2"></b-img>
         <br>
         <small class="text-muted">By {{ post.user }}</small>
         <p class="mt-3 text-justify post-body">{{ post.text }}</p>

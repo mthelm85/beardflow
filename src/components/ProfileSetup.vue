@@ -35,7 +35,7 @@
                 <template slot="title">Warning! <span class="float-right"><img src="../assets/beard-black.svg" width="20px"/></span></template>
                 Your beardonym must be at least 5 characters in length</b-popover>
               <p class="lead mt-5 text-left">3) Enter a short display title:</p>
-              <input v-model.lazy="userTitle" id="userTitleInput" class="form-control mx-auto mt-4" type="text" placeholder="Leader of the bearded brethren" maxlength="34" style="max-width: 305px">
+              <input v-model="userTitle" id="userTitleInput" class="form-control mx-auto mt-4" type="text" placeholder="Leader of the bearded brethren" maxlength="34" style="max-width: 305px">
               <b-popover
                 target="userTitleInput"
                 placement="left"
