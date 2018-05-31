@@ -54,6 +54,8 @@ export default {
         title: 'Oops...',
         text: 'We were unable to log you in. Please check your credentials and try again!',
         imageUrl: '/static/beard-black.png',
+        confirmButtonClass: 'btn btn-dark',
+        buttonsStyling: false,
         imageWidth: 150,
         imageHeight: 150
       })
