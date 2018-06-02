@@ -4,6 +4,7 @@ import NavbarHome from '@/components/NavbarHome'
 import NavbarAuthed from '@/components/NavbarAuthed'
 import HomePage from '@/components/HomePage'
 import Profile from '@/components/Profile'
+import ProfileEdit from '@/components/ProfileEdit'
 import ProfileSetup from '@/components/ProfileSetup'
 import NewPost from '@/components/NewPost'
 import PostView from '@/components/PostView'
@@ -49,6 +50,16 @@ export default new Router({
       beforeEnter: auth
     },
     {
+      path: '/edit-profile',
+      name: 'ProfileEdit',
+      components: {
+        navbar: NavbarAuthed,
+        body: ProfileEdit,
+        footer: Footer
+      },
+      beforeEnter: auth
+    },
+    {
       path: '/setup-profile',
       name: 'ProfileSetup',
       components: {
@@ -56,25 +67,25 @@ export default new Router({
         body: ProfileSetup,
         footer: Footer
       },
-      beforeEnter: (to, from, next) => {
-        Api().get('/auth')
-          .then((res) => {
-            if (res.data.authorized === 'yes') {
-              Api().get('/account').then((res) => {
-                if (res.data.userLogins > 0) {
-                  next('/profile')
-                } else {
-                  next()
-                }
-              })
-            } else if (res.data.authorized === 'no') {
-              next('/')
-            }
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-      }
+      // beforeEnter: (to, from, next) => {
+      //   Api().get('/auth')
+      //     .then((res) => {
+      //       if (res.data.authorized === 'yes') {
+      //         Api().get('/account').then((res) => {
+      //           if (res.data.userLogins > 0) {
+      //             next('/profile')
+      //           } else {
+      //             next()
+      //           }
+      //         })
+      //       } else if (res.data.authorized === 'no') {
+      //         next('/')
+      //       }
+      //     })
+      //     .catch((err) => {
+      //       console.log(err)
+      //     })
+      // }
     },
     {
       path: '/post',

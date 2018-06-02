@@ -1,4 +1,4 @@
-module.exports = (app, passport, Post, User) => {
+module.exports = (app, cloudinary, passport, Post, User) => {
 
   function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
@@ -94,6 +94,18 @@ module.exports = (app, passport, Post, User) => {
         res.send(post)
       }
     })
+  })
+
+  app.post('/api/delete-photo', isLoggedIn, (req, res) => {
+    console.log(req.body.public_id);
+    cloudinary.v2.api.delete_resources(['Profile Pics/' + req.body.public_id], (error, result) =>
+    {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(result);
+      }
+    });
   })
 
 };

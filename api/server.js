@@ -1,4 +1,5 @@
 const bodyParser = require('body-parser');
+const cloudinary = require('cloudinary');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const express = require('express');
@@ -37,8 +38,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(serveStatic("../client/dist"));
 
+cloudinary.config({
+  cloud_name: 'drbfvyc4t',
+  api_key: '577356844516192',
+  api_secret: 'N4KC78ACQ8nQYN6Yz4-K76xlblA' 
+})
+
 require('./config/passport')(passport, User);
-require('./routes/routes.js')(app, passport, Post, User);
+require('./routes/routes.js')(app, cloudinary, passport, Post, User);
 
 app.listen(port, () => {
   console.log(`The server is up on port ${port}`);

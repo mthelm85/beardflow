@@ -3,19 +3,19 @@
     <div class="row h-100 mt-3 justify-content-center">
       <div class="col-center text-center">
         <div class="card">
-          <h4 class="card-header">Welcome to BeardFlow!</h4>
+          <h4 class="card-header">Change Your Look</h4>
           <form @submit.prevent="upload">
             <div class="card-body">
-              <p class="lead text-left">1) Choose a photo of your magnificent mane and/or 'stache:</p>
+              <p class="lead text-left">Change the photo of your magnificent mane and/or 'stache:</p>
               <picture-input
-                v-b-tooltip.hover.bottom title="Click the BeardFlow logo to select your photo"
+                v-b-tooltip.hover.bottom title="Click your photo to select a new one"
                 ref="pictureInput"
                 @change="onChange"
                 margin="16"
                 :width="width"
                 :height="height"
                 :plain="true"
-                prefill="/static/beard-black.png"
+                :prefill="profilePicUrl"
                 radius="4"
                 accept="image/jpeg,image/png"
                 size="10"
@@ -25,16 +25,7 @@
                   drag: 'Choose a jpg or png file'
                 }">
               </picture-input>
-              <p class="lead mt-5 text-left">2) Choose your beardonym (your display name):</p>
-              <input v-model.trim.lazy="userName" id="userNameInput" class="form-control mx-auto mt-4" type="text" placeholder="BairdBeardsley" maxlength="17" style="max-width: 305px">
-              <b-popover
-                target="userNameInput"
-                placement="left"
-                triggers="null"
-                :show.sync="namePopover">
-                <template slot="title">Warning! <span class="float-right"><img src="../assets/beard-black.svg" width="20px"/></span></template>
-                Your beardonym must be at least 5 characters in length</b-popover>
-              <p class="lead mt-5 text-left">3) Enter a short display title:</p>
+              <p class="lead mt-5 text-left">Change your display title:</p>
               <input v-model="userTitle" id="userTitleInput" class="form-control mx-auto mt-4" type="text" placeholder="Leader of the bearded brethren" maxlength="34" style="max-width: 305px">
               <b-popover
                 target="userTitleInput"
@@ -43,7 +34,7 @@
                 :show.sync="titlePopover">
                 <template slot="title">Warning! <span class="float-right"><img src="../assets/beard-black.svg" width="20px"/></span></template>
                 Your title must be at least 5 characters in length</b-popover>
-              <button class="btn btn-dark btn-lg mt-5" :disabled="disabled">Save</button>
+              <button class="btn btn-dark btn-lg mt-5">Save</button>
             </div>
           </form>
         </div>
@@ -56,6 +47,7 @@
 import Api from '@/router/api'
 import Axios from 'axios'
 import Cloudinary from '@/cloudinary.js'
+import { getUserInfo } from '@/getUserInfo'
 import PictureInput from 'vue-picture-input'
 export default {
   created () {
@@ -74,10 +66,7 @@ export default {
         cloudName: Cloudinary.cloudName
       },
       image: null,
-      profilePicUrl: '',
-      userEmail: '',
-      userName: '',
-      userTitle: ''
+      newProfilePicUrl: ''
     }
   },
 
@@ -86,20 +75,6 @@ export default {
   },
 
   computed: {
-    disabled () {
-      if (this.image !== null && this.userName.length > 4 && this.userTitle.length > 4) {
-        return false
-      } else {
-        return true
-      }
-    },
-    namePopover () {
-      if (this.userName.length > 0 && this.userName.length < 5) {
-        return true
-      } else {
-        return false
-      }
-    },
     titlePopover () {
       if (this.userTitle.length > 0 && this.userTitle.length < 5) {
         return true
@@ -113,7 +88,7 @@ export default {
     width () {
       switch (this.$mq) {
         case 'desktop':
-          return '150'
+          return '250'
         case 'laptop':
           return '150'
         case 'tablet':
@@ -125,7 +100,7 @@ export default {
     height () {
       switch (this.$mq) {
         case 'desktop':
-          return '150'
+          return '250'
         case 'laptop':
           return '150'
         case 'tablet':
@@ -144,22 +119,25 @@ export default {
         console.log('FileReader API not supported: use the <form>, Luke!')
       }
     },
-    upload (file) {
+    async upload (file) {
       const formData = new FormData()
       formData.append('file', this.image)
       formData.append('upload_preset', this.cloudinary.uploadPreset)
       formData.append('tags', 'profile_pic')
-      formData.append('public_id', this.userEmail)
       // For debug purpose only
       // Inspects the content of formData
       // for (var pair of formData.entries()) {
       //   console.log(pair[0] + ', ' + pair[1])
       // }
+      let deletePic = await Api().post('/delete-photo', {
+        public_id: this.userEmail
+      })
+
       Axios.post(this.url, formData).then(res => {
-        this.profilePicUrl = res.data.url
+        this.newProfilePicUrl = res.data.url
         Api().post('/account-setup', {
           userEmail: this.userEmail,
-          profilePicUrl: this.profilePicUrl,
+          profilePicUrl: this.newProfilePicUrl,
           userName: this.userName,
           userTitle: this.userTitle
         }).then(() => {
@@ -169,7 +147,9 @@ export default {
         console.log(err)
       })
     }
-  }
+  },
+
+  mixins: [getUserInfo]
 }
 </script>
 
