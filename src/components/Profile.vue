@@ -6,6 +6,7 @@
         <div class="card shadow">
           <img class="card-img-top" :src="profilePicUrl">
           <div class="card-body">
+            <router-link to="/edit-profile" class="float-right cog"><i class="fas fa-cog"></i></router-link>
             <h5 class="card-title">{{ userName }}</h5>
             <p>{{ userTitle }}</p>
           </div>
@@ -79,7 +80,6 @@ export default {
         for (i = 0; i < res.data.length; i++) {
           this.posts.push(res.data[i])
         }
-        console.log(this.posts)
       })
       .catch((err) => {
         console.log(err)
@@ -96,5 +96,10 @@ export default {
 }
 </script>
 <style scoped lang="css">
-
+  .cog {
+    color: #777777;
+  }
+  .cog:hover {
+    color: #e0e0e0;
+  }
 </style>

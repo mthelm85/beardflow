@@ -96,16 +96,26 @@ module.exports = (app, cloudinary, passport, Post, User) => {
     })
   })
 
+  // app.post('/api/delete-photo', isLoggedIn, (req, res) => {
+  //     cloudinary.v2.api.delete_resources(['Profile Pics/' + req.body.public_id], (error, result) => {
+  //       if (error) {
+  //         console.log(error);
+  //       } else {
+  //         console.log(result);
+  //       }
+  //     });
+  // })
+
   app.post('/api/delete-photo', isLoggedIn, (req, res) => {
-    console.log(req.body.public_id);
-    cloudinary.v2.api.delete_resources(['Profile Pics/' + req.body.public_id], (error, result) =>
-    {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(result);
-      }
-    });
+      cloudinary.v2.api.delete_resources(['Profile Pics/' + req.body.public_id], (error, result) => {
+        if (error) {
+          console.log(error);
+          res.send(error);
+        } else {
+          console.log(result);
+          res.send(result);
+        }
+      });
   })
 
 };

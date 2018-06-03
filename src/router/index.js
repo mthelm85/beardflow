@@ -67,25 +67,25 @@ export default new Router({
         body: ProfileSetup,
         footer: Footer
       },
-      // beforeEnter: (to, from, next) => {
-      //   Api().get('/auth')
-      //     .then((res) => {
-      //       if (res.data.authorized === 'yes') {
-      //         Api().get('/account').then((res) => {
-      //           if (res.data.userLogins > 0) {
-      //             next('/profile')
-      //           } else {
-      //             next()
-      //           }
-      //         })
-      //       } else if (res.data.authorized === 'no') {
-      //         next('/')
-      //       }
-      //     })
-      //     .catch((err) => {
-      //       console.log(err)
-      //     })
-      // }
+      beforeEnter: (to, from, next) => {
+        Api().get('/auth')
+          .then((res) => {
+            if (res.data.authorized === 'yes') {
+              Api().get('/account').then((res) => {
+                if (res.data.userLogins > 0) {
+                  next('/profile')
+                } else {
+                  next()
+                }
+              })
+            } else if (res.data.authorized === 'no') {
+              next('/')
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      }
     },
     {
       path: '/post',

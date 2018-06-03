@@ -6,7 +6,7 @@
           <h4 class="card-header">Change Your Look</h4>
           <form @submit.prevent="upload">
             <div class="card-body">
-              <p class="lead text-left">Change the photo of your magnificent mane and/or 'stache:</p>
+              <p class="lead text-left">Change the photo of your magnificent mane:</p>
               <picture-input
                 v-b-tooltip.hover.bottom title="Click your photo to select a new one"
                 ref="pictureInput"
@@ -66,7 +66,8 @@ export default {
         cloudName: Cloudinary.cloudName
       },
       image: null,
-      newProfilePicUrl: ''
+      newProfilePicUrl: '',
+      userTitle: ''
     }
   },
 
@@ -112,6 +113,17 @@ export default {
   },
 
   methods: {
+    deletePic () {
+      return new Promise((resolve, reject) => {
+        Api().post('/delete-photo', {
+          public_id: this.userEmail
+        }).then((res) => {
+          resolve(res)
+        }).catch((err) => {
+          reject(err)
+        })
+      })
+    },
     onChange (image) {
       if (image) {
         this.image = image
@@ -120,32 +132,52 @@ export default {
       }
     },
     async upload (file) {
-      const formData = new FormData()
-      formData.append('file', this.image)
-      formData.append('upload_preset', this.cloudinary.uploadPreset)
-      formData.append('tags', 'profile_pic')
-      // For debug purpose only
-      // Inspects the content of formData
-      // for (var pair of formData.entries()) {
-      //   console.log(pair[0] + ', ' + pair[1])
-      // }
-      let deletePic = await Api().post('/delete-photo', {
-        public_id: this.userEmail
-      })
-
-      Axios.post(this.url, formData).then(res => {
-        this.newProfilePicUrl = res.data.url
+      if (this.image !== null) {
+        const deleted = await this.deletePic()
+        if (deleted.status === 200) {
+          const formData = new FormData()
+          formData.append('file', this.image)
+          formData.append('upload_preset', this.cloudinary.uploadPreset)
+          formData.append('tags', 'profile_pic')
+          formData.append('public_id', this.userEmail)
+          // For debug purpose only
+          // Inspects the content of formData
+          for (var pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1])
+          }
+          Axios.post(this.url, formData)
+            .then((res) => {
+              this.newProfilePicUrl = res.data.url
+            })
+            .then(() => {
+              Api().post('/account-setup', {
+                userEmail: this.userEmail,
+                profilePicUrl: this.newProfilePicUrl,
+                userName: this.userName,
+                userTitle: this.userTitle
+              })
+            })
+            .then(() => {
+              this.$router.push('/profile')
+            })
+            .catch((err) => {
+              alert(err)
+            })
+        }
+      } else {
         Api().post('/account-setup', {
           userEmail: this.userEmail,
-          profilePicUrl: this.newProfilePicUrl,
+          profilePicUrl: this.profilePicUrl,
           userName: this.userName,
           userTitle: this.userTitle
-        }).then(() => {
-          this.$router.push('/profile')
         })
-      }).catch((err) => {
-        console.log(err)
-      })
+          .then(() => {
+            this.$router.push('/profile')
+          })
+          .catch((err) => {
+            alert(err)
+          })
+      }
     }
   },
 

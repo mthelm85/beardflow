@@ -39,7 +39,6 @@ export default {
     }).catch((err) => {
       console.log(err)
     })
-    console.log(this.$router.history.current.params.postId)
   }
 }
 </script>
