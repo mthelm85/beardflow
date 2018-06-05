@@ -28,7 +28,8 @@ const postSchema = mongoose.Schema({
   date: {
     type: Date,
     default: Date.now
-  }
+  },
+  keywords: []
 });
 
 module.exports = mongoose.model('Post', postSchema);

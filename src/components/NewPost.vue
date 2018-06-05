@@ -18,10 +18,12 @@
 
 <script>
 import Api from '@/router/api'
+import Axios from 'axios'
 import { getUserInfo } from '@/getUserInfo'
 export default {
   data () {
     return {
+      postKeywords: [],
       title: '',
       text: ''
     }
@@ -38,12 +40,19 @@ export default {
   },
 
   methods: {
-    post () {
+    async post () {
+      const keywords = await Axios.post(`https://apis.paralleldots.com/v3/keywords?text=${this.text}&api_key=FlCE7ByUzvtH1PSXffuVd470L3ZIY61KDeNJnE8y9B4`)
+      let i
+      for (i = 0; i < keywords.data.keywords.length; i++) {
+        this.postKeywords.push(keywords.data.keywords[i].keyword)
+      }
+
       Api().post('/post', {
         title: this.title,
         text: this.text,
         user: this.userName,
-        userPic: this.profilePicUrl
+        userPic: this.profilePicUrl,
+        keywords: this.postKeywords
       }).then((res) => {
         if (res.data.success === 'yes') {
           this.$router.push('/profile')

@@ -24,6 +24,9 @@
               <p class="mb-1">{{ `${post.text.substring(0, 70).trim()}...` }}</p>
               <b-img :src="post.userPic" rounded="circle" width="40" class="ml-2 img-cropped"></b-img>
               <small>By {{ post.user }}</small>
+              <span class="badge badge-primary badge-pill float-right mt-2 mr-1">{{ post.keywords[0] }}</span>
+              <span class="badge badge-primary badge-pill float-right mt-2 mr-1">{{ post.keywords[1] }}</span>
+              <span class="badge badge-primary badge-pill float-right mt-2 mr-1">{{ post.keywords[2] }}</span>
             </router-link>
           </div>
           <div class="card-footer">
