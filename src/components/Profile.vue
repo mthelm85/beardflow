@@ -15,6 +15,7 @@
 
       <div class="col-xs-12 col-md-6 mt-3">
         <div class="card shadow">
+          <p class="card-header bg-dark text-white text-center">Latest Posts</p>
           <div class="list-group list-group-flush">
             <router-link v-for="post in posts" :key="post._id" :to="{ name: 'ViewPost', params: { postId: post._id } }" class="list-group-item list-group-item-action flex-column align-items-start">
               <div class="d-flex w-100 justify-content-between">
@@ -41,7 +42,7 @@
             <p
               v-b-popover.hover="'BeardFlow has a collection of cool beard-related apps built in. This list is a portal to our world of bearded awesomeness!'"
               title="What's this?"
-              class="list-group-item bg-dark text-white text-center">
+              class="card-header bg-dark text-white text-center">
               Cool Beard Stuff
             </p>
             <a href="#" class="list-group-item list-group-item-action">Face Analysis</a>
@@ -99,10 +100,10 @@ export default {
 }
 </script>
 <style scoped lang="css">
-  .cog {
-    color: #777777;
-  }
-  .cog:hover {
-    color: #e0e0e0;
-  }
+.cog {
+  color: #777777;
+}
+.cog:hover {
+  color: #e0e0e0;
+}
 </style>

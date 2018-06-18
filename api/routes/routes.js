@@ -81,7 +81,7 @@ module.exports = (app, cloudinary, passport, Post, User) => {
   app.get('/api/get-posts', isLoggedIn, (req, res) => {
     let today = new Date();
     today.setMonth(today.getMonth() -1);
-    Post.find({date: {$gt: today}}, null, {sort: '-date', limit: 10}, (err, posts) => {
+    Post.find({date: {$gt: today}}, null, {sort: '-date', limit: 5}, (err, posts) => {
       res.send(posts);
     });
   });
@@ -96,16 +96,6 @@ module.exports = (app, cloudinary, passport, Post, User) => {
       }
     })
   })
-
-  // app.post('/api/delete-photo', isLoggedIn, (req, res) => {
-  //     cloudinary.v2.api.delete_resources(['Profile Pics/' + req.body.public_id], (error, result) => {
-  //       if (error) {
-  //         console.log(error);
-  //       } else {
-  //         console.log(result);
-  //       }
-  //     });
-  // })
 
   app.post('/api/delete-photo', isLoggedIn, (req, res) => {
       cloudinary.v2.api.delete_resources(['Profile Pics/' + req.body.public_id], (error, result) => {

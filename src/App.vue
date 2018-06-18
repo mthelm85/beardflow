@@ -28,10 +28,6 @@ body, html {
   overflow: auto;
 }
 
-/* ::-webkit-scrollbar {
-    display: none;
-} */
-
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s ease;
 }
