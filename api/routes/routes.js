@@ -69,6 +69,7 @@ module.exports = (app, cloudinary, passport, Post, User) => {
     newPost.user = req.body.user;
     newPost.userPic = req.body.userPic;
     newPost.keywords = req.body.keywords;
+    newPost.category = req.body.category;
     newPost.save((err) => {
       if (err) {
         throw err;

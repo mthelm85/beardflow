@@ -4,9 +4,17 @@
       <div class="col">
         <form>
           <div class="form-group" :class="{ 'opaque': opacity }">
-            <label class="lead font-weight-bold" for="title">Title</label>
+            <label class="lead font-weight-bold">What is your post about?</label>
+            <b-form-radio-group v-model="category">
+              <b-form-radio value="general">General beard discussion</b-form-radio>
+              <b-form-radio value="styling">Styling, grooming, trimming</b-form-radio>
+              <b-form-radio value="feedback">I need help/feedback</b-form-radio>
+              <b-form-radio value="products">Beard-related products</b-form-radio>
+              <b-form-radio value="recipes">Beard balm/oil/wax recipes</b-form-radio>
+            </b-form-radio-group>
+            <label class="lead font-weight-bold mt-3" for="title">Title</label>
             <textarea v-model="title" class="form-control" rows="1" id="title"></textarea>
-            <label class="lead font-weight-bold" for="text">Body</label>
+            <label class="lead font-weight-bold mt-3" for="text">Body</label>
             <textarea v-model="text" class="form-control" rows="12" id="text"></textarea>
           </div>
           <button v-if="loading" class="btn btn-dark" @click.prevent="post" :disabled="disabled">Submit</button>
@@ -33,6 +41,7 @@ import { HollowDotsSpinner } from 'epic-spinners'
 export default {
   data () {
     return {
+      category: '',
       loading: true,
       opacity: false,
       postKeywords: [],
@@ -47,7 +56,7 @@ export default {
 
   computed: {
     disabled () {
-      if (this.title && this.text) {
+      if (this.title && this.text && this.category) {
         return false
       } else {
         return true
@@ -70,7 +79,8 @@ export default {
         text: this.text,
         user: this.userName,
         userPic: this.profilePicUrl,
-        keywords: this.postKeywords
+        keywords: this.postKeywords,
+        category: this.category
       }).then((res) => {
         if (res.data.success === 'yes') {
           this.$router.push('/profile')
