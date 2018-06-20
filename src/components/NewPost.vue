@@ -5,16 +5,38 @@
         <form>
           <div class="form-group" :class="{ 'opaque': opacity }">
             <label class="lead font-weight-bold">What is your post about?</label>
-            <b-form-radio-group v-model="category">
-              <b-form-radio value="general">General beard discussion</b-form-radio>
-              <b-form-radio value="styling">Styling, grooming, trimming</b-form-radio>
-              <b-form-radio value="feedback">I need help/feedback</b-form-radio>
-              <b-form-radio value="products">Beard-related products</b-form-radio>
-              <b-form-radio value="recipes">Beard balm/oil/wax recipes</b-form-radio>
-            </b-form-radio-group>
+            <div class="row justify-content-center">
+              <b-form-radio-group stacked v-model="category" class="text-left">
+                <b-form-radio value="general">General beard discussion</b-form-radio>
+                <b-form-radio value="styling">Styling, grooming, trimming</b-form-radio>
+                <b-form-radio value="feedback">I need help/feedback</b-form-radio>
+                <b-form-radio value="products">Beard-related products</b-form-radio>
+                <b-form-radio value="recipes">Beard balm/oil/wax recipes</b-form-radio>
+              </b-form-radio-group>
+            </div>
             <label class="lead font-weight-bold mt-3" for="title">Title</label>
             <textarea v-model="title" class="form-control" rows="1" id="title"></textarea>
-            <label class="lead font-weight-bold mt-3" for="text">Body</label>
+            <label class="lead font-weight-bold mt-3 mb-3" for="text">Body</label>
+            <button @click.prevent="showUploader" class="btn btn-sm btn-dark mt-3 addImage">Add Image</button>
+            <picture-input
+              v-if="uploadImg"
+              v-b-tooltip.hover.bottom title="Click the BeardFlow logo to select your photo"
+              ref="pictureInput"
+              @change="onChange"
+              margin="16"
+              :width="75"
+              :height="75"
+              :plain="true"
+              prefill="/static/beard-black.png"
+              radius="4"
+              accept="image/jpeg,image/png"
+              size="10"
+              :hideChangeButton="true"
+              :customStrings="{
+                upload: '<h1>Bummer!</h1>',
+                drag: 'Choose a jpg or png file'
+              }">
+            </picture-input>
             <textarea v-model="text" class="form-control" rows="12" id="text"></textarea>
           </div>
           <button v-if="loading" class="btn btn-dark" @click.prevent="post" :disabled="disabled">Submit</button>
@@ -38,6 +60,7 @@ import Api from '@/router/api'
 import Axios from 'axios'
 import { getUserInfo } from '@/getUserInfo'
 import { HollowDotsSpinner } from 'epic-spinners'
+import PictureInput from 'vue-picture-input'
 export default {
   data () {
     return {
@@ -46,12 +69,14 @@ export default {
       opacity: false,
       postKeywords: [],
       title: '',
-      text: ''
+      text: '',
+      uploadImg: false
     }
   },
 
   components: {
-    HollowDotsSpinner
+    HollowDotsSpinner,
+    PictureInput
   },
 
   computed: {
@@ -90,6 +115,10 @@ export default {
       }).catch((err) => {
         console.log(err)
       })
+    },
+
+    showUploader () {
+      this.uploadImg = !this.uploadImg
     }
   },
 
@@ -100,6 +129,11 @@ export default {
 <style scoped lang="css">
 form {
   opacity: 1;
+}
+
+.addImage {
+  position: absolute;
+  right: 15px;
 }
 
 .loaderBtn {

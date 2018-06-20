@@ -1,7 +1,6 @@
 <template lang="html">
   <div>
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark shadow-lg">
-      <div class="container">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="#navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -18,7 +17,6 @@
             <button class="btn btn-outline-light my-2 my-sm-0" :disabled="disabled">Login</button>
           </form>
         </div>
-      </div>
       </nav>
   </div>
 </template>
