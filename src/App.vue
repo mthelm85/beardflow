@@ -36,4 +36,13 @@ body, html {
   opacity: 0;
 }
 
+.height-enter-active, .height-leave-active {
+  transition: all 1s;
+  max-height: 1600px;
+}
+.height-enter, .height-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  max-height: 0;
+}
+
 </style>

@@ -16,27 +16,30 @@
             </div>
             <label class="lead font-weight-bold mt-3" for="title">Title</label>
             <textarea v-model="title" class="form-control" rows="1" id="title"></textarea>
+            <transition name="height" mode="out-in">
+              <picture-input
+                class="mt-3"
+                v-if="showInput"
+                v-b-tooltip.hover.bottom title="Click the BeardFlow logo to select your photo"
+                ref="pictureInput"
+                @change="onChange"
+                margin="16"
+                :width="width"
+                :height="height"
+                :plain="true"
+                prefill="/static/beard-black.png"
+                radius="4"
+                accept="image/jpeg,image/png"
+                size="10"
+                :hideChangeButton="true"
+                :customStrings="{
+                  upload: '<h1>Bummer!</h1>',
+                  drag: 'Choose a jpg or png file'
+                }">
+              </picture-input>
+            </transition>
             <label class="lead font-weight-bold mt-3 mb-3" for="text">Body</label>
-            <button @click.prevent="showUploader" class="btn btn-sm btn-dark mt-3 addImage">Add Image</button>
-            <picture-input
-              v-if="uploadImg"
-              v-b-tooltip.hover.bottom title="Click the BeardFlow logo to select your photo"
-              ref="pictureInput"
-              @change="onChange"
-              margin="16"
-              :width="75"
-              :height="75"
-              :plain="true"
-              prefill="/static/beard-black.png"
-              radius="4"
-              accept="image/jpeg,image/png"
-              size="10"
-              :hideChangeButton="true"
-              :customStrings="{
-                upload: '<h1>Bummer!</h1>',
-                drag: 'Choose a jpg or png file'
-              }">
-            </picture-input>
+            <button @click.prevent="showUploader" class="btn btn-sm btn-dark mt-3 addImage">{{ btnText }}</button>
             <textarea v-model="text" class="form-control" rows="12" id="text"></textarea>
           </div>
           <button v-if="loading" class="btn btn-dark" @click.prevent="post" :disabled="disabled">Submit</button>
@@ -60,7 +63,7 @@ import Api from '@/router/api'
 import Axios from 'axios'
 import { getUserInfo } from '@/getUserInfo'
 import { HollowDotsSpinner } from 'epic-spinners'
-import PictureInput from 'vue-picture-input'
+import { uploadImg } from '@/uploadImg'
 export default {
   data () {
     return {
@@ -68,18 +71,24 @@ export default {
       loading: true,
       opacity: false,
       postKeywords: [],
+      showInput: false,
       title: '',
-      text: '',
-      uploadImg: false
+      text: ''
     }
   },
 
   components: {
-    HollowDotsSpinner,
-    PictureInput
+    HollowDotsSpinner
   },
 
   computed: {
+    btnText () {
+      if (this.showInput === false) {
+        return 'Add Image'
+      } else {
+        return 'Done'
+      }
+    },
     disabled () {
       if (this.title && this.text && this.category) {
         return false
@@ -118,17 +127,21 @@ export default {
     },
 
     showUploader () {
-      this.uploadImg = !this.uploadImg
+      this.showInput = !this.showInput
     }
   },
 
-  mixins: [getUserInfo]
+  mixins: [
+    getUserInfo,
+    uploadImg
+  ]
 }
 </script>
 
 <style scoped lang="css">
 form {
   opacity: 1;
+  transition: all 1s ease;
 }
 
 .addImage {
