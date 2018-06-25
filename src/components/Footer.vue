@@ -1,22 +1,16 @@
 <template lang="html">
-  <div v-if="show" class="container-fluid">
-    <div class="row bg-dark text-secondary">
-      <div class="col-12">
-        <footer>
-          <div class="float-left py-3">
-            <a class="text-secondary px-3" href="#"><i class="fab fa-facebook"></i></a>
-            <a class="text-secondary px-3" href="#"><i class="fab fa-twitter-square"></i></a>
-            <a class="text-secondary px-3" href="#"><i class="fab fa-instagram"></i></a>
-            <a class="text-secondary px-3" href="#"><i class="fab fa-pinterest-square"></i></a>
-          </div>
-          <div class="float-right text-white py-3">
-              © {{ year }} BeardFlow
-              <img src="../assets/beard.svg" width="30px"/>
-          </div>
-        </footer>
-      </div>
+  <nav v-if="show" class="navbar bottom navbar-dark bg-dark">
+    <div class="float-left py-3">
+      <a class="text-secondary px-3" href="#"><i class="fab fa-facebook"></i></a>
+      <a class="text-secondary px-3" href="#"><i class="fab fa-twitter-square"></i></a>
+      <a class="text-secondary px-3" href="#"><i class="fab fa-instagram"></i></a>
+      <a class="text-secondary px-3" href="#"><i class="fab fa-pinterest-square"></i></a>
     </div>
-  </div>
+    <div class="float-right text-white py-3">
+        © {{ year }} BeardFlow
+        <img src="../assets/beard.svg" width="30px"/>
+    </div>
+  </nav>
 </template>
 
 <script>

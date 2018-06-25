@@ -61,9 +61,11 @@
 <script>
 import Api from '@/router/api'
 import Axios from 'axios'
-import { getUserInfo } from '@/getUserInfo'
+import { getUserInfo } from '@/mixins/getUserInfo'
 import { HollowDotsSpinner } from 'epic-spinners'
-import { uploadImg } from '@/uploadImg'
+import { imgSize } from '@/mixins/imgSize'
+import parallelDots from '@/parallelDots'
+import { uploadImg } from '@/mixins/uploadImg'
 export default {
   data () {
     return {
@@ -71,6 +73,7 @@ export default {
       loading: true,
       opacity: false,
       postKeywords: [],
+      postPicUrl: '',
       showInput: false,
       title: '',
       text: ''
@@ -102,7 +105,8 @@ export default {
     async post () {
       this.loading = false
       this.opacity = true
-      const keywords = await Axios.post(`https://apis.paralleldots.com/v3/keywords?text=${this.text}&api_key=FlCE7ByUzvtH1PSXffuVd470L3ZIY61KDeNJnE8y9B4`)
+      const uploaded = await this.upload()
+      const keywords = await Axios.post(`https://apis.paralleldots.com/v3/keywords?text=${this.text}&api_key=${parallelDots.apiKey}`)
       let i
       for (i = 0; i < keywords.data.keywords.length; i++) {
         this.postKeywords.push(keywords.data.keywords[i].keyword)
@@ -114,12 +118,15 @@ export default {
         user: this.userName,
         userPic: this.profilePicUrl,
         keywords: this.postKeywords,
-        category: this.category
+        category: this.category,
+        postPicUrl: uploaded.url
       }).then((res) => {
         if (res.data.success === 'yes') {
           this.$router.push('/profile')
         } else {
-          console.log('Unable to post')
+          alert('Unable to post')
+          console.log(res.data.error)
+          this.$router.push('/profile')
         }
       }).catch((err) => {
         console.log(err)
@@ -133,7 +140,8 @@ export default {
 
   mixins: [
     getUserInfo,
-    uploadImg
+    uploadImg,
+    imgSize
   ]
 }
 </script>

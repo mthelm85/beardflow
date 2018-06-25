@@ -58,7 +58,7 @@
 
 <script>
 import Api from '@/router/api'
-import { getUserInfo } from '@/getUserInfo'
+import { getUserInfo } from '@/mixins/getUserInfo'
 import Moment from 'moment'
 export default {
   data () {

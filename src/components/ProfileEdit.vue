@@ -47,7 +47,8 @@
 import Api from '@/router/api'
 import Axios from 'axios'
 import Cloudinary from '@/cloudinary.js'
-import { getUserInfo } from '@/getUserInfo'
+import { getUserInfo } from '@/mixins/getUserInfo'
+import { imgSize } from '@/mixins/imgSize'
 import PictureInput from 'vue-picture-input'
 export default {
   created () {
@@ -85,30 +86,6 @@ export default {
     },
     url () {
       return `https://api.cloudinary.com/v1_1/${this.cloudinary.cloudName}/upload`
-    },
-    width () {
-      switch (this.$mq) {
-        case 'desktop':
-          return '250'
-        case 'laptop':
-          return '150'
-        case 'tablet':
-          return '100'
-        case 'mobile':
-          return '75'
-      }
-    },
-    height () {
-      switch (this.$mq) {
-        case 'desktop':
-          return '250'
-        case 'laptop':
-          return '150'
-        case 'tablet':
-          return '100'
-        case 'mobile':
-          return '75'
-      }
     }
   },
 
@@ -181,7 +158,7 @@ export default {
     }
   },
 
-  mixins: [getUserInfo]
+  mixins: [getUserInfo, imgSize]
 }
 </script>
 
