@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="container h-100">
+  <div class="container post-container">
     <div class="row mt-3">
       <div class="col text-center">
         <h3>{{ post.title }}</h3>
@@ -70,7 +70,7 @@ export default {
       }
     }).then((res) => {
       this.post.title = res.data.title
-      this.post.text = res.data.text.replace(/(\r\n|\r|\n){2,}/g, '$1\n')
+      this.post.text = res.data.text
       this.post.user = res.data.user
       this.post.userPic = res.data.userPic
       this.post.postPicUrl = res.data.postPicUrl
@@ -84,6 +84,10 @@ export default {
 <style scoped lang="css">
 .post-body {
   white-space: pre-wrap;
+}
+
+.post-container {
+  min-height: 100%;
 }
 
 .profile-pic {

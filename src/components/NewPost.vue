@@ -15,7 +15,7 @@
               </b-form-radio-group>
             </div>
             <label class="lead font-weight-bold mt-3" for="title">Title</label>
-            <textarea v-model="title" class="form-control" rows="1" id="title"></textarea>
+            <textarea v-model="title" class="form-control" rows="1" id="title" maxlength="70"></textarea>
             <transition name="height" mode="out-in">
               <picture-input
                 class="mt-3"
@@ -40,7 +40,7 @@
             </transition>
             <label class="lead font-weight-bold mt-3 mb-3" for="text">Body</label>
             <button @click.prevent="showUploader" class="btn btn-sm btn-dark mt-3 addImage">{{ btnText }}</button>
-            <textarea v-model="text" class="form-control" rows="12" id="text"></textarea>
+            <textarea v-model="text" class="form-control" rows="12" id="text" maxlength="3000"></textarea>
           </div>
           <button v-if="loading" class="btn btn-dark" @click.prevent="post" :disabled="disabled">Submit</button>
           <button v-else disabled class="loaderBtn">
