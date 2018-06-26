@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="container h-100">
+  <div class="container h-100 new-post-min-height">
     <div class="row h-100 text-center mt-3">
       <div class="col">
         <form>
@@ -161,6 +161,10 @@ form {
   background: none;
   border: none;
   width: 105px;
+}
+
+.new-post-min-height {
+  min-height: 854px;
 }
 
 .opaque {
