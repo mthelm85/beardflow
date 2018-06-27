@@ -2,14 +2,15 @@
   <div class="container post-container">
     <div class="row mt-3">
       <div class="col text-center">
-        <div class="lead text-left">{{ parsedDate }}</div>
-        <h3 class="negative-top">{{ post.title }}</h3>
+        <h3>{{ post.title }}</h3>
         <b-img :src="post.userPic" width="90" rounded="circle" class="mt-2"></b-img>
         <br>
-        <small class="text-muted">By {{ post.user }}</small>
+        <small class="text-muted">Posted: <strong>{{ parsedDate }}</strong>
+          <br>Author: <strong>{{ post.user }}</strong></small>
         <hr />
         <b-img v-if="hasImage" :src="post.postPicUrl" rounded :width="width" class="float-right my-2 profile-pic"></b-img>
         <p class="mt-3 text-justify post-body">{{ post.text }}</p>
+        <hr>
         <div class="text-left">
           <textarea v-model="response" class="form-control mt-3" rows="6" id="title" maxlength="1500" placeholder="Grow this flow by responding here..."></textarea>
           <button class="btn btn-warning my-3">Respond</button>
@@ -93,9 +94,6 @@ export default {
 </script>
 
 <style scoped lang="css">
-.negative-top {
-  margin-top: -33px;
-}
 
 .post-body {
   white-space: pre-wrap;
