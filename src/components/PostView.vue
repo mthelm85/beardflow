@@ -8,8 +8,18 @@
         <small class="text-muted">Posted: <strong>{{ parsedDate }}</strong>
           <br>Author: <strong>{{ post.user }}</strong></small>
         <hr />
-        <b-img v-if="hasImage" :src="post.postPicUrl" rounded :width="width" class="float-right my-2 profile-pic"></b-img>
+        <modal
+         name="post-pic"
+         transition="scale"
+         :height="height"
+         :width="width"
+         @opened="opened">
+          <b-img v-if="hasImage" :src="post.postPicUrl" :width="width"></b-img>
+        </modal>
         <p class="mt-3 text-justify post-body">{{ post.text }}</p>
+        <div class="text-left">
+          <button @click="show" class="false-button"><b-img thumbnail v-if="hasImage" :src="post.postPicUrl" width="100"></b-img></button>
+        </div>
         <hr>
         <div class="text-left">
           <textarea v-model="response" class="form-control mt-3" rows="6" id="title" maxlength="1500" placeholder="Grow this flow by responding here..."></textarea>
@@ -32,7 +42,8 @@ export default {
         text: '',
         user: '',
         userPic: '',
-        postPicUrl: ''
+        postPicUrl: '',
+        postPicBig: false
       }
     }
   },
@@ -41,25 +52,25 @@ export default {
     width () {
       switch (this.$mq) {
         case 'desktop':
-          return '250'
+          return '450'
         case 'laptop':
-          return '175'
+          return '375'
         case 'tablet':
-          return '100'
+          return '300'
         case 'mobile':
-          return '75'
+          return '275'
       }
     },
     height () {
       switch (this.$mq) {
         case 'desktop':
-          return '250'
+          return '450'
         case 'laptop':
-          return '175'
+          return '375'
         case 'tablet':
-          return '100'
+          return '300'
         case 'mobile':
-          return '75'
+          return '275'
       }
     },
     hasImage () {
@@ -89,11 +100,25 @@ export default {
     }).catch((err) => {
       console.log(err)
     })
+  },
+
+  methods: {
+    show () {
+      this.$modal.show('post-pic')
+    }
   }
 }
 </script>
 
 <style scoped lang="css">
+.false-button {
+  background-color: transparent;
+  border: none;
+}
+
+.false-button:hover {
+  cursor: pointer;
+}
 
 .post-body {
   white-space: pre-wrap;
@@ -107,5 +132,15 @@ export default {
   shape-outside: padding-box;
   shape-margin: 20px;
   margin-left: 20px;
+}
+
+.scale-enter-active,
+.scale-leave-active {
+  transition: all 0.5s;
+}
+.scale-enter,
+.scale-leave-active {
+  opacity: 0;
+  transform: scale(0.3) translateY(24px);
 }
 </style>

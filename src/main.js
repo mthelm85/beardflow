@@ -6,6 +6,7 @@ import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import vmodal from 'vue-js-modal'
 import VueMq from 'vue-mq'
 import VueSweetalert2 from 'vue-sweetalert2'
 
@@ -20,6 +21,7 @@ Vue.use(VueMq, {
 })
 
 Vue.use(BootstrapVue)
+Vue.use(vmodal)
 
 Vue.config.productionTip = false
 
