@@ -1,4 +1,4 @@
-module.exports = (app, cloudinary, passport, Post, User) => {
+module.exports = (app, cloudinary, passport, Post, User, Reply) => {
 
   function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
@@ -90,15 +90,40 @@ module.exports = (app, cloudinary, passport, Post, User) => {
   });
 
   app.get('/api/get-one-post', isLoggedIn, (req, res) => {
-    console.log(req.query.id)
     Post.findById(req.query.id, (err, post) => {
       if (err) {
         res.send(err)
       } else {
         res.send(post)
       }
+    });
+  });
+
+  app.get('/api/get-replies', isLoggedIn, (req, res) => {
+    Reply.find({ postObjectID: req.query.postObjectID }, (err, replies) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(replies);
+      }
     })
-  })
+  });
+
+  app.post('/api/reply', isLoggedIn, (req, res) => {
+    let newReply = new Reply();
+    newReply.postObjectID = req.body.postObjectID;
+    newReply.user = req.body.user;
+    newReply.userPic = req.body.userPic;
+    newReply.text = req.body.text;
+    newReply.save((err) => {
+      if (err) {
+        return res.json({ error: err });
+        throw err;
+      } else {
+        return res.json({ success: 'yes' });
+      }
+    });
+  });
 
   app.post('/api/delete-photo', isLoggedIn, (req, res) => {
       cloudinary.v2.api.delete_resources(['Profile Pics/' + req.body.public_id], (error, result) => {

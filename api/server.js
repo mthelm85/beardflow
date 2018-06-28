@@ -15,6 +15,7 @@ const app = express();
 const secret = require('./config/secret');
 const User = require('./config/models/user.js');
 const Post = require('./config/models/post.js');
+const Reply = require('./config/models/post-reply.js');
 
 mongoose.connect(configDB.url);
 
@@ -41,11 +42,11 @@ app.use(serveStatic("../client/dist"));
 cloudinary.config({
   cloud_name: 'drbfvyc4t',
   api_key: '577356844516192',
-  api_secret: 'N4KC78ACQ8nQYN6Yz4-K76xlblA' 
+  api_secret: 'N4KC78ACQ8nQYN6Yz4-K76xlblA'
 })
 
 require('./config/passport')(passport, User);
-require('./routes/routes.js')(app, cloudinary, passport, Post, User);
+require('./routes/routes.js')(app, cloudinary, passport, Post, User, Reply);
 
 app.listen(port, () => {
   console.log(`The server is up on port ${port}`);
