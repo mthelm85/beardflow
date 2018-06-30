@@ -113,16 +113,7 @@ export default {
       this.post.postPicUrl = res.data.postPicUrl
       this.post.postObjectID = res.data._id
     }).then(() => {
-      Api().get('/get-replies', {
-        params: {
-          postObjectID: this.$router.history.current.params.postId
-        }
-      }).then((res) => {
-        this.replies = res.data
-        console.log(this.replies)
-      }).catch((err) => {
-        alert(err)
-      })
+      this.getReplies()
     }).catch((err) => {
       alert(err)
     })
@@ -135,6 +126,18 @@ export default {
   },
 
   methods: {
+    getReplies () {
+      Api().get('/get-replies', {
+        params: {
+          postObjectID: this.$router.history.current.params.postId
+        }
+      }).then((res) => {
+        this.replies = res.data
+        console.log(this.replies)
+      }).catch((err) => {
+        alert(err)
+      })
+    },
     reply () {
       Api().post('/reply', {
         postObjectID: this.post.postObjectID,
@@ -142,8 +145,9 @@ export default {
         user: this.userName,
         userPic: this.profilePicUrl
       }).then((res) => {
+        this.response.text = ''
         if (res.data.success === 'yes') {
-          this.$router.go()
+          this.getReplies()
         } else if (res.data.error) {
           alert(res.data.error)
         }

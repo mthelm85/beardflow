@@ -100,7 +100,7 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
   });
 
   app.get('/api/get-replies', isLoggedIn, (req, res) => {
-    Reply.find({ postObjectID: req.query.postObjectID }, (err, replies) => {
+    Reply.find({ postObjectID: req.query.postObjectID }, null, {sort: '-date', limit: 5}, (err, replies) => {
       if (err) {
         res.send(err);
       } else {
