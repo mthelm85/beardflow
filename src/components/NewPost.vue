@@ -9,7 +9,7 @@
               <b-form-radio-group stacked v-model="category" class="text-left">
                 <b-form-radio value="general">General beard discussion</b-form-radio>
                 <b-form-radio value="styling">Styling, grooming, trimming</b-form-radio>
-                <b-form-radio value="feedback">I need help/feedback</b-form-radio>
+                <b-form-radio value="feedback">I want help/feedback</b-form-radio>
                 <b-form-radio value="products">Beard-related products</b-form-radio>
                 <b-form-radio value="recipes">Beard balm/oil/wax recipes</b-form-radio>
               </b-form-radio-group>

@@ -15,27 +15,49 @@
          :width="width">
           <b-img v-if="hasImage" :src="post.postPicUrl" :width="width"></b-img>
         </modal>
-        <p class="mt-3 text-justify post-body">{{ post.text }}</p>
-        <div class="text-left">
-          <button @click="show" class="false-button"><b-img thumbnail v-if="hasImage" :src="post.postPicUrl" width="100"></b-img></button>
+        <p class="mt-3 text-justify post-body lead">{{ post.text }}</p>
+        <div class="row">
+          <div class="col-4">
+            <div class="text-left">
+              <button @click="show" class="false-button"><b-img thumbnail v-if="hasImage" :src="post.postPicUrl" width="100"></b-img></button>
+            </div>
+            <div v-if="!response.showInput" class="text-left">
+              <button class="btn btn-warning mt-3" @click.prevent="showResponseInput">Post a Response</button>
+            </div>
+          </div>
+          <div class="col-8 my-auto text-right h5">
+            <button class="false-button"><i class="far fa-thumbs-up"></i></button>
+            <em>I like this post</em>
+            <img src="../assets/beard-black.svg" width="30px"/>
+            <em>This post sucks</em>
+            <button class="false-button"><i class="far fa-thumbs-down"></i></button>
+          </div>
         </div>
+        <transition name="height" mode="out-in">
+          <div v-if="response.showInput">
+            <hr>
+            <div class="text-left">
+              <textarea v-model="response.text" class="form-control mt-3" rows="6" id="title" maxlength="1500" placeholder="Grow this flow by responding here..."></textarea>
+              <button class="btn btn-warning mt-3" @click.prevent="reply" :disabled="disabled">Respond</button>
+            </div>
+          </div>
+        </transition>
         <hr>
-        <div class="text-left">
-          <textarea v-model="response.text" class="form-control mt-3" rows="6" id="title" maxlength="1500" placeholder="Grow this flow by responding here..."></textarea>
-          <button class="btn btn-warning mt-3" @click.prevent="reply">Respond</button>
-        </div>
-        <hr>
-        <b-card v-for="reply in replies" :key="reply._id" class="text-justify mb-3">
-          <div class="reply-left">
-            <b-img :src="reply.userPic" width="90" rounded="circle"></b-img>
-          </div>
-          <div>
-            <strong>{{ reply.user }}:</strong> {{ reply.text }}
-          </div>
-          <div class="text-right mb-0">
-            <small>{{ reply.date | formatDate }}</small>
-          </div>
-        </b-card>
+        <transition-group name="height">
+          <b-card v-for="reply in replies" :key="reply._id" class="text-justify mb-3">
+            <div class="reply-left">
+              <b-img :src="reply.userPic" :width="replyWidth" rounded="circle"></b-img>
+            </div>
+            <div>
+              {{ reply.text }}
+            </div>
+            <footer class="blockquote-footer text-right">
+              {{ reply.user }}
+              <br>
+              <cite>{{ reply.date | formatDate }}</cite>
+            </footer>
+          </b-card>
+        </transition-group>
       </div>
     </div>
   </div>
@@ -59,13 +81,21 @@ export default {
         postObjectID: ''
       },
       response: {
-        text: ''
+        text: '',
+        showInput: false
       },
       replies: []
     }
   },
 
   computed: {
+    disabled () {
+      if (this.response.text !== '') {
+        return false
+      } else {
+        return true
+      }
+    },
     width () {
       switch (this.$mq) {
         case 'desktop':
@@ -75,7 +105,7 @@ export default {
         case 'tablet':
           return '300'
         case 'mobile':
-          return '275'
+          return '200'
       }
     },
     height () {
@@ -87,7 +117,7 @@ export default {
         case 'tablet':
           return '300'
         case 'mobile':
-          return '275'
+          return '200'
       }
     },
     hasImage () {
@@ -95,6 +125,18 @@ export default {
         return false
       } else {
         return true
+      }
+    },
+    replyWidth () {
+      switch (this.$mq) {
+        case 'desktop':
+          return '90'
+        case 'laptop':
+          return '90'
+        case 'tablet':
+          return '70'
+        case 'mobile':
+          return '40'
       }
     }
   },
@@ -155,6 +197,9 @@ export default {
     },
     show () {
       this.$modal.show('post-pic')
+    },
+    showResponseInput () {
+      this.response.showInput = true
     }
   },
 
@@ -200,4 +245,5 @@ export default {
   opacity: 0;
   transform: scale(0.3) translateY(24px);
 }
+
 </style>
