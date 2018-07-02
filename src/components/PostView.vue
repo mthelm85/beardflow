@@ -5,8 +5,8 @@
         <h3>{{ post.title }}</h3>
         <b-img :src="post.userPic" width="90" rounded="circle" class="mt-2"></b-img>
         <br>
-        <small class="text-muted">Posted: <strong>{{ post.date }}</strong>
-          <br>Author: <strong>{{ post.user }}</strong></small>
+        <small class="text-muted">Posted {{ post.date }}
+          <br>By {{ post.user }}</small>
         <hr />
         <modal
          name="post-pic"
@@ -25,13 +25,7 @@
               <button class="btn btn-warning mt-3" @click.prevent="showResponseInput">Post a Response</button>
             </div>
           </div>
-          <div class="col-8 my-auto text-right h5">
-            <button class="false-button"><i class="far fa-thumbs-up"></i></button>
-            <em>I like this post</em>
-            <img src="../assets/beard-black.svg" width="30px"/>
-            <em>This post sucks</em>
-            <button class="false-button"><i class="far fa-thumbs-down"></i></button>
-          </div>
+          <like-dislike></like-dislike>
         </div>
         <transition name="height" mode="out-in">
           <div v-if="response.showInput">
@@ -66,8 +60,13 @@
 <script>
 import Api from '@/router/api'
 import { getUserInfo } from '@/mixins/getUserInfo'
+import LikeDislike from '@/components/LikeDislike.vue'
 import Moment from 'moment'
 export default {
+  components: {
+    LikeDislike
+  },
+
   data () {
     return {
       post: {
@@ -208,14 +207,6 @@ export default {
 </script>
 
 <style scoped lang="css">
-.false-button {
-  background-color: transparent;
-  border: none;
-}
-
-.false-button:hover {
-  cursor: pointer;
-}
 
 .post-body {
   white-space: pre-wrap;

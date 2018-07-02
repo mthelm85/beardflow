@@ -36,6 +36,19 @@ body, html {
   opacity: 0;
 }
 
+.false-button {
+  background-color: transparent;
+  border: none;
+}
+
+.false-button:hover {
+  cursor: pointer;
+}
+
+.false-button:focus {
+  outline: none;
+}
+
 .height-enter-active, .height-leave-active {
   transition: all 1s;
   max-height: 1600px;
