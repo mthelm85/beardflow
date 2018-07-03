@@ -60,7 +60,7 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
         }
       }
     )
-  })
+  });
 
   app.post('/api/post', isLoggedIn, (req, res) => {
     let newPost = new Post();
@@ -78,7 +78,7 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
       } else {
         return res.json({ success: 'yes' });
       }
-    })
+    });
   });
 
   app.get('/api/get-posts', isLoggedIn, (req, res) => {
@@ -106,7 +106,7 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
       } else {
         res.send(replies);
       }
-    })
+    });
   });
 
   app.post('/api/reply', isLoggedIn, (req, res) => {
@@ -135,6 +135,26 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
           res.send(result);
         }
       });
-  })
+  });
+
+  app.post('/api/like-post', isLoggedIn, (req, res) => {
+    User.findOne({ email: req.body.email }, (err, user) => {
+      if (err) {
+        console.log(err)
+      } else if (user) {
+        if (user.keywords.length > 99) {
+          for (let i = 0; i < 3; i++) {
+            user.keywords.splice(0, 1, req.body.keywords[i])
+          }
+        } else {
+          for (let i = 0; i < 3; i++) {
+            user.keywords.push(req.body.keywords[i])
+          }
+        }
+        user.save();
+      }
+      console.log(user.keywords, user.userName)
+    });
+  });
 
 };

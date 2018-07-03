@@ -19,20 +19,40 @@
 </template>
 
 <script>
+import Api from '@/router/api'
+import { getUserInfo } from '@/mixins/getUserInfo'
 export default {
+  created () {
+    Api().get('/get-one-post', {
+      params: {
+        id: this.$router.history.current.params.postId
+      }
+    }).then((res) => {
+      this.keywords = res.data.keywords
+    }).catch((err) => {
+      alert(err)
+    })
+  },
+
   data () {
     return {
       like: false,
-      dislike: false
+      dislike: false,
+      keywords: null
     }
   },
 
   methods: {
     liked () {
+      console.log(this.keywords, this.userEmail)
       if (this.like === false) {
         this.like = true
         this.dislike = false
       }
+      Api().post('/like-post', {
+        email: this.userEmail,
+        keywords: this.keywords
+      })
     },
     disliked () {
       if (this.dislike === false) {
@@ -40,7 +60,9 @@ export default {
         this.like = false
       }
     }
-  }
+  },
+
+  mixins: [getUserInfo]
 }
 </script>
 

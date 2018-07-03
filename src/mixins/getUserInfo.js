@@ -5,6 +5,7 @@ export const getUserInfo = {
       this.profilePicUrl = res.data.profilePicUrl
       this.userName = res.data.userName
       this.userTitle = res.data.userTitle
+      this.userEmail = res.data.userEmail
     }).catch((err) => {
       console.log(err)
     })
@@ -13,7 +14,8 @@ export const getUserInfo = {
     return {
       profilePicUrl: null,
       userName: null,
-      userTitle: null
+      userTitle: null,
+      userEmail: null
     }
   }
 }
