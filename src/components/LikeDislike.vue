@@ -20,25 +20,11 @@
 
 <script>
 import Api from '@/router/api'
-import { getUserInfo } from '@/mixins/getUserInfo'
 export default {
-  created () {
-    Api().get('/get-one-post', {
-      params: {
-        id: this.$router.history.current.params.postId
-      }
-    }).then((res) => {
-      this.keywords = res.data.keywords
-    }).catch((err) => {
-      alert(err)
-    })
-  },
-
   data () {
     return {
       like: false,
-      dislike: false,
-      keywords: null
+      dislike: false
     }
   },
 
@@ -51,7 +37,7 @@ export default {
       }
       Api().post('/like-post', {
         email: this.userEmail,
-        keywords: this.keywords
+        keywords: this.postKeywords
       })
     },
     disliked () {
@@ -62,7 +48,7 @@ export default {
     }
   },
 
-  mixins: [getUserInfo]
+  props: ['postKeywords', 'userEmail']
 }
 </script>
 

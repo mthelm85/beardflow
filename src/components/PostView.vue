@@ -18,14 +18,17 @@
         <p class="mt-3 text-justify post-body lead">{{ post.text }}</p>
         <div class="row">
           <div class="col-4">
-            <div class="text-left">
-              <button @click="show" class="false-button"><b-img thumbnail v-if="hasImage" :src="post.postPicUrl" width="100"></b-img></button>
+            <div v-if="hasImage" class="text-left">
+              <button @click="show" class="false-button"><b-img thumbnail :src="post.postPicUrl" width="100"></b-img></button>
             </div>
             <div v-if="!response.showInput" class="text-left">
               <button class="btn btn-warning mt-3" @click.prevent="showResponseInput">Post a Response</button>
             </div>
           </div>
-          <like-dislike></like-dislike>
+          <like-dislike
+            :postKeywords="post.keywords"
+            :userEmail="userEmail">
+          </like-dislike>
         </div>
         <transition name="height" mode="out-in">
           <div v-if="response.showInput">
@@ -77,7 +80,8 @@ export default {
         userPic: '',
         postPicUrl: '',
         postPicBig: false,
-        postObjectID: ''
+        postObjectID: '',
+        keywords: null
       },
       response: {
         text: '',
@@ -120,7 +124,7 @@ export default {
       }
     },
     hasImage () {
-      if (this.postPicUrl === null) {
+      if (this.post.postPicUrl === null) {
         return false
       } else {
         return true
@@ -153,6 +157,7 @@ export default {
       this.post.userPic = res.data.userPic
       this.post.postPicUrl = res.data.postPicUrl
       this.post.postObjectID = res.data._id
+      this.post.keywords = res.data.keywords
     }).then(() => {
       this.getReplies()
     }).catch((err) => {

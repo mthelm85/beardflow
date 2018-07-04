@@ -17,7 +17,7 @@ module.exports = (passport, User) => {
     passwordField: 'password',
     passReqToCallback: true
   }, (req, email, password, done) => {
-    console.log(req.body);
+    // console.log(req.body);
     process.nextTick(() => {
       User.findOne({
         'email': email
@@ -47,7 +47,7 @@ module.exports = (passport, User) => {
     passwordField: 'password',
     passReqToCallback: true
   }, (req, email, password, done) => {
-    console.log(req.body);
+    // console.log(req.body);
     User.findOne({
       'email': email
     }, (err, user) => {

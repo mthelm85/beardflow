@@ -9,7 +9,6 @@ yarn-error.log*
 selenium-debug.log
 cloudinary.js
 parallelDots.js
-todo.txt
 
 # Editor directories and files
 .idea

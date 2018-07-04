@@ -36,7 +36,8 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
           userLogins: user.loginCounter,
           userName: user.userName,
           userTitle: user.userTitle,
-          profilePicUrl: user.profilePicUrl
+          profilePicUrl: user.profilePicUrl,
+          keywords: user.keywords
          });
       }
     });
@@ -84,7 +85,7 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
   app.get('/api/get-posts', isLoggedIn, (req, res) => {
     let today = new Date();
     today.setMonth(today.getMonth() -1);
-    Post.find({date: {$gt: today}}, null, {sort: '-date', limit: 5}, (err, posts) => {
+    Post.find({date: {$gt: today}}, null, {sort: '-date', limit: 100}, (err, posts) => {
       res.send(posts);
     });
   });

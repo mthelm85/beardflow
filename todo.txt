@@ -1,0 +1,13 @@
+-create a view that has the following post categories:
+	* show off your beard
+	* ask for feedback
+	* beard product reviews
+	* beard product recipes
+	* random shit
+
+-create recommended posts component
+
+-create recipe store
+	* add recipe model for database
+	* create post route to add new recipes
+	* create retrieve route to retrieve recipes
