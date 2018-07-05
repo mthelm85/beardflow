@@ -5,8 +5,6 @@
 	* beard product recipes
 	* random shit
 
--create recommended posts component
-
 -create recipe store
 	* add recipe model for database
 	* create post route to add new recipes

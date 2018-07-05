@@ -3,6 +3,12 @@ import Router from 'vue-router'
 import NavbarHome from '@/components/NavbarHome'
 import NavbarAuthed from '@/components/NavbarAuthed'
 import HomePage from '@/components/HomePage'
+import PostsLatest from '@/components/PostsLatest'
+import PostsGeneral from '@/components/PostsGeneral'
+import PostsStyling from '@/components/PostsStyling'
+import PostsFeedback from '@/components/PostsFeedback'
+import PostsProducts from '@/components/PostsProducts'
+import PostsRecipes from '@/components/PostsRecipes'
 import Profile from '@/components/Profile'
 import ProfileEdit from '@/components/ProfileEdit'
 import ProfileSetup from '@/components/ProfileSetup'
@@ -47,7 +53,33 @@ export default new Router({
         body: Profile,
         footer: Footer
       },
-      beforeEnter: auth
+      beforeEnter: auth,
+      children: [
+        {
+          path: '',
+          component: PostsLatest
+        },
+        {
+          path: 'posts-general',
+          component: PostsGeneral
+        },
+        {
+          path: 'posts-styling',
+          component: PostsStyling
+        },
+        {
+          path: 'posts-feedback',
+          component: PostsFeedback
+        },
+        {
+          path: 'posts-products',
+          component: PostsProducts
+        },
+        {
+          path: 'posts-recipes',
+          component: PostsRecipes
+        }
+      ]
     },
     {
       path: '/edit-profile',

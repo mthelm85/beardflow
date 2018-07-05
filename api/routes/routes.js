@@ -90,6 +90,14 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
     });
   });
 
+  app.get('/api/get-posts-categorized', isLoggedIn, (req, res) => {
+    let today = new Date();
+    today.setMonth(today.getMonth() -1);
+    Post.find({date: {$gt: today}, category: req.query.category}, null, {sort: '-date', limit: 100}, (err, posts) => {
+      res.send(posts);
+    });
+  });
+
   app.get('/api/get-one-post', isLoggedIn, (req, res) => {
     Post.findById(req.query.id, (err, post) => {
       if (err) {

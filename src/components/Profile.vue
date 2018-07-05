@@ -15,15 +15,15 @@
           <div class="col-12">
             <div class="card shadow">
               <div class="list-group" :class="{ 'pb-3': padBottom }">
-                <p
-                  v-b-popover.hover="'BeardFlow has a collection of cool beard-related apps built in. This list is a portal to our world of bearded awesomeness!'"
-                  title="What's this?"
-                  class="card-header bg-dark text-white text-center">
-                  Cool Beard Stuff
+                <p class="card-header bg-dark text-white text-center">
+                  Browse All Posts
                 </p>
-                <a href="#" class="list-group-item list-group-item-action">Face Analysis</a>
-                <a href="#" class="list-group-item list-group-item-action">Better My Beard</a>
-                <a href="#" class="list-group-item list-group-item-action">Create/Store Recipes</a>
+                <router-link to="/profile/posts-general" class="list-group-item list-group-item-action">General Beard Discussions</router-link>
+                <router-link to="/profile/posts-styling" class="list-group-item list-group-item-action">Styling & Grooming</router-link>
+                <router-link to="/profile/posts-feedback" class="list-group-item list-group-item-action">Feedback & Help</router-link>
+                <router-link to="/profile/posts-products" class="list-group-item list-group-item-action">Beard-Related Products</router-link>
+                <router-link to="/profile/posts-recipes" class="list-group-item list-group-item-action">Beard Balm/Oil/Wax Recipes</router-link>
+                <router-link to="/profile" class="list-group-item list-group-item-action">Latest Posts</router-link>
               </div>
             </div>
           </div>
@@ -31,32 +31,11 @@
       </div>
 
       <div class="col-xs-12 col-md-9 mt-3">
-        <div class="card shadow">
-          <p class="card-header bg-dark text-white text-center">Latest Posts</p>
-          <div class="list-group list-group-flush">
-            <router-link v-for="post in posts" :key="post._id" :to="{ name: 'ViewPost', params: { postId: post._id } }" class="list-group-item list-group-item-action flex-column align-items-start">
-              <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">{{ post.title }}
-                  <img src="../assets/beard-black.svg"
-                    v-if="recommended(post.keywords)"
-                    width="30px"
-                    v-b-popover.hover="'This post is recommended just for you, based on past posts that you have liked.'"
-                    title="Recommended for you"/>
-                </h5>
-                <small class="text-right">{{ post.date | relativeTime }}</small>
-              </div>
-              <p class="mb-1">{{ `${post.text.substring(0, 70).trim()}...` }}</p>
-              <b-img :src="post.userPic" rounded="circle" width="40" class="ml-2 img-cropped"></b-img>
-              <small>By {{ post.user }}</small>
-              <span class="badge badge-secondary float-right mt-2 mr-1">{{ post.keywords[0] }}</span>
-              <span class="badge badge-secondary float-right mt-2 mr-1">{{ post.keywords[1] }}</span>
-              <span class="badge badge-secondary float-right mt-2 mr-1">{{ post.keywords[2] }}</span>
-            </router-link>
-          </div>
-          <div class="card-footer">
-            <router-link to="/post" class="btn btn-warning btn-sm">Post your own story</router-link>
-          </div>
-        </div>
+        <transition name="fade" mode="out-in">
+          <keep-alive>
+            <router-view></router-view>
+          </keep-alive>
+        </transition>
       </div>
 
     </div>
@@ -64,67 +43,17 @@
 </template>
 
 <script>
-import Api from '@/router/api'
 import { getUserInfo } from '@/mixins/getUserInfo'
-import Moment from 'moment'
 export default {
   data () {
     return {
-      posts: []
+
     }
   },
 
   computed: {
     padBottom () {
       if (this.$mq === 'mobile') {
-        return true
-      } else {
-        return false
-      }
-    }
-  },
-
-  created () {
-    Api().get('/get-posts')
-      .then((res) => {
-        if (res.data.length < 5) {
-          let i = 0
-          for (i = 0; i < res.data.length; i++) {
-            this.posts.push(res.data[i])
-          }
-        } else {
-          let i = 0
-          for (i = 0; i < 5; i++) {
-            this.posts.push(res.data[i])
-          }
-        }
-      })
-      .catch((err) => {
-        alert(err)
-      })
-  },
-
-  filters: {
-    relativeTime (date) {
-      return Moment(date).fromNow()
-    }
-  },
-
-  methods: {
-    recommended (keywords) {
-      let a = keywords
-      let b = this.userKeywords
-      let z
-      let commonVals
-      if (b.length > a.length) {
-        z = b
-        b = a
-        a = z
-      }
-      commonVals = a.filter(function (e) {
-        return b.indexOf(e) > -1
-      })
-      if (commonVals.length > 0) {
         return true
       } else {
         return false
