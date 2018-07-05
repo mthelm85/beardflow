@@ -16,9 +16,7 @@
         <p class="mb-1">{{ `${post.text.substring(0, 70).trim()}...` }}</p>
         <b-img :src="post.userPic" rounded="circle" width="40" class="ml-2 img-cropped"></b-img>
         <small>By {{ post.user }}</small>
-        <span class="badge badge-secondary float-right mt-2 mr-1">{{ post.keywords[0] }}</span>
-        <span class="badge badge-secondary float-right mt-2 mr-1">{{ post.keywords[1] }}</span>
-        <span class="badge badge-secondary float-right mt-2 mr-1">{{ post.keywords[2] }}</span>
+        <span class="badge badge-secondary float-right mt-2 mr-1">{{ post.category | fullCatName }}</span>
       </router-link>
     </div>
     <div class="card-footer">
@@ -61,6 +59,20 @@ export default {
   filters: {
     relativeTime (date) {
       return Moment(date).fromNow()
+    },
+    fullCatName (cat) {
+      switch (cat) {
+        case 'general':
+          return 'General Beard Discussions'
+        case 'styling':
+          return 'Styling & Grooming'
+        case 'feedback':
+          return 'Feedback & Help'
+        case 'products':
+          return 'Beard-Related Products'
+        case 'recipes':
+          return 'Beard Balm/Oil/Wax Recipes'
+      }
     }
   },
 
@@ -78,7 +90,8 @@ export default {
       commonVals = a.filter(function (e) {
         return b.indexOf(e) > -1
       })
-      if (commonVals.length > 0) {
+      if (commonVals.length > 5) {
+        console.log(commonVals)
         return true
       } else {
         return false

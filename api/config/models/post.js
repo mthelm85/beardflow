@@ -39,5 +39,5 @@ const postSchema = mongoose.Schema({
     type: String
   }
 });
-
+postSchema.index({ text: 'text' });
 module.exports = mongoose.model('Post', postSchema);

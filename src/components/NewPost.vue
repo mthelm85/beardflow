@@ -114,7 +114,7 @@ export default {
 
       Api().post('/post', {
         title: this.title,
-        text: this.text,
+        text: this.text.replace(/\n\s*\n\s*\n/g, '\n\n'),
         user: this.userName,
         userPic: this.profilePicUrl,
         keywords: this.postKeywords,
