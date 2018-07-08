@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate')
 const validator = require('validator');
 
 const postSchema = mongoose.Schema({
@@ -44,4 +45,5 @@ const postSchema = mongoose.Schema({
   }
 });
 postSchema.index({ text: 'text' });
+postSchema.plugin(mongoosePaginate);
 module.exports = mongoose.model('Post', postSchema);

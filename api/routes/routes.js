@@ -82,11 +82,27 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
     });
   });
 
+  // app.get('/api/get-posts', isLoggedIn, (req, res) => {
+  //   let today = new Date();
+  //   today.setMonth(today.getMonth() -1);
+  //   Post.find({date: {$gt: today}}, null, {sort: '-date'}, (err, posts) => {
+  //     res.send(posts);
+  //   });
+  // });
+
   app.get('/api/get-posts', isLoggedIn, (req, res) => {
-    let today = new Date();
-    today.setMonth(today.getMonth() -1);
-    Post.find({date: {$gt: today}}, null, {sort: '-date', limit: 100}, (err, posts) => {
-      res.send(posts);
+    let query = {}
+    let options = {
+      sort: { date: -1 },
+      page: req.query.page,
+      limit: 5
+    }
+    Post.paginate(query, options).then((err, posts) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(posts);
+      }
     });
   });
 

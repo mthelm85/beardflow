@@ -20,7 +20,12 @@
       </router-link>
     </div>
     <div class="card-footer">
-      <router-link to="/post" class="btn btn-warning btn-sm">Post your own story</router-link>
+      <router-link to="/post" class="btn btn-warning btn-sm mt-2">Post your own story</router-link>
+      <ul class="pagination pagination-sm float-right mt-2">
+        <li class="page-item" :class="{ disabled: isDisabled }"><button class="page-link" @click.prevent="previous">Previous</button></li>
+        <li class="page-item disabled"><button class="page-link">{{ page }} of {{ totalPages }}</button></li>
+        <li class="page-item"><button class="page-link" @click.prevent="next">Next</button></li>
+      </ul>
     </div>
   </div>
 </template>
@@ -32,28 +37,24 @@ import Moment from 'moment'
 export default {
   data () {
     return {
-      posts: []
+      page: 1,
+      posts: [],
+      totalPages: null
+    }
+  },
+
+  computed: {
+    isDisabled () {
+      if (this.page === 1) {
+        return true
+      } else {
+        return false
+      }
     }
   },
 
   created () {
-    Api().get('/get-posts')
-      .then((res) => {
-        if (res.data.length < 5) {
-          let i = 0
-          for (i = 0; i < res.data.length; i++) {
-            this.posts.push(res.data[i])
-          }
-        } else {
-          let i = 0
-          for (i = 0; i < 5; i++) {
-            this.posts.push(res.data[i])
-          }
-        }
-      })
-      .catch((err) => {
-        alert(err)
-      })
+    this.getPosts()
   },
 
   filters: {
@@ -77,6 +78,28 @@ export default {
   },
 
   methods: {
+    getPosts () {
+      Api().get('/get-posts', {
+        params: {
+          page: this.page
+        }
+      })
+        .then((res) => {
+          this.posts = res.data.docs
+          this.totalPages = res.data.pages
+        })
+        .catch((err) => {
+          alert(err)
+        })
+    },
+    next () {
+      this.page++
+      this.getPosts()
+    },
+    previous () {
+      this.page--
+      this.getPosts()
+    },
     recommended (keywords) {
       let a = keywords
       let b = this.userKeywords
