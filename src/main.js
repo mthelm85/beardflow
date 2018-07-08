@@ -6,6 +6,7 @@ import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import { store } from '@/store/store.js'
 import vmodal from 'vue-js-modal'
 import VueMq from 'vue-mq'
 import VueSweetalert2 from 'vue-sweetalert2'
@@ -29,6 +30,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

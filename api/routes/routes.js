@@ -147,9 +147,36 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
   });
 
   app.post('/api/like-post', isLoggedIn, (req, res) => {
+    let query = { _id: req.body.id }
+    Post.findOneAndUpdate(query, { $inc: { likes: 1 } }, (err, post) => {
+      if (err) {
+        res.send(err)
+      } else {
+        post.save();
+      }
+    });
     User.findOne({ email: req.body.email }, (err, user) => {
       if (err) {
-        console.log(err)
+        res.send(err)
+      } else if (user) {
+        if (user.keywords.length > 999) {
+          for (let i = 0; i < req.body.keywords.length; i++) {
+            user.keywords.splice(0, 1, req.body.keywords[i])
+          }
+        } else {
+          for (let i = 0; i < req.body.keywords.length; i++) {
+            user.keywords.push(req.body.keywords[i])
+          }
+        }
+        user.save();
+      }
+    });
+  });
+
+  app.post('/api/save-keywords', isLoggedIn, (req, res) => {
+    User.findOne({ email: req.body.email }, (err, user) => {
+      if (err) {
+        res.send(err)
       } else if (user) {
         if (user.keywords.length > 99) {
           for (let i = 0; i < 3; i++) {
@@ -162,8 +189,21 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
         }
         user.save();
       }
-      console.log(user.keywords, user.userName)
     });
+  });
+
+  app.post('/api/search-posts', isLoggedIn, (req, res) => {
+    Post.find(
+      { $text: { $search: req.body.searchTerm } },
+      { score: { $meta: 'textScore' } })
+    .sort({ score: { $meta: 'textScore' } })
+    .exec((err, results) => {
+      if (err) {
+        res.send(err)
+      } else if (results) {
+        res.send(results)
+      }
+    })
   });
 
 };

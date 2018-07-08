@@ -30,12 +30,12 @@ export default {
 
   methods: {
     liked () {
-      console.log(this.keywords, this.userEmail)
       if (this.like === false) {
         this.like = true
         this.dislike = false
       }
       Api().post('/like-post', {
+        id: this.$router.history.current.params.postId,
         email: this.userEmail,
         keywords: this.postKeywords
       })

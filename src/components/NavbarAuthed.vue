@@ -11,6 +11,14 @@
           <router-link tag="li" to="/" class="nav-item" active-class="active" exact><a class="nav-link">Home</a></router-link>
           <router-link tag="li" to="/profile" class="nav-item" active-class="active"><a class="nav-link">My Profile</a></router-link>
         </ul>
+        <form class="form-inline">
+          <div class="input-group mr-2">
+            <div class="input-group-prepend">
+              <button class="btn btn-outline-light" @click.prevent="search"><i class="fas fa-search"></i></button>
+            </div>
+            <input v-model="searchTerm" type="text" class="form-control" placeholder="Search all posts">
+          </div>
+        </form>
         <form class="form-inline my-2 my-lg-0">
           <button class="btn btn-outline-light my-2 my-sm-0" @click.prevent="logout">Logout</button>
         </form>
@@ -24,7 +32,7 @@ import Api from '@/router/api'
 export default {
   data () {
     return {
-
+      searchTerm: ''
     }
   },
 
@@ -35,10 +43,29 @@ export default {
       }).catch((err) => {
         console.log(err)
       })
+    },
+
+    search () {
+      if (this.searchTerm !== '') {
+        Api().post('/search-posts', {
+          searchTerm: this.searchTerm
+        }).then((res) => {
+          this.$store.state.searchResults = res.data
+          console.log('STORE DATA:', this.$store.state.searchResults)
+          this.$router.push('/profile/search-results')
+        }).catch((err) => {
+          if (err) {
+            alert(err)
+          }
+        })
+      } else {
+        alert('You must enter a search term')
+      }
     }
   }
 }
 </script>
 
-<style lang="css">
+<style scoped lang="css">
+
 </style>

@@ -87,11 +87,10 @@ export default {
         b = a
         a = z
       }
-      commonVals = a.filter(function (e) {
+      commonVals = a.filter((e) => {
         return b.indexOf(e) > -1
       })
       if (commonVals.length > 5) {
-        console.log(commonVals)
         return true
       } else {
         return false

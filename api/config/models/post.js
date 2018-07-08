@@ -37,6 +37,10 @@ const postSchema = mongoose.Schema({
   },
   postPicUrl: {
     type: String
+  },
+  likes: {
+    type: Number,
+    default: 0
   }
 });
 postSchema.index({ text: 'text' });

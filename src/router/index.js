@@ -9,6 +9,7 @@ import PostsStyling from '@/components/PostsStyling'
 import PostsFeedback from '@/components/PostsFeedback'
 import PostsProducts from '@/components/PostsProducts'
 import PostsRecipes from '@/components/PostsRecipes'
+import PostsSearched from '@/components/PostsSearched'
 import Profile from '@/components/Profile'
 import ProfileEdit from '@/components/ProfileEdit'
 import ProfileSetup from '@/components/ProfileSetup'
@@ -78,6 +79,10 @@ export default new Router({
         {
           path: 'posts-recipes',
           component: PostsRecipes
+        },
+        {
+          path: 'search-results',
+          component: PostsSearched
         }
       ]
     },
