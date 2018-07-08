@@ -1,11 +1,11 @@
 <template lang="html">
   <div class="card shadow">
-    <p class="card-header bg-dark text-white text-center">Latest Posts</p>
+    <p class="card-header bg-dark text-white text-center"><span class="h5">Latest Posts</span></p>
     <div class="list-group list-group-flush">
       <router-link v-for="post in posts" :key="post._id" :to="{ name: 'ViewPost', params: { postId: post._id } }" class="list-group-item list-group-item-action flex-column align-items-start">
         <div class="d-flex w-100 justify-content-between">
           <h5 class="mb-1">{{ post.title }}
-            <img src="../assets/beard-black.svg"
+            <img src="../../assets/beard-black.svg"
               v-if="recommended(post.keywords)"
               width="30px"
               v-b-popover.hover="'This post is recommended just for you, based on past posts that you have liked.'"
@@ -22,9 +22,9 @@
     <div class="card-footer">
       <router-link to="/post" class="btn btn-warning btn-sm mt-2">Post your own story</router-link>
       <ul class="pagination pagination-sm float-right mt-2">
-        <li class="page-item" :class="{ disabled: isDisabled }"><button class="page-link" @click.prevent="previous">Previous</button></li>
+        <li class="page-item" :class="{ disabled: prevDisabled }"><button class="page-link" @click.prevent="previous">Previous</button></li>
         <li class="page-item disabled"><button class="page-link">{{ page }} of {{ totalPages }}</button></li>
-        <li class="page-item"><button class="page-link" @click.prevent="next">Next</button></li>
+        <li class="page-item" :class="{ disabled: nextDisabled }"><button class="page-link" @click.prevent="next">Next</button></li>
       </ul>
     </div>
   </div>
@@ -34,22 +34,11 @@
 import Api from '@/router/api'
 import { getUserInfo } from '@/mixins/getUserInfo'
 import Moment from 'moment'
+import { prevNext } from '@/mixins/prevNext'
 export default {
   data () {
     return {
-      page: 1,
-      posts: [],
-      totalPages: null
-    }
-  },
-
-  computed: {
-    isDisabled () {
-      if (this.page === 1) {
-        return true
-      } else {
-        return false
-      }
+      posts: []
     }
   },
 
@@ -92,14 +81,6 @@ export default {
           alert(err)
         })
     },
-    next () {
-      this.page++
-      this.getPosts()
-    },
-    previous () {
-      this.page--
-      this.getPosts()
-    },
     recommended (keywords) {
       let a = keywords
       let b = this.userKeywords
@@ -121,7 +102,7 @@ export default {
     }
   },
 
-  mixins: [getUserInfo]
+  mixins: [getUserInfo, prevNext]
 }
 </script>
 

@@ -16,7 +16,7 @@
             <div class="card shadow">
               <div class="list-group" :class="{ 'pb-3': padBottom }">
                 <p class="card-header bg-dark text-white text-center">
-                  Browse All Posts
+                  <span class="h6">Browse All Posts</span>
                 </p>
                 <router-link to="/profile/posts-general" class="list-group-item list-group-item-action">General Beard Discussions</router-link>
                 <router-link to="/profile/posts-styling" class="list-group-item list-group-item-action">Styling & Grooming</router-link>

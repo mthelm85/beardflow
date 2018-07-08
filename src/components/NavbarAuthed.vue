@@ -48,7 +48,8 @@ export default {
     search () {
       if (this.searchTerm !== '') {
         Api().post('/search-posts', {
-          searchTerm: this.searchTerm
+          searchTerm: this.searchTerm,
+          page: 1
         }).then((res) => {
           this.$store.state.searchResults = res.data
           console.log('STORE DATA:', this.$store.state.searchResults)

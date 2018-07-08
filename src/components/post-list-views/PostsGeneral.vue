@@ -1,11 +1,11 @@
 <template lang="html">
   <div class="card shadow">
-    <p class="card-header bg-dark text-white text-center">Beard Products Discussions</p>
+    <p class="card-header bg-dark text-white text-center">General Beard Discussions</p>
     <div class="list-group list-group-flush">
       <router-link v-for="post in posts" :key="post._id" :to="{ name: 'ViewPost', params: { postId: post._id } }" class="list-group-item list-group-item-action flex-column align-items-start">
         <div class="d-flex w-100 justify-content-between">
           <h5 class="mb-1">{{ post.title }}
-            <img src="../assets/beard-black.svg"
+            <img src="../../assets/beard-black.svg"
               v-if="recommended(post.keywords)"
               width="30px"
               v-b-popover.hover="'This post is recommended just for you, based on past posts that you have liked.'"
@@ -19,7 +19,12 @@
       </router-link>
     </div>
     <div class="card-footer">
-      <router-link to="/post" class="btn btn-warning btn-sm">Post your own story</router-link>
+      <router-link to="/post" class="btn btn-warning btn-sm mt-2">Post your own story</router-link>
+      <ul class="pagination pagination-sm float-right mt-2">
+        <li class="page-item" :class="{ disabled: prevDisabled }"><button class="page-link" @click.prevent="previous">Previous</button></li>
+        <li class="page-item disabled"><button class="page-link">{{ page }} of {{ totalPages }}</button></li>
+        <li class="page-item" :class="{ disabled: nextDisabled }"><button class="page-link" @click.prevent="next">Next</button></li>
+      </ul>
     </div>
   </div>
 </template>
@@ -28,6 +33,7 @@
 import Api from '@/router/api'
 import { getUserInfo } from '@/mixins/getUserInfo'
 import Moment from 'moment'
+import { prevNext } from '@/mixins/prevNext'
 export default {
   data () {
     return {
@@ -36,27 +42,7 @@ export default {
   },
 
   created () {
-    Api().get('/get-posts-categorized', {
-      params: {
-        category: 'products'
-      }
-    })
-      .then((res) => {
-        if (res.data.length < 5) {
-          let i = 0
-          for (i = 0; i < res.data.length; i++) {
-            this.posts.push(res.data[i])
-          }
-        } else {
-          let i = 0
-          for (i = 0; i < 5; i++) {
-            this.posts.push(res.data[i])
-          }
-        }
-      })
-      .catch((err) => {
-        alert(err)
-      })
+    this.getPosts()
   },
 
   filters: {
@@ -66,6 +52,21 @@ export default {
   },
 
   methods: {
+    getPosts () {
+      Api().get('/get-posts-categorized', {
+        params: {
+          category: 'general',
+          page: this.page
+        }
+      })
+        .then((res) => {
+          this.posts = res.data.docs
+          this.totalPages = res.data.pages
+        })
+        .catch((err) => {
+          alert(err)
+        })
+    },
     recommended (keywords) {
       let a = keywords
       let b = this.userKeywords
@@ -79,7 +80,7 @@ export default {
       commonVals = a.filter(function (e) {
         return b.indexOf(e) > -1
       })
-      if (commonVals.length > 0) {
+      if (commonVals.length > 5) {
         return true
       } else {
         return false
@@ -87,7 +88,7 @@ export default {
     }
   },
 
-  mixins: [getUserInfo]
+  mixins: [getUserInfo, prevNext]
 }
 </script>
 

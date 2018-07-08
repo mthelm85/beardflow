@@ -5,7 +5,7 @@
         <router-link :to="{ name: 'ViewPost', params: { postId: post._id } }" class="list-group-item list-group-item-action flex-column align-items-start">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">{{ post.title }}
-              <img src="../assets/beard-black.svg"
+              <img src="../../assets/beard-black.svg"
                 v-if="recommended(post.keywords)"
                 width="30px"
                 v-b-popover.hover="'This post is recommended just for you, based on past posts that you have liked.'"
@@ -19,7 +19,7 @@
         </router-link>
       </div>
     <div class="card-footer">
-      <router-link to="/post" class="btn btn-warning btn-sm">Post your own story</router-link>
+      <router-link to="/post" class="btn btn-warning btn-sm mt-2">Post your own story</router-link>
     </div>
   </div>
 </template>

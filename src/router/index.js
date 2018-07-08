@@ -3,13 +3,13 @@ import Router from 'vue-router'
 import NavbarHome from '@/components/NavbarHome'
 import NavbarAuthed from '@/components/NavbarAuthed'
 import HomePage from '@/components/HomePage'
-import PostsLatest from '@/components/PostsLatest'
-import PostsGeneral from '@/components/PostsGeneral'
-import PostsStyling from '@/components/PostsStyling'
-import PostsFeedback from '@/components/PostsFeedback'
-import PostsProducts from '@/components/PostsProducts'
-import PostsRecipes from '@/components/PostsRecipes'
-import PostsSearched from '@/components/PostsSearched'
+import PostsLatest from '@/components/post-list-views/PostsLatest'
+import PostsGeneral from '@/components/post-list-views/PostsGeneral'
+import PostsStyling from '@/components/post-list-views/PostsStyling'
+import PostsFeedback from '@/components/post-list-views/PostsFeedback'
+import PostsProducts from '@/components/post-list-views/PostsProducts'
+import PostsRecipes from '@/components/post-list-views/PostsRecipes'
+import PostsSearched from '@/components/post-list-views/PostsSearched'
 import Profile from '@/components/Profile'
 import ProfileEdit from '@/components/ProfileEdit'
 import ProfileSetup from '@/components/ProfileSetup'
@@ -62,22 +62,27 @@ export default new Router({
         },
         {
           path: 'posts-general',
+          name: 'postsGeneral',
           component: PostsGeneral
         },
         {
           path: 'posts-styling',
+          name: 'postsStyling',
           component: PostsStyling
         },
         {
           path: 'posts-feedback',
+          name: 'postsFeedback',
           component: PostsFeedback
         },
         {
           path: 'posts-products',
+          name: 'postsProducts',
           component: PostsProducts
         },
         {
           path: 'posts-recipes',
+          name: 'postsRecipes',
           component: PostsRecipes
         },
         {

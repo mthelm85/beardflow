@@ -82,14 +82,6 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
     });
   });
 
-  // app.get('/api/get-posts', isLoggedIn, (req, res) => {
-  //   let today = new Date();
-  //   today.setMonth(today.getMonth() -1);
-  //   Post.find({date: {$gt: today}}, null, {sort: '-date'}, (err, posts) => {
-  //     res.send(posts);
-  //   });
-  // });
-
   app.get('/api/get-posts', isLoggedIn, (req, res) => {
     let query = {}
     let options = {
@@ -107,10 +99,18 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
   });
 
   app.get('/api/get-posts-categorized', isLoggedIn, (req, res) => {
-    let today = new Date();
-    today.setMonth(today.getMonth() -1);
-    Post.find({date: {$gt: today}, category: req.query.category}, null, {sort: '-date', limit: 100}, (err, posts) => {
-      res.send(posts);
+    let query = { category: req.query.category }
+    let options = {
+      sort: { date: -1 },
+      page: req.query.page,
+      limit: 5
+    }
+    Post.paginate(query, options).then((err, posts) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(posts);
+      }
     });
   });
 
@@ -208,16 +208,33 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
     });
   });
 
+  // app.post('/api/search-posts', isLoggedIn, (req, res) => {
+  //   Post.find(
+  //     { $text: { $search: req.body.searchTerm } },
+  //     { score: { $meta: 'textScore' } })
+  //   .sort({ score: { $meta: 'textScore' } })
+  //   .exec((err, results) => {
+  //     if (err) {
+  //       res.send(err)
+  //     } else if (results) {
+  //       res.send(results)
+  //     }
+  //   })
+  // });
+
   app.post('/api/search-posts', isLoggedIn, (req, res) => {
-    Post.find(
-      { $text: { $search: req.body.searchTerm } },
-      { score: { $meta: 'textScore' } })
-    .sort({ score: { $meta: 'textScore' } })
-    .exec((err, results) => {
+    let query = { $text: { $search: req.body.searchTerm } }
+    let additional = { score: { $meta: 'textScore' } }
+    let options = {
+      page: req.query.page,
+      limit: 5,
+      sort: { score: { $meta: 'textScore' } }
+    }
+    Post.find(query, additional, options).then((err, posts) => {
       if (err) {
         res.send(err)
-      } else if (results) {
-        res.send(results)
+      } else if (posts) {
+        res.send(posts)
       }
     })
   });
