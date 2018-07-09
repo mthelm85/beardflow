@@ -5,6 +5,7 @@
       <a class="text-secondary px-3" href="#"><i class="fab fa-twitter-square"></i></a>
       <a class="text-secondary px-3" href="#"><i class="fab fa-instagram"></i></a>
       <a class="text-secondary px-3" href="#"><i class="fab fa-pinterest-square"></i></a>
+      <a href="mailto:mail@beardflow.io" class="ml-3 text-white">mail@beardflow.io</a>
     </div>
     <div class="float-right text-white py-3">
         © {{ year }} BeardFlow

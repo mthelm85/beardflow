@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="container-fluid h-100">
+  <div class="container-fluid">
     <div class="row h-100 justify-content-center">
 
       <div class="col-xs-12 col-md-3 mt-3">
@@ -13,7 +13,7 @@
         </div>
         <div class="row mt-3">
           <div class="col-12">
-            <div class="card shadow">
+            <div class="card shadow mb-3">
               <div class="list-group" :class="{ 'pb-3': padBottom }">
                 <p class="card-header bg-dark text-white text-center">
                   <span class="h6">Browse All Posts</span>

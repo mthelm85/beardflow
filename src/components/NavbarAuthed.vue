@@ -9,7 +9,7 @@
         <ul class="navbar-nav mr-auto">
           <span class="navbar-brand mb-0 h1">BeardFlow <img src="../assets/beard.svg" width="30"/></span>
           <router-link tag="li" to="/" class="nav-item" active-class="active" exact><a class="nav-link">Home</a></router-link>
-          <router-link tag="li" to="/profile" class="nav-item" active-class="active"><a class="nav-link">My Profile</a></router-link>
+          <router-link tag="li" to="/profile" class="nav-item" active-class="active"><a class="nav-link">Posts</a></router-link>
         </ul>
         <form class="form-inline">
           <div class="input-group mr-2">
