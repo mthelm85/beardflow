@@ -20,6 +20,11 @@
       </div>
     <div class="card-footer">
       <router-link to="/post" class="btn btn-warning btn-sm mt-2">Post your own story</router-link>
+      <ul class="pagination pagination-sm float-right mt-2">
+        <li class="page-item" :class="{ disabled: prevDisabled }"><button class="page-link" @click.prevent="previous">Previous</button></li>
+        <li class="page-item disabled"><button class="page-link">{{ page }} of {{ totalPages }}</button></li>
+        <li class="page-item" :class="{ disabled: nextDisabled }"><button class="page-link" @click.prevent="next">Next</button></li>
+      </ul>
     </div>
   </div>
 </template>
@@ -37,8 +42,24 @@ export default {
 
   computed: {
     ...mapGetters({
-      searchResults: 'getSearchResults'
-    })
+      page: 'getCurrentPage',
+      searchResults: 'getSearchResults',
+      totalPages: 'getTotalPages'
+    }),
+    nextDisabled () {
+      if (this.page === this.totalPages) {
+        return true
+      } else {
+        return false
+      }
+    },
+    prevDisabled () {
+      if (this.page === 1) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
 
   filters: {
@@ -48,6 +69,14 @@ export default {
   },
 
   methods: {
+    next () {
+      this.page++
+      this.getPosts()
+    },
+    previous () {
+      this.page--
+      this.getPosts()
+    },
     recommended (keywords) {
       let a = keywords
       let b = this.userKeywords

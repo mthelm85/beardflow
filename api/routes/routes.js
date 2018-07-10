@@ -224,13 +224,13 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
 
   app.post('/api/search-posts', isLoggedIn, (req, res) => {
     let query = { $text: { $search: req.body.searchTerm } }
-    let additional = { score: { $meta: 'textScore' } }
+    // let projection = { score: { $meta: 'textScore' } }
     let options = {
+      // sort: { score: { $meta: 'textScore' } },
       page: req.query.page,
-      limit: 5,
-      sort: { score: { $meta: 'textScore' } }
+      limit: 5
     }
-    Post.find(query, additional, options).then((err, posts) => {
+    Post.paginate(query, options).then((err, posts) => {
       if (err) {
         res.send(err)
       } else if (posts) {

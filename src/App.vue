@@ -28,6 +28,10 @@ body, html {
   overflow: auto;
 }
 
+.container-fluid {
+  height: inherit;
+}
+
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s ease;
 }

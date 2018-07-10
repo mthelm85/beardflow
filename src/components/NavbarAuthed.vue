@@ -49,10 +49,10 @@ export default {
       if (this.searchTerm !== '') {
         Api().post('/search-posts', {
           searchTerm: this.searchTerm,
-          page: 1
+          page: this.$store.state.page
         }).then((res) => {
-          this.$store.state.searchResults = res.data
-          console.log('STORE DATA:', this.$store.state.searchResults)
+          this.$store.state.searchResults = res.data.docs
+          this.$store.state.totalPages = Math.ceil(res.data.total / res.data.limit)
           this.$router.push('/profile/search-results')
         }).catch((err) => {
           if (err) {
