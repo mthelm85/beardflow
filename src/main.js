@@ -9,8 +9,10 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { store } from '@/store/store.js'
 import vmodal from 'vue-js-modal'
 import VueMq from 'vue-mq'
+import VuePaginate from 'vue-paginate'
 import VueSweetalert2 from 'vue-sweetalert2'
 
+Vue.use(VuePaginate)
 Vue.use(VueSweetalert2)
 Vue.use(VueMq, {
   breakpoints: {

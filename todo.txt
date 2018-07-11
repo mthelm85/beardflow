@@ -1,11 +1,4 @@
--create a view that has the following post categories:
-	* show off your beard
-	* ask for feedback
-	* beard product reviews
-	* beard product recipes
-	* random shit
-
--create recipe store
-	* add recipe model for database
-	* create post route to add new recipes
-	* create retrieve route to retrieve recipes
+-create saved posts feature
+-create messaging feature
+-add ability to add more images to new posts
+-paginate post responses

@@ -5,9 +5,9 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-    page: 1,
     searchResults: null,
-    totalPages: null
+    totalPages: null,
+    currentPage: 1
   },
   getters: {
     getSearchResults: (state) => {
@@ -17,7 +17,7 @@ export const store = new Vuex.Store({
       return state.totalPages
     },
     getCurrentPage: (state) => {
-      return state.totalPages
+      return state.currentPage
     }
   }
 })

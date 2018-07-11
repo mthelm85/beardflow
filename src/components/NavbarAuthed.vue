@@ -47,20 +47,19 @@ export default {
 
     search () {
       if (this.searchTerm !== '') {
+        this.$store.state.currentPage = 1
         Api().post('/search-posts', {
-          searchTerm: this.searchTerm,
-          page: this.$store.state.page
+          searchTerm: this.searchTerm
         }).then((res) => {
-          this.$store.state.searchResults = res.data.docs
-          this.$store.state.totalPages = Math.ceil(res.data.total / res.data.limit)
+          console.log(res)
+          this.$store.state.searchResults = res.data
+          this.$store.state.totalPages = Math.ceil(res.data.length / 5)
           this.$router.push('/profile/search-results')
         }).catch((err) => {
           if (err) {
             alert(err)
           }
         })
-      } else {
-        alert('You must enter a search term')
       }
     }
   }

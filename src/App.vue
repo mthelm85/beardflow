@@ -62,4 +62,13 @@ body, html {
   max-height: 0;
 }
 
+.post-enter-active, .post-leave-active {
+  transition: all 0.4s;
+  max-height: 1600px;
+}
+.post-enter, .post-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  max-height: 0;
+}
+
 </style>
