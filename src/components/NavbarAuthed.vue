@@ -51,7 +51,6 @@ export default {
         Api().post('/search-posts', {
           searchTerm: this.searchTerm
         }).then((res) => {
-          console.log(res)
           this.$store.state.searchResults = res.data
           this.$store.state.totalPages = Math.ceil(res.data.length / 5)
           this.$router.push('/profile/search-results')

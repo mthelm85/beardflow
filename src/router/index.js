@@ -51,8 +51,7 @@ export default new Router({
       name: 'Profile',
       components: {
         navbar: NavbarAuthed,
-        body: Profile,
-        footer: Footer
+        body: Profile
       },
       beforeEnter: auth,
       children: [
@@ -96,8 +95,7 @@ export default new Router({
       name: 'ProfileEdit',
       components: {
         navbar: NavbarAuthed,
-        body: ProfileEdit,
-        footer: Footer
+        body: ProfileEdit
       },
       beforeEnter: auth
     },
@@ -106,8 +104,7 @@ export default new Router({
       name: 'ProfileSetup',
       components: {
         navbar: NavbarAuthed,
-        body: ProfileSetup,
-        footer: Footer
+        body: ProfileSetup
       },
       beforeEnter: (to, from, next) => {
         Api().get('/auth')
@@ -134,8 +131,7 @@ export default new Router({
       name: 'Post',
       components: {
         navbar: NavbarAuthed,
-        body: NewPost,
-        footer: Footer
+        body: NewPost
       },
       beforeEnter: auth
     },
@@ -144,8 +140,7 @@ export default new Router({
       name: 'ViewPost',
       components: {
         navbar: NavbarAuthed,
-        body: PostView,
-        footer: Footer
+        body: PostView
       },
       beforeEnter: auth
     }

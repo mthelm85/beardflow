@@ -16,30 +16,46 @@
             </div>
             <label class="lead font-weight-bold mt-3" for="title">Title</label>
             <textarea v-model="title" class="form-control" rows="1" id="title" maxlength="70"></textarea>
-            <transition name="height" mode="out-in">
-              <picture-input
-                class="mt-3"
-                v-if="showInput"
-                v-b-tooltip.hover.bottom title="Click the BeardFlow logo to select your photo"
-                ref="pictureInput"
-                @change="onChange"
-                margin="16"
-                :width="width"
-                :height="height"
-                :plain="true"
-                prefill="/static/beard-black.png"
-                radius="4"
-                accept="image/jpeg,image/png"
-                size="10"
-                :hideChangeButton="true"
-                :customStrings="{
-                  upload: '<h1>Bummer!</h1>',
-                  drag: 'Choose a jpg or png file'
-                }">
-              </picture-input>
-            </transition>
+            <div class="row">
+              <div class="col-4">
+                <p>{{ imageUrls[0]}}</p>
+                <p>{{ imageUrls[1]}}</p>
+              </div>
+              <div class="col-4">
+                <transition name="height" mode="out-in">
+                  <picture-input
+                    class="mt-3"
+                    v-if="showInput"
+                    v-b-tooltip.hover.bottom title="Click the BeardFlow logo to select your photo"
+                    ref="pictureInput"
+                    @change="onChange"
+                    margin="16"
+                    :width="width"
+                    :height="height"
+                    :plain="true"
+                    prefill="/static/beard-black.png"
+                    radius="4"
+                    accept="image/jpeg,image/png"
+                    size="10"
+                    :hideChangeButton="true"
+                    :customStrings="{
+                      upload: '<h1>Bummer!</h1>',
+                      drag: 'Choose a jpg or png file'
+                    }">
+                  </picture-input>
+                </transition>
+              </div>
+              <div class="col-4">
+
+              </div>
+            </div>
             <label class="lead font-weight-bold mt-3 mb-3" for="text">Body</label>
-            <button @click.prevent="showUploader" class="btn btn-sm btn-dark mt-3 addImage">{{ btnText }}</button>
+            <transition name="fade">
+              <button v-show="showAddAnother" @click.prevent="multiImg" class="btn btn-sm btn-dark mt-3 addImage">Add Another Image</button>
+            </transition>
+            <transition name="fade">
+              <button v-show="showAddImage" @click.prevent="showUploader" class="btn btn-sm btn-dark mt-3 addImage">Add Image(s)</button>
+            </transition>
             <textarea v-model="text" class="form-control" rows="12" id="text" maxlength="3000"></textarea>
           </div>
           <button v-if="loading" class="btn btn-dark" @click.prevent="post" :disabled="disabled">Submit</button>
@@ -69,7 +85,9 @@ import { uploadImg } from '@/mixins/uploadImg'
 export default {
   data () {
     return {
+      showAddAnother: false,
       category: '',
+      imageUrls: [],
       loading: true,
       opacity: false,
       postKeywords: [],
@@ -85,23 +103,33 @@ export default {
   },
 
   computed: {
-    btnText () {
-      if (this.showInput === false) {
-        return 'Add Image'
-      } else {
-        return 'Done'
-      }
-    },
     disabled () {
       if (this.title && this.text && this.category) {
         return false
       } else {
         return true
       }
+    },
+    showAddImage () {
+      if (this.showInput === false) {
+        return true
+      } else {
+        return false
+      }
     }
   },
 
   methods: {
+    async multiImg () {
+      this.loading = false
+      this.opacity = true
+      const uploaded = await this.upload()
+      if (uploaded.url) {
+        this.imageUrls.push(uploaded.url)
+        this.loading = true
+        this.opacity = false
+      }
+    },
     async post () {
       this.loading = false
       this.opacity = true

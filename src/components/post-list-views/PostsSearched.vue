@@ -1,5 +1,15 @@
 <template lang="html">
-  <div class="card shadow">
+  <transition v-if="noResults" name="post" mode="out-in">
+    <div class="card shadow">
+      <p class="card-header bg-dark text-white text-center">Search Results</p>
+      <div class="card-body">Sorry, your search did not return any results. Please enter a new search term
+      and try again.</div>
+      <div class="card-footer">
+        <router-link to="/post" class="btn btn-warning btn-sm mt-2">Post your own story</router-link>
+      </div>
+    </div>
+  </transition>
+  <div v-else class="card shadow">
     <p class="card-header bg-dark text-white text-center">Search Results</p>
     <transition name="post" mode="out-in">
       <paginate
@@ -64,6 +74,13 @@ export default {
     }),
     nextDisabled () {
       if (this.page === this.totalPages) {
+        return true
+      } else {
+        return false
+      }
+    },
+    noResults () {
+      if (this.searchResults.length === 0) {
         return true
       } else {
         return false

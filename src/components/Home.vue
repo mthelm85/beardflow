@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="container-fluid with-bg-photo h-100">
+  <div class="container-fluid with-bg-photo">
     <div class="row h-100">
       <div class="col my-auto">
         <div class="card float-right mr-5">

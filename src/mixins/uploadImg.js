@@ -29,6 +29,7 @@ export const uploadImg = {
     onChange (image) {
       if (image) {
         this.image = image
+        this.showAddAnother = true
       } else {
         console.log('FileReader API not supported: use the <form>, Luke!')
       }

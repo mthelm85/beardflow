@@ -1,12 +1,12 @@
 <template>
   <div class="h-100">
-    <transition name="fade" mode="out-in" appear>
+    <transition name="fade" mode="out-in">
       <router-view name="navbar"></router-view>
     </transition>
-    <transition name="fade" mode="out-in" appear>
+    <transition name="fade" mode="out-in">
       <router-view name="body"></router-view>
     </transition>
-    <transition name="fade" mode="out-in" appear>
+    <transition name="fade" mode="out-in">
       <router-view name="footer"></router-view>
     </transition>
   </div>
