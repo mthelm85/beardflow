@@ -16,14 +16,24 @@
             </div>
             <label class="lead font-weight-bold mt-3" for="title">Title</label>
             <textarea v-model="title" class="form-control" rows="1" id="title" maxlength="70"></textarea>
-            <div class="row">
+            <div class="row justify-content-center">
               <div class="col-4">
                 <p>{{ imageUrls[0]}}</p>
                 <p>{{ imageUrls[1]}}</p>
               </div>
               <div class="col-4">
+                <div v-show="uploadingImg" id="imageLoadingDots">
+                  <hollow-dots-spinner
+                    animation-duration="1000"
+                    dot-size="15"
+                    dots-num="3"
+                    color="#000000"
+                    style="margin-top: 70%;"
+                  />
+                </div>
                 <transition name="height" mode="out-in">
                   <picture-input
+                    :class="{ 'opaque': inputOpacity }"
                     class="mt-3"
                     v-if="showInput"
                     v-b-tooltip.hover.bottom title="Click the BeardFlow logo to select your photo"
@@ -51,7 +61,11 @@
             </div>
             <label class="lead font-weight-bold mt-3 mb-3" for="text">Body</label>
             <transition name="fade">
-              <button v-show="showAddAnother" @click.prevent="multiImg" class="btn btn-sm btn-dark mt-3 addImage">Add Another Image</button>
+              <button
+                v-show="showAddAnother"
+                @click.prevent="multiImg"
+                class="btn btn-sm btn-dark mt-3 addImage"
+                :disabled="imageBtn">Add Another Image</button>
             </transition>
             <transition name="fade">
               <button v-show="showAddImage" @click.prevent="showUploader" class="btn btn-sm btn-dark mt-3 addImage">Add Image(s)</button>
@@ -87,14 +101,17 @@ export default {
     return {
       showAddAnother: false,
       category: '',
+      imageBtn: false,
       imageUrls: [],
+      inputOpacity: false,
       loading: true,
       opacity: false,
       postKeywords: [],
       postPicUrl: '',
       showInput: false,
       title: '',
-      text: ''
+      text: '',
+      uploadingImg: false
     }
   },
 
@@ -121,13 +138,16 @@ export default {
 
   methods: {
     async multiImg () {
-      this.loading = false
-      this.opacity = true
+      this.uploadingImg = true
+      this.inputOpacity = true
+      this.imageBtn = true
       const uploaded = await this.upload()
       if (uploaded.url) {
         this.imageUrls.push(uploaded.url)
-        this.loading = true
-        this.opacity = false
+        this.inputOpacity = false
+        this.uploadingImg = false
+        this.image = null
+        this.imageBtn = false
       }
     },
     async post () {
@@ -199,6 +219,13 @@ form {
   animation: lighten 1s forwards;
 }
 
+#imageLoadingDots {
+  position: absolute;
+  width: 90px;
+  left: 50%;
+  margin-left: -45px;
+  z-index: 100000;
+}
 @keyframes lighten {
   0% {
     opacity: 1
