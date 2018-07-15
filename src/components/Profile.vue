@@ -4,11 +4,11 @@
 
       <div class="col-xs-12 col-md-3 mt-3">
         <div class="card shadow">
-          <img class="card-img-top" :src="profilePicUrl">
+          <img class="card-img-top" :src="user.profilePicUrl">
           <div class="card-body">
             <router-link to="/edit-profile" class="float-right cog"><i class="fas fa-cog"></i></router-link>
-            <h5 class="card-title">{{ userName }}</h5>
-            <p>{{ userTitle }}</p>
+            <h5 class="card-title">{{ user.userName }}</h5>
+            <p>{{ user.userTitle }}</p>
           </div>
         </div>
         <div class="row mt-3">
@@ -43,7 +43,8 @@
 </template>
 
 <script>
-import { getUserInfo } from '@/mixins/getUserInfo'
+import Api from '@/router/api'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -52,6 +53,9 @@ export default {
   },
 
   computed: {
+    ...mapGetters({
+      user: 'getUserData'
+    }),
     padBottom () {
       if (this.$mq === 'mobile') {
         return true
@@ -61,7 +65,18 @@ export default {
     }
   },
 
-  mixins: [getUserInfo]
+  created () {
+    Api().get('/account').then((res) => {
+      console.log('THIS CODE RAN')
+      this.$store.state.user.profilePicUrl = res.data.profilePicUrl
+      this.$store.state.user.userName = res.data.userName
+      this.$store.state.user.userTitle = res.data.userTitle
+      this.$store.state.user.userEmail = res.data.userEmail
+      this.$store.state.user.userKeywords = res.data.keywords
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
 }
 </script>
 <style scoped lang="css">

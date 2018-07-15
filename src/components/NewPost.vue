@@ -91,9 +91,9 @@
 <script>
 import Api from '@/router/api'
 import Axios from 'axios'
-import { getUserInfo } from '@/mixins/getUserInfo'
 import { HollowDotsSpinner } from 'epic-spinners'
 import { imgSize } from '@/mixins/imgSize'
+import { mapGetters } from 'vuex'
 import parallelDots from '@/parallelDots'
 import { uploadImg } from '@/mixins/uploadImg'
 export default {
@@ -127,6 +127,9 @@ export default {
         return true
       }
     },
+    ...mapGetters({
+      user: 'getUserData'
+    }),
     showAddImage () {
       if (this.showInput === false) {
         return true
@@ -163,8 +166,8 @@ export default {
       Api().post('/post', {
         title: this.title,
         text: this.text.replace(/\n\s*\n\s*\n/g, '\n\n'),
-        user: this.userName,
-        userPic: this.profilePicUrl,
+        user: this.user.userName,
+        userPic: this.user.profilePicUrl,
         keywords: this.postKeywords,
         category: this.category,
         postPicUrl: uploaded.url
@@ -187,7 +190,6 @@ export default {
   },
 
   mixins: [
-    getUserInfo,
     uploadImg,
     imgSize
   ]

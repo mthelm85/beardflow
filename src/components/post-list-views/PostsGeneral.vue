@@ -33,7 +33,7 @@
 
 <script>
 import Api from '@/router/api'
-import { getUserInfo } from '@/mixins/getUserInfo'
+import { getUserKeywords } from '@/mixins/getUserKeywords'
 import Moment from 'moment'
 import { prevNext } from '@/mixins/prevNext'
 export default {
@@ -68,29 +68,10 @@ export default {
         .catch((err) => {
           alert(err)
         })
-    },
-    recommended (keywords) {
-      let a = keywords
-      let b = this.userKeywords
-      let z
-      let commonVals
-      if (b.length > a.length) {
-        z = b
-        b = a
-        a = z
-      }
-      commonVals = a.filter(function (e) {
-        return b.indexOf(e) > -1
-      })
-      if (commonVals.length > 5) {
-        return true
-      } else {
-        return false
-      }
     }
   },
 
-  mixins: [getUserInfo, prevNext]
+  mixins: [getUserKeywords, prevNext]
 }
 </script>
 

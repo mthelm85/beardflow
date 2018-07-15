@@ -1,17 +1,14 @@
 <template lang="html">
-  <transition v-if="noResults" name="post" mode="out-in">
-    <div class="card shadow">
-      <p class="card-header bg-dark text-white text-center">Search Results</p>
-      <div class="card-body">Sorry, your search did not return any results. Please enter a new search term
-      and try again.</div>
-      <div class="card-footer">
-        <router-link to="/post" class="btn btn-warning btn-sm mt-2">Post your own story</router-link>
-      </div>
+  <div class="card shadow" v-if="noResults">
+    <p class="card-header bg-dark text-white text-center">Search Results</p>
+    <div class="card-body">Sorry, your search did not return any results. Please enter a new search term
+    and try again.</div>
+    <div class="card-footer">
+      <router-link to="/post" class="btn btn-warning btn-sm mt-2">Post your own story</router-link>
     </div>
-  </transition>
+  </div>
   <div v-else class="card shadow">
     <p class="card-header bg-dark text-white text-center">Search Results</p>
-    <transition name="post" mode="out-in">
       <paginate
         class="m-0 p-0"
         name="searchResults"
@@ -37,7 +34,6 @@
           </router-link>
         </div>
       </paginate>
-    </transition>
     <div class="card-footer">
       <router-link to="/post" class="btn btn-warning btn-sm mt-2">Post your own story</router-link>
       <ul class="pagination pagination-sm float-right mt-2">
@@ -50,7 +46,7 @@
 </template>
 
 <script>
-import { getUserInfo } from '@/mixins/getUserInfo'
+import { getUserKeywords } from '@/mixins/getUserKeywords'
 import { mapGetters } from 'vuex'
 import Moment from 'moment'
 export default {
@@ -111,29 +107,10 @@ export default {
     previous () {
       this.$store.state.currentPage--
       this.$refs.paginator.goToPage(this.page)
-    },
-    recommended (keywords) {
-      let a = keywords
-      let b = this.userKeywords
-      let z
-      let commonVals
-      if (b.length > a.length) {
-        z = b
-        b = a
-        a = z
-      }
-      commonVals = a.filter(function (e) {
-        return b.indexOf(e) > -1
-      })
-      if (commonVals.length > 5) {
-        return true
-      } else {
-        return false
-      }
     }
   },
 
-  mixins: [getUserInfo]
+  mixins: [getUserKeywords]
 }
 </script>
 

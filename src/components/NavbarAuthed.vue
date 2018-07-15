@@ -9,7 +9,7 @@
         <ul class="navbar-nav mr-auto">
           <span class="navbar-brand mb-0 h1">BeardFlow <img src="../assets/beard.svg" width="30"/></span>
           <router-link tag="li" to="/" class="nav-item" active-class="active" exact><a class="nav-link">Home</a></router-link>
-          <router-link tag="li" to="/profile" class="nav-item" active-class="active"><a class="nav-link">Posts</a></router-link>
+          <router-link tag="li" to="/profile" class="nav-item" active-class="active"><a class="nav-link">My Portal</a></router-link>
         </ul>
         <form class="form-inline">
           <div class="input-group mr-2">
@@ -51,6 +51,9 @@ export default {
         Api().post('/search-posts', {
           searchTerm: this.searchTerm
         }).then((res) => {
+          if (res.data.length === 0) {
+            this.searchTerm = ''
+          }
           this.$store.state.searchResults = res.data
           this.$store.state.totalPages = Math.ceil(res.data.length / 5)
           this.$router.push('/profile/search-results')

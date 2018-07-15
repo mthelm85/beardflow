@@ -1,7 +1,6 @@
 <template lang="html">
   <div class="card shadow">
     <p class="card-header bg-dark text-white text-center"><span class="h5">Latest Posts</span></p>
-    <transition name="post" mode="out-in">
       <div class="list-group list-group-flush" :key="page">
         <router-link v-for="post in posts" :key="post._id" :to="{ name: 'ViewPost', params: { postId: post._id } }" class="list-group-item list-group-item-action flex-column align-items-start">
           <div class="d-flex w-100 justify-content-between">
@@ -20,8 +19,7 @@
           <span class="badge badge-secondary float-right mt-2 mr-1">{{ post.category | fullCatName }}</span>
         </router-link>
       </div>
-    </transition>
-    <div class="card-footer">
+    <div class="card-footer" :key="page">
       <router-link to="/post" class="btn btn-warning btn-sm mt-2">Post your own story</router-link>
       <ul class="pagination pagination-sm float-right mt-2">
         <li class="page-item" :class="{ disabled: prevDisabled }"><button class="page-link" @click.prevent="previous">Previous</button></li>
@@ -34,7 +32,8 @@
 
 <script>
 import Api from '@/router/api'
-import { getUserInfo } from '@/mixins/getUserInfo'
+import { getUserKeywords } from '@/mixins/getUserKeywords'
+import { mapGetters } from 'vuex'
 import Moment from 'moment'
 import { prevNext } from '@/mixins/prevNext'
 export default {
@@ -42,6 +41,12 @@ export default {
     return {
       posts: []
     }
+  },
+
+  computed: {
+    ...mapGetters({
+      user: 'getUserData'
+    })
   },
 
   created () {
@@ -82,29 +87,10 @@ export default {
         .catch((err) => {
           alert(err)
         })
-    },
-    recommended (keywords) {
-      let a = keywords
-      let b = this.userKeywords
-      let z
-      let commonVals
-      if (b.length > a.length) {
-        z = b
-        b = a
-        a = z
-      }
-      commonVals = a.filter((e) => {
-        return b.indexOf(e) > -1
-      })
-      if (commonVals.length > 5) {
-        return true
-      } else {
-        return false
-      }
     }
   },
 
-  mixins: [getUserInfo, prevNext]
+  mixins: [getUserKeywords, prevNext]
 }
 </script>
 

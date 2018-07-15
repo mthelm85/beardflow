@@ -15,7 +15,7 @@
                 :width="width"
                 :height="height"
                 :plain="true"
-                :prefill="profilePicUrl"
+                :prefill="user.profilePicUrl"
                 radius="4"
                 accept="image/jpeg,image/png"
                 size="10"
@@ -47,18 +47,10 @@
 import Api from '@/router/api'
 import Axios from 'axios'
 import Cloudinary from '@/cloudinary.js'
-import { getUserInfo } from '@/mixins/getUserInfo'
 import { imgSize } from '@/mixins/imgSize'
+import { mapGetters } from 'vuex'
 import PictureInput from 'vue-picture-input'
 export default {
-  created () {
-    Api().get('/account').then((res) => {
-      this.userEmail = res.data.userEmail
-    }).catch((err) => {
-      console.log(err)
-    })
-  },
-
   data () {
     return {
       cloudinary: {
@@ -77,6 +69,9 @@ export default {
   },
 
   computed: {
+    ...mapGetters({
+      user: 'getUserData'
+    }),
     titlePopover () {
       if (this.userTitle.length > 0 && this.userTitle.length < 5) {
         return true
@@ -93,7 +88,7 @@ export default {
     deletePic () {
       return new Promise((resolve, reject) => {
         Api().post('/delete-photo', {
-          public_id: this.userEmail
+          public_id: this.user.userEmail
         }).then((res) => {
           resolve(res)
         }).catch((err) => {
@@ -116,7 +111,7 @@ export default {
           formData.append('file', this.image)
           formData.append('upload_preset', this.cloudinary.uploadPreset)
           formData.append('tags', 'profile_pic')
-          formData.append('public_id', this.userEmail)
+          formData.append('public_id', this.user.userEmail)
           // For debug purpose only
           // Inspects the content of formData
           for (var pair of formData.entries()) {
@@ -128,9 +123,9 @@ export default {
             })
             .then(() => {
               Api().post('/account-setup', {
-                userEmail: this.userEmail,
+                userEmail: this.user.userEmail,
                 profilePicUrl: this.newProfilePicUrl,
-                userName: this.userName,
+                userName: this.user.userName,
                 userTitle: this.userTitle
               })
             })
@@ -143,9 +138,9 @@ export default {
         }
       } else {
         Api().post('/account-setup', {
-          userEmail: this.userEmail,
-          profilePicUrl: this.profilePicUrl,
-          userName: this.userName,
+          userEmail: this.user.userEmail,
+          profilePicUrl: this.user.profilePicUrl,
+          userName: this.user.userName,
           userTitle: this.userTitle
         })
           .then(() => {
@@ -158,7 +153,7 @@ export default {
     }
   },
 
-  mixins: [getUserInfo, imgSize]
+  mixins: [imgSize]
 }
 </script>
 

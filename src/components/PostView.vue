@@ -62,8 +62,8 @@
 
 <script>
 import Api from '@/router/api'
-import { getUserInfo } from '@/mixins/getUserInfo'
 import LikeDislike from '@/components/LikeDislike.vue'
+import { mapGetters } from 'vuex'
 import Moment from 'moment'
 export default {
   components: {
@@ -92,6 +92,9 @@ export default {
   },
 
   computed: {
+    ...mapGetters({
+      user: 'getUserData'
+    }),
     disabled () {
       if (this.response.text !== '') {
         return false
@@ -188,8 +191,8 @@ export default {
       Api().post('/reply', {
         postObjectID: this.post.postObjectID,
         text: this.response.text,
-        user: this.userName,
-        userPic: this.profilePicUrl
+        user: this.user.userName,
+        userPic: this.user.profilePicUrl
       }).then((res) => {
         this.response.text = ''
         if (res.data.success === 'yes') {
@@ -205,9 +208,7 @@ export default {
     showResponseInput () {
       this.response.showInput = true
     }
-  },
-
-  mixins: [getUserInfo]
+  }
 }
 </script>
 

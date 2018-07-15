@@ -7,7 +7,14 @@ export const store = new Vuex.Store({
   state: {
     searchResults: null,
     totalPages: null,
-    currentPage: 1
+    currentPage: 1,
+    user: {
+      profilePicUrl: null,
+      userName: null,
+      userTitle: null,
+      userEmail: null,
+      userKeywords: null
+    }
   },
   getters: {
     getSearchResults: (state) => {
@@ -18,6 +25,9 @@ export const store = new Vuex.Store({
     },
     getCurrentPage: (state) => {
       return state.currentPage
+    },
+    getUserData: (state) => {
+      return state.user
     }
   }
 })
