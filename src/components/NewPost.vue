@@ -17,9 +17,9 @@
             <label class="lead font-weight-bold mt-3" for="title">Title</label>
             <textarea v-model="title" class="form-control" rows="1" id="title" maxlength="70"></textarea>
             <div class="row justify-content-center">
-              <div class="col-4">
-                <p>{{ imageUrls[0]}}</p>
-                <p>{{ imageUrls[1]}}</p>
+              <div class="col-4  my-auto">
+                <b-img class="mt-3" v-if="hasMultiImg(1)" thumbnail :src="imageUrls[0]" :width="100"></b-img>
+                <b-img class="mt-3" v-if="hasMultiImg(2)" thumbnail :src="imageUrls[1]" :width="100"></b-img>
               </div>
               <div class="col-4">
                 <div v-show="uploadingImg" id="imageLoadingDots">
@@ -31,9 +31,10 @@
                     style="margin-top: 70%;"
                   />
                 </div>
-                <transition name="height" mode="out-in">
+                <transition name="fade" mode="out-in">
                   <picture-input
-                    :class="{ 'opaque': inputOpacity }"
+                    :key="imageUrls.length"
+                    :class="{ 'opaque': inputOpacity, 'disabledInput': !maxImgs }"
                     class="mt-3"
                     v-if="showInput"
                     v-b-tooltip.hover.bottom title="Click the BeardFlow logo to select your photo"
@@ -55,21 +56,18 @@
                   </picture-input>
                 </transition>
               </div>
-              <div class="col-4">
-
+              <div class="col-4 my-auto">
+                <b-alert v-show="!maxImgs" class="mt-3" show variant="secondary">Only two images per post are allowed</b-alert>
               </div>
             </div>
             <label class="lead font-weight-bold mt-3 mb-3" for="text">Body</label>
-            <transition name="fade">
               <button
-                v-show="showAddAnother"
                 @click.prevent="multiImg"
                 class="btn btn-sm btn-dark mt-3 addImage"
-                :disabled="imageBtn">Add Another Image</button>
-            </transition>
-            <transition name="fade">
+                :disabled="!maxImgs">
+                  Upload
+              </button>
               <button v-show="showAddImage" @click.prevent="showUploader" class="btn btn-sm btn-dark mt-3 addImage">Add Image(s)</button>
-            </transition>
             <textarea v-model="text" class="form-control" rows="12" id="text" maxlength="3000"></textarea>
           </div>
           <button v-if="loading" class="btn btn-dark" @click.prevent="post" :disabled="disabled">Submit</button>
@@ -99,9 +97,7 @@ import { uploadImg } from '@/mixins/uploadImg'
 export default {
   data () {
     return {
-      showAddAnother: false,
       category: '',
-      imageBtn: false,
       imageUrls: [],
       inputOpacity: false,
       loading: true,
@@ -136,21 +132,38 @@ export default {
       } else {
         return false
       }
+    },
+    maxImgs () {
+      if (this.imageUrls.length <= 1) {
+        return true
+      } else {
+        return false
+      }
     }
   },
 
   methods: {
+    hasMultiImg (n) {
+      if (this.imageUrls.length >= n) {
+        return true
+      } else {
+        return false
+      }
+    },
     async multiImg () {
-      this.uploadingImg = true
-      this.inputOpacity = true
-      this.imageBtn = true
-      const uploaded = await this.upload()
-      if (uploaded.url) {
-        this.imageUrls.push(uploaded.url)
-        this.inputOpacity = false
-        this.uploadingImg = false
-        this.image = null
-        this.imageBtn = false
+      if (this.image !== null) {
+        this.uploadingImg = true
+        this.inputOpacity = true
+        const uploaded = await this.upload()
+
+        if (uploaded.url) {
+          this.imageUrls.push(uploaded.url)
+          this.inputOpacity = false
+          this.uploadingImg = false
+          this.image = null
+        }
+      } else {
+        alert('Pick a photo, dummy!')
       }
     },
     async post () {
@@ -205,6 +218,10 @@ form {
 .addImage {
   position: absolute;
   right: 15px;
+}
+
+.disabledInput {
+  opacity: 0.3;
 }
 
 .loaderBtn {
