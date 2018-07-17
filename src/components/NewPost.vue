@@ -62,6 +62,7 @@
             </div>
             <label class="lead font-weight-bold mt-3 mb-3" for="text">Body</label>
               <button
+                v-show="!showAddImage"
                 @click.prevent="multiImg"
                 class="btn btn-sm btn-dark mt-3 addImage"
                 :disabled="!maxImgs">
@@ -103,7 +104,7 @@ export default {
       loading: true,
       opacity: false,
       postKeywords: [],
-      postPicUrl: '',
+      // postPicUrl: '',
       showInput: false,
       title: '',
       text: '',
@@ -169,7 +170,7 @@ export default {
     async post () {
       this.loading = false
       this.opacity = true
-      const uploaded = await this.upload()
+      // const uploaded = await this.upload()
       const keywords = await Axios.post(`https://apis.paralleldots.com/v3/keywords?text=${this.text}&api_key=${parallelDots.apiKey}`)
       let i
       for (i = 0; i < keywords.data.keywords.length; i++) {
@@ -183,7 +184,7 @@ export default {
         userPic: this.user.profilePicUrl,
         keywords: this.postKeywords,
         category: this.category,
-        postPicUrl: uploaded.url
+        imageUrls: this.imageUrls
       }).then((res) => {
         if (res.data.success === 'yes') {
           this.$router.push('/profile')

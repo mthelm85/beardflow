@@ -9,17 +9,25 @@
           <br>By {{ post.user }}</small>
         <hr />
         <modal
-         name="post-pic"
+         name="post-pic1"
          transition="scale"
          :height="height"
          :width="width">
-          <b-img v-if="hasImage" :src="post.postPicUrl" :width="width"></b-img>
+          <b-img v-if="hasImage(1)" :src="post.imageUrls[0]" :width="width"></b-img>
+        </modal>
+        <modal
+         name="post-pic2"
+         transition="scale"
+         :height="height"
+         :width="width">
+          <b-img v-if="hasImage(2)" :src="post.imageUrls[1]" :width="width"></b-img>
         </modal>
         <p class="mt-3 text-justify post-body lead">{{ post.text }}</p>
         <div class="row">
           <div class="col-4">
-            <div v-if="hasImage" class="text-left">
-              <button @click="show" class="false-button"><b-img thumbnail :src="post.postPicUrl" width="100"></b-img></button>
+            <div v-if="hasImage(1)" class="text-left">
+              <button @click="show(1)" class="false-button"><b-img thumbnail :src="post.imageUrls[0]" width="100"></b-img></button>
+              <button v-if="hasImage(2)" @click="show(2)" class="false-button"><b-img thumbnail :src="post.imageUrls[1]" width="100"></b-img></button>
             </div>
             <div v-if="!response.showInput" class="text-left">
               <button class="btn btn-warning mt-3" @click.prevent="showResponseInput">Post a Response</button>
@@ -78,7 +86,7 @@ export default {
         text: '',
         user: '',
         userPic: '',
-        postPicUrl: '',
+        imageUrls: null,
         postPicBig: false,
         postObjectID: '',
         keywords: null
@@ -126,13 +134,6 @@ export default {
           return '200'
       }
     },
-    hasImage () {
-      if (this.post.postPicUrl === null) {
-        return false
-      } else {
-        return true
-      }
-    },
     replyWidth () {
       switch (this.$mq) {
         case 'desktop':
@@ -158,7 +159,7 @@ export default {
       this.post.text = res.data.text
       this.post.user = res.data.user
       this.post.userPic = res.data.userPic
-      this.post.postPicUrl = res.data.postPicUrl
+      this.post.imageUrls = res.data.imageUrls
       this.post.postObjectID = res.data._id
       this.post.keywords = res.data.keywords
     }).then(() => {
@@ -187,6 +188,13 @@ export default {
         alert(err)
       })
     },
+    hasImage (n) {
+      if (this.post.imageUrls.length >= n) {
+        return true
+      } else if (this.post.imageUrls.length <= n) {
+        return false
+      }
+    },
     reply () {
       Api().post('/reply', {
         postObjectID: this.post.postObjectID,
@@ -202,8 +210,12 @@ export default {
         }
       })
     },
-    show () {
-      this.$modal.show('post-pic')
+    show (n) {
+      if (n === 1) {
+        this.$modal.show('post-pic1')
+      } else if (n === 2) {
+        this.$modal.show('post-pic2')
+      }
     },
     showResponseInput () {
       this.response.showInput = true

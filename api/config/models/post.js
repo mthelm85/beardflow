@@ -36,9 +36,7 @@ const postSchema = mongoose.Schema({
     required: true,
     unique: false
   },
-  postPicUrl: {
-    type: String
-  },
+  imageUrls: [],
   likes: {
     type: Number,
     default: 0

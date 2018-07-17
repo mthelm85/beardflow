@@ -71,7 +71,7 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
     newPost.userPic = req.body.userPic;
     newPost.keywords = req.body.keywords;
     newPost.category = req.body.category;
-    newPost.postPicUrl = req.body.postPicUrl;
+    newPost.imageUrls = req.body.imageUrls;
     newPost.save((err) => {
       if (err) {
         return res.json({ error: err });
