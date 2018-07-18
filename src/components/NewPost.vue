@@ -18,8 +18,42 @@
             <textarea v-model="title" class="form-control" rows="1" id="title" maxlength="70"></textarea>
             <div class="row justify-content-center">
               <div class="col-4  my-auto">
-                <b-img class="mt-3" v-if="hasMultiImg(1)" thumbnail :src="imageUrls[0]" :width="100"></b-img>
-                <b-img class="mt-3" v-if="hasMultiImg(2)" thumbnail :src="imageUrls[1]" :width="100"></b-img>
+                <b-img
+                  @mouseover="imgHover"
+                  @mouseleave="imgHoverEnd"
+                  :class="{ 'hovering': hovering }"
+                  class="mt-3"
+                  v-if="hasMultiImg(1)"
+                  thumbnail
+                  :src="imageUrls[0]"
+                  :width="100">
+                </b-img>
+                <div
+                  v-show="hovering"
+                  :class=" { 'pointer': hovering } "
+                  class="carousel-caption text-danger"
+                  @mouseover="imgHover"
+                  @mouseleave="imgHoverEnd">
+                  <i class="fas fa-trash-alt"></i>
+                </div>
+                <b-img
+                  @mouseover="imgHover"
+                  @mouseleave="imgHoverEnd"
+                  :class="{ 'hovering': hovering }"
+                  class="mt-3"
+                  v-if="hasMultiImg(2)"
+                  thumbnail
+                  :src="imageUrls[1]"
+                  :width="100">
+                </b-img>
+                <div
+                  v-show="hovering"
+                  :class=" { 'pointer': hovering } "
+                  class="carousel-caption text-danger"
+                  @mouseover="imgHover"
+                  @mouseleave="imgHoverEnd">
+                  <i class="fas fa-trash-alt"></i>
+                </div>
               </div>
               <div class="col-4">
                 <div v-show="uploadingImg" id="imageLoadingDots">
@@ -99,6 +133,7 @@ export default {
   data () {
     return {
       category: '',
+      hovering: false,
       imageUrls: [],
       inputOpacity: false,
       loading: true,
@@ -149,6 +184,12 @@ export default {
       } else {
         return false
       }
+    },
+    imgHover () {
+      this.hovering = true
+    },
+    imgHoverEnd () {
+      this.hovering = false
     },
     async multiImg () {
       if (this.image !== null) {
@@ -214,13 +255,27 @@ form {
   transition: all 1s ease;
 }
 
+i {
+  font-size: 24px;
+}
+
 .addImage {
   position: absolute;
   right: 15px;
 }
 
+.b-img:hover {
+  cursor: pointer;
+  opacity: 0.3;
+}
+
 .disabledInput {
   opacity: 0.3;
+}
+
+.hovering {
+  opacity: 0.3;
+  cursor: pointer;
 }
 
 .loaderBtn {
@@ -235,6 +290,10 @@ form {
 
 .opaque {
   animation: lighten 1s forwards;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 #imageLoadingDots {

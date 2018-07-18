@@ -151,7 +151,7 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
   });
 
   app.post('/api/delete-photo', isLoggedIn, (req, res) => {
-      cloudinary.v2.api.delete_resources(['Profile Pics/' + req.body.public_id], (error, result) => {
+      cloudinary.v2.api.delete_resources([req.body.folder + req.body.public_id], (error, result) => {
         if (error) {
           console.log(error);
           res.send(error);
