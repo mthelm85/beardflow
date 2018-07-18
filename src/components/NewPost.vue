@@ -57,7 +57,7 @@
                 </transition>
               </div>
               <div class="col-4 my-auto">
-                <b-alert v-show="!maxImgs" class="mt-3" show variant="secondary">Only two images per post are allowed</b-alert>
+                <b-alert v-if="!maxImgs" class="mt-3" show variant="secondary">Only two images per post are allowed</b-alert>
               </div>
             </div>
             <label class="lead font-weight-bold mt-3 mb-3" for="text">Body</label>
@@ -104,7 +104,6 @@ export default {
       loading: true,
       opacity: false,
       postKeywords: [],
-      // postPicUrl: '',
       showInput: false,
       title: '',
       text: '',
@@ -170,7 +169,6 @@ export default {
     async post () {
       this.loading = false
       this.opacity = true
-      // const uploaded = await this.upload()
       const keywords = await Axios.post(`https://apis.paralleldots.com/v3/keywords?text=${this.text}&api_key=${parallelDots.apiKey}`)
       let i
       for (i = 0; i < keywords.data.keywords.length; i++) {
