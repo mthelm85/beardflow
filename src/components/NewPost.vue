@@ -18,45 +18,60 @@
             <textarea v-model="title" class="form-control" rows="1" id="title" maxlength="70"></textarea>
             <div class="row justify-content-center">
               <div class="col-4  my-auto">
-                <b-img
-                  @mouseover="imgHover"
-                  @mouseleave="imgHoverEnd"
-                  :class="{ 'hovering': hovering }"
-                  class="mt-3"
-                  v-if="hasMultiImg(1)"
-                  thumbnail
-                  :src="imageUrls[0]"
-                  :width="100">
-                </b-img>
-                <div
-                  v-show="hovering"
-                  :class=" { 'pointer': hovering } "
-                  class="carousel-caption text-danger"
-                  @mouseover="imgHover"
-                  @mouseleave="imgHoverEnd">
-                  <i class="fas fa-trash-alt"></i>
+                <div class="thumb-container d-inline-block">
+                  <div v-show="uploadingImg.thumb1" id="imageLoadingDots">
+                    <hollow-dots-spinner
+                      animation-duration="1000"
+                      dot-size="15"
+                      dots-num="3"
+                      color="#000000"
+                      style="margin-top: 70%;"
+                    />
+                  </div>
+                  <b-img
+                    @mouseover="imgHover(1)"
+                    @mouseleave="imgHoverEnd(1)"
+                    :class="{ 'hovering': hovering.thumb1 }"
+                    class="mt-3"
+                    v-if="hasMultiImg(1)"
+                    thumbnail
+                    :src="imageUrls[0]"
+                    :width="100">
+                  </b-img>
+                  <div
+                    v-show="hovering.thumb1"
+                    :class=" { 'pointer': hovering.thumb1 } "
+                    class="trash-can text-danger"
+                    @click="deletePic(0)"
+                    @mouseover="imgHover(1)"
+                    @mouseleave="imgHoverEnd(1)">
+                    <i class="fas fa-trash-alt"></i>
+                  </div>
                 </div>
-                <b-img
-                  @mouseover="imgHover"
-                  @mouseleave="imgHoverEnd"
-                  :class="{ 'hovering': hovering }"
-                  class="mt-3"
-                  v-if="hasMultiImg(2)"
-                  thumbnail
-                  :src="imageUrls[1]"
-                  :width="100">
-                </b-img>
-                <div
-                  v-show="hovering"
-                  :class=" { 'pointer': hovering } "
-                  class="carousel-caption text-danger"
-                  @mouseover="imgHover"
-                  @mouseleave="imgHoverEnd">
-                  <i class="fas fa-trash-alt"></i>
+                <div class="thumb-container d-inline-block">
+                  <b-img
+                    @mouseover="imgHover(2)"
+                    @mouseleave="imgHoverEnd(2)"
+                    :class="{ 'hovering': hovering.thumb2 }"
+                    class="mt-3"
+                    v-if="hasMultiImg(2)"
+                    thumbnail
+                    :src="imageUrls[1]"
+                    :width="100">
+                  </b-img>
+                  <div
+                    v-show="hovering.thumb2"
+                    :class=" { 'pointer': hovering.thumb2 } "
+                    class="trash-can text-danger"
+                    @click="deletePic(1)"
+                    @mouseover="imgHover(2)"
+                    @mouseleave="imgHoverEnd(2)">
+                    <i class="fas fa-trash-alt"></i>
+                  </div>
                 </div>
               </div>
               <div class="col-4">
-                <div v-show="uploadingImg" id="imageLoadingDots">
+                <div v-show="uploadingImg.input" id="imageLoadingDots">
                   <hollow-dots-spinner
                     animation-duration="1000"
                     dot-size="15"
@@ -133,7 +148,10 @@ export default {
   data () {
     return {
       category: '',
-      hovering: false,
+      hovering: {
+        thumb1: false,
+        thumb2: false
+      },
       imageUrls: [],
       inputOpacity: false,
       loading: true,
@@ -142,7 +160,12 @@ export default {
       showInput: false,
       title: '',
       text: '',
-      uploadingImg: false
+      uploadingImg: {
+        input: false,
+        thumb1: false,
+        thumb2: false
+      },
+      thumbPubIds: []
     }
   },
 
@@ -178,6 +201,31 @@ export default {
   },
 
   methods: {
+    deletePic (n) {
+      if (n === 0) {
+        this.uploadingImg.thumb1 = true
+      } else {
+        this.uploadingImg.thumb2 = true
+      }
+      Api().post('/delete-photo', {
+        folder: '',
+        public_id: this.thumbPubIds[n]
+      }).then((res) => {
+        if (n === 0) {
+          this.uploadingImg.thumb1 = false
+          this.imageUrls.splice(0, 1)
+        } else {
+          this.uploadingImg.thumb2 = false
+        }
+      }).catch((err) => {
+        if (n === 0) {
+          this.uploadingImg.thumb1 = false
+        } else {
+          this.uploadingImg.thumb2 = false
+        }
+        alert(err)
+      })
+    },
     hasMultiImg (n) {
       if (this.imageUrls.length >= n) {
         return true
@@ -185,22 +233,31 @@ export default {
         return false
       }
     },
-    imgHover () {
-      this.hovering = true
+    imgHover (n) {
+      if (n === 1) {
+        this.hovering.thumb1 = true
+      } else {
+        this.hovering.thumb2 = true
+      }
     },
-    imgHoverEnd () {
-      this.hovering = false
+    imgHoverEnd (n) {
+      if (n === 1) {
+        this.hovering.thumb1 = false
+      } else {
+        this.hovering.thumb2 = false
+      }
     },
     async multiImg () {
       if (this.image !== null) {
-        this.uploadingImg = true
+        this.uploadingImg.input = true
         this.inputOpacity = true
         const uploaded = await this.upload()
 
         if (uploaded.url) {
           this.imageUrls.push(uploaded.url)
+          this.thumbPubIds.push(uploaded.public_id)
           this.inputOpacity = false
-          this.uploadingImg = false
+          this.uploadingImg.input = false
           this.image = null
         }
       } else {
@@ -294,6 +351,19 @@ i {
 
 .pointer {
   cursor: pointer;
+}
+
+.thumb-container {
+  position: relative;
+}
+
+.trash-can {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
 }
 
 #imageLoadingDots {
