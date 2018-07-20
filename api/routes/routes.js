@@ -114,6 +114,22 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
     });
   });
 
+  app.get('/api/get-my-posts', isLoggedIn, (req, res) => {
+    let query = { user: req.query.user }
+    let options = {
+      sort: { date: -1 },
+      page: req.query.page,
+      limit: 5
+    }
+    Post.paginate(query, options).then((err, posts) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(posts);
+      }
+    });
+  });
+
   app.get('/api/get-one-post', isLoggedIn, (req, res) => {
     Post.findById(req.query.id, (err, post) => {
       if (err) {

@@ -18,60 +18,31 @@
             <textarea v-model="title" class="form-control" rows="1" id="title" maxlength="70"></textarea>
             <div class="row justify-content-center">
               <div class="col-4  my-auto">
-                <div class="thumb-container d-inline-block">
-                  <div v-show="uploadingImg.thumb1" id="imageLoadingDots">
-                    <hollow-dots-spinner
-                      animation-duration="1000"
-                      dot-size="15"
-                      dots-num="3"
-                      color="#000000"
-                      style="margin-top: 70%;"
-                    />
-                  </div>
+                <transition name="fade">
                   <b-img
                     @mouseover="imgHover(1)"
                     @mouseleave="imgHoverEnd(1)"
-                    :class="{ 'hovering': hovering.thumb1 }"
                     class="mt-3"
-                    v-if="hasMultiImg(1)"
+                    v-if="showInput"
                     thumbnail
-                    :src="imageUrls[0]"
+                    :src="thumbSrc(1)"
                     :width="100">
                   </b-img>
-                  <div
-                    v-show="hovering.thumb1"
-                    :class=" { 'pointer': hovering.thumb1 } "
-                    class="trash-can text-danger"
-                    @click="deletePic(0)"
-                    @mouseover="imgHover(1)"
-                    @mouseleave="imgHoverEnd(1)">
-                    <i class="fas fa-trash-alt"></i>
-                  </div>
-                </div>
-                <div class="thumb-container d-inline-block">
+                </transition>
+                <transition name="fade">
                   <b-img
                     @mouseover="imgHover(2)"
                     @mouseleave="imgHoverEnd(2)"
-                    :class="{ 'hovering': hovering.thumb2 }"
                     class="mt-3"
-                    v-if="hasMultiImg(2)"
+                    v-if="showInput"
                     thumbnail
-                    :src="imageUrls[1]"
+                    :src="thumbSrc(2)"
                     :width="100">
                   </b-img>
-                  <div
-                    v-show="hovering.thumb2"
-                    :class=" { 'pointer': hovering.thumb2 } "
-                    class="trash-can text-danger"
-                    @click="deletePic(1)"
-                    @mouseover="imgHover(2)"
-                    @mouseleave="imgHoverEnd(2)">
-                    <i class="fas fa-trash-alt"></i>
-                  </div>
-                </div>
+                </transition>
               </div>
-              <div class="col-4">
-                <div v-show="uploadingImg.input" id="imageLoadingDots">
+              <div class="col-4 my-auto">
+                <div v-show="uploadingImg" id="imageLoadingDots">
                   <hollow-dots-spinner
                     animation-duration="1000"
                     dot-size="15"
@@ -83,7 +54,7 @@
                 <transition name="fade" mode="out-in">
                   <picture-input
                     :key="imageUrls.length"
-                    :class="{ 'opaque': inputOpacity, 'disabledInput': !maxImgs }"
+                    :class="{ 'opaque': inputOpacity, 'disabledInput': maxImgs }"
                     class="mt-3"
                     v-if="showInput"
                     v-b-tooltip.hover.bottom title="Click the BeardFlow logo to select your photo"
@@ -106,7 +77,9 @@
                 </transition>
               </div>
               <div class="col-4 my-auto">
-                <b-alert v-if="!maxImgs" class="mt-3" show variant="secondary">Only two images per post are allowed</b-alert>
+                <transition name="fade" mode="out-in">
+                  <b-alert v-if="showInput" class="mt-3" show variant="secondary">You can attach up to two (2) images to your post.</b-alert>
+                </transition>
               </div>
             </div>
             <label class="lead font-weight-bold mt-3 mb-3" for="text">Body</label>
@@ -114,7 +87,7 @@
                 v-show="!showAddImage"
                 @click.prevent="multiImg"
                 class="btn btn-sm btn-dark mt-3 addImage"
-                :disabled="!maxImgs">
+                :disabled="maxImgs">
                   Upload
               </button>
               <button v-show="showAddImage" @click.prevent="showUploader" class="btn btn-sm btn-dark mt-3 addImage">Add Image(s)</button>
@@ -148,24 +121,41 @@ export default {
   data () {
     return {
       category: '',
-      hovering: {
-        thumb1: false,
-        thumb2: false
-      },
-      imageUrls: [],
+      imageUrls: ['/static/1.png', '/static/2.png'],
       inputOpacity: false,
       loading: true,
       opacity: false,
+      posted: false,
       postKeywords: [],
       showInput: false,
       title: '',
       text: '',
-      uploadingImg: {
-        input: false,
-        thumb1: false,
-        thumb2: false
-      },
+      uploadingImg: false,
       thumbPubIds: []
+    }
+  },
+
+  async beforeRouteLeave (to, from, next) {
+    if (this.posted === false && this.thumbPubIds.length > 0) {
+      switch (this.thumbPubIds.length) {
+        case 1:
+          this.loading = false
+          this.opacity = true
+          this.deletePic(0)
+          next()
+          break
+        case 2:
+          this.loading = false
+          this.opacity = true
+          let deleted = await this.deletePic(0)
+          if (deleted.status === 200) {
+            this.deletePic(1)
+            next()
+            break
+          }
+      }
+    } else {
+      next()
     }
   },
 
@@ -184,15 +174,15 @@ export default {
     ...mapGetters({
       user: 'getUserData'
     }),
-    showAddImage () {
-      if (this.showInput === false) {
+    maxImgs () {
+      if (this.imageUrls.length >= 4) {
         return true
       } else {
         return false
       }
     },
-    maxImgs () {
-      if (this.imageUrls.length <= 1) {
+    showAddImage () {
+      if (this.showInput === false) {
         return true
       } else {
         return false
@@ -202,62 +192,27 @@ export default {
 
   methods: {
     deletePic (n) {
-      if (n === 0) {
-        this.uploadingImg.thumb1 = true
-      } else {
-        this.uploadingImg.thumb2 = true
-      }
-      Api().post('/delete-photo', {
-        folder: '',
-        public_id: this.thumbPubIds[n]
-      }).then((res) => {
-        if (n === 0) {
-          this.uploadingImg.thumb1 = false
-          this.imageUrls.splice(0, 1)
-        } else {
-          this.uploadingImg.thumb2 = false
-        }
-      }).catch((err) => {
-        if (n === 0) {
-          this.uploadingImg.thumb1 = false
-        } else {
-          this.uploadingImg.thumb2 = false
-        }
-        alert(err)
+      return new Promise((resolve, reject) => {
+        Api().post('/delete-photo', {
+          folder: '',
+          public_id: this.thumbPubIds[n]
+        }).then((res) => {
+          resolve(res)
+        }).catch((err) => {
+          reject(err)
+        })
       })
-    },
-    hasMultiImg (n) {
-      if (this.imageUrls.length >= n) {
-        return true
-      } else {
-        return false
-      }
-    },
-    imgHover (n) {
-      if (n === 1) {
-        this.hovering.thumb1 = true
-      } else {
-        this.hovering.thumb2 = true
-      }
-    },
-    imgHoverEnd (n) {
-      if (n === 1) {
-        this.hovering.thumb1 = false
-      } else {
-        this.hovering.thumb2 = false
-      }
     },
     async multiImg () {
       if (this.image !== null) {
-        this.uploadingImg.input = true
+        this.uploadingImg = true
         this.inputOpacity = true
         const uploaded = await this.upload()
-
         if (uploaded.url) {
           this.imageUrls.push(uploaded.url)
           this.thumbPubIds.push(uploaded.public_id)
           this.inputOpacity = false
-          this.uploadingImg.input = false
+          this.uploadingImg = false
           this.image = null
         }
       } else {
@@ -265,6 +220,7 @@ export default {
       }
     },
     async post () {
+      this.posted = true
       this.loading = false
       this.opacity = true
       const keywords = await Axios.post(`https://apis.paralleldots.com/v3/keywords?text=${this.text}&api_key=${parallelDots.apiKey}`)
@@ -280,7 +236,7 @@ export default {
         userPic: this.user.profilePicUrl,
         keywords: this.postKeywords,
         category: this.category,
-        imageUrls: this.imageUrls
+        imageUrls: this.imageUrls.slice(2)
       }).then((res) => {
         if (res.data.success === 'yes') {
           this.$router.push('/profile')
@@ -293,9 +249,29 @@ export default {
         console.log(err)
       })
     },
-
     showUploader () {
       this.showInput = !this.showInput
+    },
+    thumbSrc (n) {
+      if (n === 1) {
+        switch (this.imageUrls.length) {
+          case 2:
+            return '/static/1.png'
+          case 3:
+            return this.imageUrls[2]
+          case 4:
+            return this.imageUrls[2]
+        }
+      } else {
+        switch (this.imageUrls.length) {
+          case 2:
+            return '/static/2.png'
+          case 3:
+            return '/static/2.png'
+          case 4:
+            return this.imageUrls[3]
+        }
+      }
     }
   },
 
@@ -355,15 +331,6 @@ i {
 
 .thumb-container {
   position: relative;
-}
-
-.trash-can {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  text-align: center;
 }
 
 #imageLoadingDots {

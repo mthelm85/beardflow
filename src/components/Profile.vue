@@ -10,6 +10,10 @@
             <h5 class="card-title">{{ user.userName }}</h5>
             <p>{{ user.userTitle }}</p>
           </div>
+          <div class="card-footer">
+            <router-link to="/profile/posts-mine" class="btn btn-sm btn-outline-dark float-left">&nbsp;My Posts&nbsp;</router-link>
+            <button class="btn btn-sm btn-outline-dark float-right">Saved Posts</button>
+          </div>
         </div>
         <div class="row mt-3">
           <div class="col-12">

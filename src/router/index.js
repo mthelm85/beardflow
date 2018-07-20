@@ -7,6 +7,7 @@ import PostsLatest from '@/components/post-list-views/PostsLatest'
 import PostsGeneral from '@/components/post-list-views/PostsGeneral'
 import PostsStyling from '@/components/post-list-views/PostsStyling'
 import PostsFeedback from '@/components/post-list-views/PostsFeedback'
+import PostsMine from '@/components/post-list-views/PostsMine'
 import PostsProducts from '@/components/post-list-views/PostsProducts'
 import PostsRecipes from '@/components/post-list-views/PostsRecipes'
 import PostsSearched from '@/components/post-list-views/PostsSearched'
@@ -87,6 +88,10 @@ export default new Router({
         {
           path: 'search-results',
           component: PostsSearched
+        },
+        {
+          path: 'posts-mine',
+          component: PostsMine
         }
       ]
     },
