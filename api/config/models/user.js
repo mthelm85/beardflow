@@ -43,7 +43,8 @@ const userSchema = mongoose.Schema({
     type: String,
     maxlength: 30
   },
-  keywords: []
+  keywords: [],
+  favorites: []
 });
 
 userSchema.methods.generateHash = (password) => {

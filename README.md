@@ -1,12 +1,17 @@
 # beardflow
 
-> A Vue.js project
+> A modern forum built with Vue and Node
 
 ## Build Setup
 
 ``` bash
+This project depends on an instance of MongoDB running on port 27017
+
 # install dependencies
 npm install
+
+#start server
+node server.js (in the /api directory)
 
 # serve with hot reload at localhost:8080
 npm run dev
@@ -26,5 +31,3 @@ npm run e2e
 # run all tests
 npm test
 ```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).

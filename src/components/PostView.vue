@@ -29,8 +29,9 @@
               <button @click="show(1)" class="false-button"><b-img thumbnail :src="post.imageUrls[0]" width="100"></b-img></button>
               <button v-if="hasImage(2)" @click="show(2)" class="false-button"><b-img thumbnail :src="post.imageUrls[1]" width="100"></b-img></button>
             </div>
-            <div v-if="!response.showInput" class="text-left">
-              <button class="btn btn-warning mt-3" @click.prevent="showResponseInput">Post a Response</button>
+            <div class="text-left">
+              <button v-if="!response.showInput" class="btn btn-warning mt-3" @click.prevent="showResponseInput">Post a Response</button>
+              <button class="btn btn-warning mt-3" @click.prevent="addToFavs">Save This Flow</button>
             </div>
           </div>
           <like-dislike
@@ -176,6 +177,16 @@ export default {
   },
 
   methods: {
+    addToFavs () {
+      Api().post('/add-to-favs', {
+        email: this.user.userEmail,
+        postId: this.$router.history.current.params.postId
+      }).then((res) => {
+        console.log(res)
+      }).catch((err) => {
+        alert(err)
+      })
+    },
     getReplies () {
       Api().get('/get-replies', {
         params: {

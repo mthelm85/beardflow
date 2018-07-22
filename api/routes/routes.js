@@ -240,4 +240,16 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
     })
   });
 
+  app.post('/api/add-to-favs', isLoggedIn, (req, res) => {
+    User.findOne({ email: req.body.email }, (err, user) => {
+      if (err) {
+        res.send(err);
+      } else {
+        user.favorites.push(req.body.postId);
+        user.save();
+        res.json({ success: 'yes' })
+      }
+    })
+  })
+
 };

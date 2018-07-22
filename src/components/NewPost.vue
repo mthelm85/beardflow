@@ -68,6 +68,7 @@
                     radius="4"
                     accept="image/jpeg,image/png"
                     size="10"
+                    zIndex="5"
                     :hideChangeButton="true"
                     :customStrings="{
                       upload: '<h1>Bummer!</h1>',
@@ -88,7 +89,7 @@
                 @click.prevent="multiImg"
                 class="btn btn-sm btn-dark mt-3 addImage"
                 :disabled="maxImgs">
-                  Upload
+                  Attach
               </button>
               <button v-show="showAddImage" @click.prevent="showUploader" class="btn btn-sm btn-dark mt-3 addImage">Add Image(s)</button>
             <textarea v-model="text" class="form-control" rows="12" id="text" maxlength="3000"></textarea>
@@ -216,7 +217,15 @@ export default {
           this.image = null
         }
       } else {
-        alert('Pick a photo, dummy!')
+        this.$swal({
+          title: 'Oops...',
+          text: 'Please select a photo to attach first!',
+          confirmButtonClass: 'btn btn-dark',
+          buttonsStyling: false,
+          imageUrl: '/static/beard-black.png',
+          imageWidth: 150,
+          imageHeight: 150
+        })
       }
     },
     async post () {
