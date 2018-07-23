@@ -13,7 +13,8 @@ export const store = new Vuex.Store({
       userName: null,
       userTitle: null,
       userEmail: null,
-      userKeywords: null
+      userKeywords: null,
+      userFavorites: null
     }
   },
   getters: {

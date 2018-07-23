@@ -71,12 +71,12 @@ export default {
 
   created () {
     Api().get('/account').then((res) => {
-      console.log('THIS CODE RAN')
       this.$store.state.user.profilePicUrl = res.data.profilePicUrl
       this.$store.state.user.userName = res.data.userName
       this.$store.state.user.userTitle = res.data.userTitle
       this.$store.state.user.userEmail = res.data.userEmail
       this.$store.state.user.userKeywords = res.data.keywords
+      this.$store.state.user.userFavorites = res.data.favorites
     }).catch((err) => {
       console.log(err)
     })

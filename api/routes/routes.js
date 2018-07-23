@@ -37,7 +37,8 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
           userName: user.userName,
           userTitle: user.userTitle,
           profilePicUrl: user.profilePicUrl,
-          keywords: user.keywords
+          keywords: user.keywords,
+          favorites: user.favorites
          });
       }
     });
@@ -241,12 +242,20 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
   });
 
   app.post('/api/add-to-favs', isLoggedIn, (req, res) => {
-    User.findOne({ email: req.body.email }, (err, user) => {
+    User.update({ email: req.body.email }, { $push: { favorites: [req.body.postId] } }, (err, user) => {
       if (err) {
         res.send(err);
       } else {
-        user.favorites.push(req.body.postId);
-        user.save();
+        res.json({ success: 'yes' })
+      }
+    })
+  });
+
+  app.post('/api/remove-fav', isLoggedIn, (req, res) => {
+    User.update({ email: req.body.email }, { $pullAll: { favorites: [req.body.postId] } }, (err, user) => {
+      if (err) {
+        res.send(err);
+      } else {
         res.json({ success: 'yes' })
       }
     })

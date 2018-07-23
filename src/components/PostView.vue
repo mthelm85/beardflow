@@ -31,7 +31,10 @@
             </div>
             <div class="text-left">
               <button v-if="!response.showInput" class="btn btn-warning mt-3" @click.prevent="showResponseInput">Post a Response</button>
-              <button class="btn btn-warning mt-3" @click.prevent="addToFavs">Save This Flow</button>
+              <transition name="fade" mode="out-in">
+                <button v-if="!saved" :key="0" class="btn btn-warning mt-3" @click.prevent="addToFavs">Save This Flow</button>
+                <button v-else :key="1" class="btn btn-danger mt-3" @click.prevent="removeFromFavs">Remove From Favs</button>
+              </transition>
             </div>
           </div>
           <like-dislike
@@ -96,7 +99,8 @@ export default {
         text: '',
         showInput: false
       },
-      replies: []
+      replies: [],
+      saved: ''
     }
   },
 
@@ -168,6 +172,7 @@ export default {
     }).catch((err) => {
       alert(err)
     })
+    this.savedStatus()
   },
 
   filters: {
@@ -178,6 +183,7 @@ export default {
 
   methods: {
     addToFavs () {
+      this.saved = true
       Api().post('/add-to-favs', {
         email: this.user.userEmail,
         postId: this.$router.history.current.params.postId
@@ -206,6 +212,17 @@ export default {
         return false
       }
     },
+    removeFromFavs () {
+      this.saved = false
+      Api().post('/remove-fav', {
+        email: this.user.userEmail,
+        postId: this.$router.history.current.params.postId
+      }).then((res) => {
+        console.log(res)
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
     reply () {
       Api().post('/reply', {
         postObjectID: this.post.postObjectID,
@@ -220,6 +237,13 @@ export default {
           alert(res.data.error)
         }
       })
+    },
+    savedStatus () {
+      if (this.user.userFavorites.includes(this.$router.history.current.params.postId)) {
+        this.saved = true
+      } else {
+        this.saved = false
+      }
     },
     show (n) {
       if (n === 1) {
