@@ -131,6 +131,22 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
     });
   });
 
+  app.get('/api/get-my-favs', isLoggedIn, (req, res) => {
+    let query = { _id: { $in: req.query.favs } }
+    let options = {
+      sort: { date: -1 },
+      page: req.query.page,
+      limit: 5
+    }
+    Post.paginate(query, options).then((err, posts) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(posts);
+      }
+    });
+  });
+
   app.get('/api/get-one-post', isLoggedIn, (req, res) => {
     Post.findById(req.query.id, (err, post) => {
       if (err) {

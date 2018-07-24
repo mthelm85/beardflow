@@ -6,6 +6,7 @@ import HomePage from '@/components/HomePage'
 import PostsLatest from '@/components/post-list-views/PostsLatest'
 import PostsGeneral from '@/components/post-list-views/PostsGeneral'
 import PostsStyling from '@/components/post-list-views/PostsStyling'
+import PostsFavs from '@/components/post-list-views/PostsFavs'
 import PostsFeedback from '@/components/post-list-views/PostsFeedback'
 import PostsMine from '@/components/post-list-views/PostsMine'
 import PostsProducts from '@/components/post-list-views/PostsProducts'
@@ -92,6 +93,10 @@ export default new Router({
         {
           path: 'posts-mine',
           component: PostsMine
+        },
+        {
+          path: 'posts-favs',
+          component: PostsFavs
         }
       ]
     },

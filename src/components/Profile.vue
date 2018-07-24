@@ -12,7 +12,7 @@
           </div>
           <div class="card-footer">
             <router-link to="/profile/posts-mine" class="btn btn-sm btn-outline-dark float-left">&nbsp;My Posts&nbsp;</router-link>
-            <button class="btn btn-sm btn-outline-dark float-right">Saved Posts</button>
+            <router-link to="/profile/posts-favs" class="btn btn-sm btn-outline-dark float-right">Saved Posts</router-link>
           </div>
         </div>
         <div class="row mt-3">
