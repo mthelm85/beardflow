@@ -7,6 +7,9 @@
         <br>
         <small class="text-muted">Posted {{ post.date }}
           <br>By {{ post.user }}</small>
+        <div class="text-left" v-if="isAuthor">
+          <button class="btn btn-sm btn-success" @click.prevent="editFlow">Edit This Flow</button>
+        </div>
         <hr />
         <modal
          name="post-pic1"
@@ -22,7 +25,10 @@
          :width="width">
           <b-img v-if="hasImage(2)" :src="post.imageUrls[1]" :width="width"></b-img>
         </modal>
-        <p class="mt-3 text-justify post-body lead">{{ post.text }}</p>
+        <transition name="fade" mode="out-in">
+          <textarea v-if="edit" v-model="post.text" class="form-control mb-3" rows="12" id="text" maxlength="3000"></textarea>
+          <p v-else class="mt-3 text-justify post-body lead">{{ post.text }}</p>
+        </transition>
         <div class="row">
           <div class="col-4">
             <div v-if="hasImage(1)" class="text-left">
@@ -84,6 +90,7 @@ export default {
 
   data () {
     return {
+      edit: false,
       post: {
         date: '',
         title: '',
@@ -100,7 +107,8 @@ export default {
         showInput: false
       },
       replies: [],
-      saved: ''
+      saved: '',
+      text: ''
     }
   },
 
@@ -113,6 +121,13 @@ export default {
         return false
       } else {
         return true
+      }
+    },
+    isAuthor () {
+      if (this.post.user === this.user.userName) {
+        return true
+      } else {
+        return false
       }
     },
     width () {
@@ -192,6 +207,9 @@ export default {
       }).catch((err) => {
         alert(err)
       })
+    },
+    editFlow () {
+      this.edit = true
     },
     getReplies () {
       Api().get('/get-replies', {
