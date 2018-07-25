@@ -20,8 +20,10 @@
               <div class="col-4  my-auto">
                 <transition name="fade">
                   <b-img
+                    id="thumb1"
                     @click="deletePic(0)"
-                    class="mt-3 thumb"
+                    class="mt-3"
+                    :class="{ 'thumb': attachThumbClass(1) }"
                     v-if="showInput"
                     thumbnail
                     :src="thumbSrc(1)"
@@ -31,7 +33,8 @@
                 <transition name="fade">
                   <b-img
                     @click="deletePic(1)"
-                    class="mt-3 thumb"
+                    class="mt-3"
+                    :class="{ 'thumb': attachThumbClass(2) }"
                     v-if="showInput"
                     thumbnail
                     :src="thumbSrc(2)"
@@ -190,6 +193,15 @@ export default {
   },
 
   methods: {
+    attachThumbClass (n) {
+      if (n === 1 && this.imageUrls.length >= 3) {
+        return true
+      } else if (n === 2 && this.imageUrls.length > 3) {
+        return true
+      } else {
+        return false
+      }
+    },
     deletePic (n) {
       if (this.imageUrls.length > 2) {
         if (n === 0) {
@@ -314,11 +326,6 @@ i {
   right: 15px;
 }
 
-.b-img:hover {
-  cursor: pointer;
-  opacity: 0.3;
-}
-
 .disabledInput {
   opacity: 0.3;
 }
@@ -348,6 +355,7 @@ i {
 
 .thumb:hover {
   cursor: pointer;
+  opacity: 0.3;
 }
 
 .thumb-container {

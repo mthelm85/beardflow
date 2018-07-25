@@ -11,8 +11,8 @@
             <p>{{ user.userTitle }}</p>
           </div>
           <div class="card-footer">
-            <router-link to="/profile/posts-mine" class="btn btn-sm btn-outline-dark float-left">&nbsp;My Posts&nbsp;</router-link>
-            <router-link to="/profile/posts-favs" class="btn btn-sm btn-outline-dark float-right">Saved Posts</router-link>
+            <router-link to="/profile/posts-mine" class="btn btn-sm btn-outline-dark mt-1">&nbsp;My Posts&nbsp;</router-link>
+            <router-link to="/profile/posts-favs" class="btn btn-sm btn-outline-dark mt-1">Saved Posts</router-link>
           </div>
         </div>
         <div class="row mt-3">
