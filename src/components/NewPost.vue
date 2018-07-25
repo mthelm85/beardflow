@@ -20,9 +20,8 @@
               <div class="col-4  my-auto">
                 <transition name="fade">
                   <b-img
-                    @mouseover="imgHover(1)"
-                    @mouseleave="imgHoverEnd(1)"
-                    class="mt-3"
+                    @click="deletePic(0)"
+                    class="mt-3 thumb"
                     v-if="showInput"
                     thumbnail
                     :src="thumbSrc(1)"
@@ -31,9 +30,8 @@
                 </transition>
                 <transition name="fade">
                   <b-img
-                    @mouseover="imgHover(2)"
-                    @mouseleave="imgHoverEnd(2)"
-                    class="mt-3"
+                    @click="deletePic(1)"
+                    class="mt-3 thumb"
                     v-if="showInput"
                     thumbnail
                     :src="thumbSrc(2)"
@@ -193,16 +191,26 @@ export default {
 
   methods: {
     deletePic (n) {
-      return new Promise((resolve, reject) => {
-        Api().post('/delete-photo', {
-          folder: '',
-          public_id: this.thumbPubIds[n]
-        }).then((res) => {
-          resolve(res)
-        }).catch((err) => {
-          reject(err)
+      if (this.imageUrls.length > 2) {
+        if (n === 0) {
+          this.imageUrls.splice(2, 1)
+        } else {
+          this.imageUrls.splice(3, 1)
+        }
+
+        return new Promise((resolve, reject) => {
+          Api().post('/delete-photo', {
+            folder: '',
+            public_id: this.thumbPubIds[n]
+          }).then((res) => {
+            resolve(res)
+          }).catch((err) => {
+            reject(err)
+          })
         })
-      })
+      } else {
+        console.log('No images have been attached')
+      }
     },
     async multiImg () {
       if (this.image !== null) {
@@ -335,6 +343,10 @@ i {
 }
 
 .pointer {
+  cursor: pointer;
+}
+
+.thumb:hover {
   cursor: pointer;
 }
 
