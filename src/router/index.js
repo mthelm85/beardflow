@@ -16,6 +16,7 @@ import Profile from '@/components/Profile'
 import ProfileEdit from '@/components/ProfileEdit'
 import ProfileSetup from '@/components/ProfileSetup'
 import NewPost from '@/components/NewPost'
+import NewFlow from '@/components/NewFlow'
 import PostView from '@/components/PostView'
 import Api from '@/router/api'
 import Footer from '@/components/Footer'
@@ -141,7 +142,7 @@ export default new Router({
       name: 'Post',
       components: {
         navbar: NavbarAuthed,
-        body: NewPost
+        body: NewFlow
       },
       beforeEnter: auth
     },

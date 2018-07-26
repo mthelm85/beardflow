@@ -29,7 +29,15 @@ export const uploadImg = {
     onChange (image) {
       if (image) {
         this.image = image
-        this.multiImg()
+        this.multiImg(1)
+      } else {
+        console.log('FileReader API not supported: use the <form>, Luke!')
+      }
+    },
+    onChange2 (image) {
+      if (image) {
+        this.image = image
+        this.multiImg(2)
       } else {
         console.log('FileReader API not supported: use the <form>, Luke!')
       }

@@ -19,9 +19,9 @@
             <div class="row justify-content-center">
               <div class="col-6 my-auto">
                 <div class="row">
-                  <div class="col-6 my-auto">
-                    <div v-if="showInput" class="border mt-3">
-                      <div v-show="uploadingImg" id="imageLoadingDots">
+                  <div class="col-6 my-auto mr-0">
+                    <div v-if="showInput" class="mt-3">
+                      <div v-show="uploadingImg.one" id="imageLoadingDots">
                         <hollow-dots-spinner
                           animation-duration="1000"
                           dot-size="15"
@@ -32,15 +32,15 @@
                       </div>
                       <transition name="fade" mode="out-in">
                         <picture-input
-                          :class="{ 'opaque': inputOpacity, 'disabledInput': maxImgs }"
+                          :class="{ 'opaque': inputOpacity.one1 }"
                           class="my-3"
                           v-if="showInput"
                           v-b-tooltip.hover.bottom title="Click the BeardFlow logo to select your photo"
                           ref="pictureInput"
                           @change="onChange"
                           margin="16"
-                          width=100
-                          height=100
+                          width=150
+                          height=150
                           :plain="true"
                           prefill="/static/beard-black.png"
                           radius="4"
@@ -56,9 +56,9 @@
                       </transition>
                     </div>
                   </div>
-                  <div class="col-6 my-auto">
-                    <div v-if="showInput" class="border mt-3">
-                      <div v-show="uploadingImg" id="imageLoadingDots">
+                  <div class="col-6 my-auto ml-0">
+                    <div v-if="showInput" class="mt-3">
+                      <div v-show="uploadingImg.two" id="imageLoadingDots">
                         <hollow-dots-spinner
                           animation-duration="1000"
                           dot-size="15"
@@ -69,15 +69,15 @@
                       </div>
                       <transition name="fade" mode="out-in">
                         <picture-input
-                          :class="{ 'opaque': inputOpacity, 'disabledInput': maxImgs }"
+                          :class="{ 'opaque': inputOpacity.two }"
                           class="my-3"
                           v-if="showInput"
                           v-b-tooltip.hover.bottom title="Click the BeardFlow logo to select your photo"
                           ref="pictureInput"
-                          @change="onChange"
+                          @change="onChange2"
                           margin="16"
-                          width=100
-                          height=100
+                          width=150
+                          height=150
                           :plain="true"
                           prefill="/static/beard-black.png"
                           radius="4"
@@ -133,8 +133,11 @@ export default {
   data () {
     return {
       category: '',
-      imageUrls: ['/static/1.png', '/static/2.png'],
-      inputOpacity: false,
+      imageUrls: [],
+      inputOpacity: {
+        one: false,
+        two: false
+      },
       loading: true,
       opacity: false,
       posted: false,
@@ -142,7 +145,10 @@ export default {
       showInput: false,
       title: '',
       text: '',
-      uploadingImg: false,
+      uploadingImg: {
+        one: false,
+        two: false
+      },
       thumbPubIds: []
     }
   },
@@ -186,13 +192,6 @@ export default {
     ...mapGetters({
       user: 'getUserData'
     }),
-    maxImgs () {
-      if (this.imageUrls.length >= 4) {
-        return true
-      } else {
-        return false
-      }
-    },
     showAddImage () {
       if (this.showInput === false) {
         return true
@@ -225,28 +224,23 @@ export default {
         console.log('No images have been attached')
       }
     },
-    async multiImg () {
-      if (this.image !== null) {
-        this.uploadingImg = true
-        this.inputOpacity = true
-        const uploaded = await this.upload()
-        if (uploaded.url) {
-          this.imageUrls.push(uploaded.url)
-          this.thumbPubIds.push(uploaded.public_id)
-          this.inputOpacity = false
-          this.uploadingImg = false
-          this.image = null
+    async multiImg (n) {
+      if (n === 1) {
+        if (this.imageUrls.length === 1) {
+          this.deletePic(0).then(() => {
+            this.uploadUpdate()
+          })
+        } else {
+          this.uploadUpdate()
         }
       } else {
-        this.$swal({
-          title: 'Oops...',
-          text: 'Please select a photo to attach first!',
-          confirmButtonClass: 'btn btn-dark',
-          buttonsStyling: false,
-          imageUrl: '/static/beard-black.png',
-          imageWidth: 150,
-          imageHeight: 150
-        })
+        if (this.imageUrls.length === 2) {
+          this.deletePic(1).then(() => {
+            this.uploadUpdate()
+          })
+        } else {
+          this.uploadUpdate()
+        }
       }
     },
     async post () {
@@ -281,6 +275,30 @@ export default {
     },
     showUploader () {
       this.showInput = !this.showInput
+    },
+    async uploadUpdate () {
+      if (this.image !== null) {
+        this.uploadingImg = true
+        this.inputOpacity = true
+        const uploaded = await this.upload()
+        if (uploaded.url) {
+          this.imageUrls.push(uploaded.url)
+          this.thumbPubIds.push(uploaded.public_id)
+          this.inputOpacity = false
+          this.uploadingImg = false
+          this.image = null
+        }
+      } else {
+        this.$swal({
+          title: 'Oops...',
+          text: 'Please select a photo to attach first!',
+          confirmButtonClass: 'btn btn-dark',
+          buttonsStyling: false,
+          imageUrl: '/static/beard-black.png',
+          imageWidth: 150,
+          imageHeight: 150
+        })
+      }
     }
   },
 
@@ -304,10 +322,6 @@ i {
 .addImage {
   position: absolute;
   right: 15px;
-}
-
-.disabledInput {
-  opacity: 0.3;
 }
 
 .hovering {
