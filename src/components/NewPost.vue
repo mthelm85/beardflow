@@ -128,7 +128,6 @@ import { HollowDotsSpinner } from 'epic-spinners'
 import { imgSize } from '@/mixins/imgSize'
 import { mapGetters } from 'vuex'
 import parallelDots from '@/parallelDots'
-import { uploadImg } from '@/mixins/uploadImg'
 export default {
   data () {
     return {
@@ -303,7 +302,6 @@ export default {
   },
 
   mixins: [
-    uploadImg,
     imgSize
   ]
 }
