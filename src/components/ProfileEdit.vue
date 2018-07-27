@@ -88,8 +88,7 @@ export default {
     deletePic () {
       return new Promise((resolve, reject) => {
         Api().post('/delete-photo', {
-          folder: 'Profile Pics/',
-          public_id: this.user.userEmail
+          public_id: [`Profile Pics/${this.user.userEmail}`]
         }).then((res) => {
           resolve(res)
         }).catch((err) => {

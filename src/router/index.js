@@ -3,6 +3,9 @@ import Router from 'vue-router'
 import NavbarHome from '@/components/NavbarHome'
 import NavbarAuthed from '@/components/NavbarAuthed'
 import HomePage from '@/components/HomePage'
+import Mailbox from '@/components/Mailbox'
+import Message from '@/components/Message'
+import PostsBy from '@/components/post-list-views/PostsBy'
 import PostsLatest from '@/components/post-list-views/PostsLatest'
 import PostsGeneral from '@/components/post-list-views/PostsGeneral'
 import PostsStyling from '@/components/post-list-views/PostsStyling'
@@ -15,7 +18,6 @@ import PostsSearched from '@/components/post-list-views/PostsSearched'
 import Profile from '@/components/Profile'
 import ProfileEdit from '@/components/ProfileEdit'
 import ProfileSetup from '@/components/ProfileSetup'
-import NewPost from '@/components/NewPost'
 import NewFlow from '@/components/NewFlow'
 import PostView from '@/components/PostView'
 import Api from '@/router/api'
@@ -98,6 +100,16 @@ export default new Router({
         {
           path: 'posts-favs',
           component: PostsFavs
+        },
+        {
+          path: 'posts-by/:user',
+          name: 'PostsBy',
+          component: PostsBy
+        },
+        {
+          path: 'mailbox',
+          name: 'Mailbox',
+          component: Mailbox
         }
       ]
     },
@@ -152,6 +164,15 @@ export default new Router({
       components: {
         navbar: NavbarAuthed,
         body: PostView
+      },
+      beforeEnter: auth
+    },
+    {
+      path: '/message/:user',
+      name: 'Message',
+      components: {
+        navbar: NavbarAuthed,
+        body: Message
       },
       beforeEnter: auth
     }

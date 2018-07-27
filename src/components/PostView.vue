@@ -6,9 +6,12 @@
         <b-img :src="post.userPic" width="90" rounded="circle" class="mt-2"></b-img>
         <br>
         <small class="text-muted">Posted {{ post.date }}
-          <br>By {{ post.user }}</small>
+          <br>By <router-link :to="{ name: 'PostsBy', params: { user: post.user } }">{{ post.user }}</router-link></small>
         <div class="text-left" v-if="isAuthor">
-          <button class="btn btn-sm btn-success" @click.prevent="editFlow">Edit This Flow</button>
+          <transition name="fade" mode="out-in">
+            <button v-if="!edit" class="btn btn-sm btn-warning" @click.prevent="editFlow">Edit This Flow</button>
+            <button v-else class="btn btn-sm btn-success" @click.prevent="saveEdits">Save Changes</button>
+          </transition>
         </div>
         <hr />
         <modal
@@ -30,16 +33,16 @@
           <p v-else class="mt-3 text-justify post-body lead">{{ post.text }}</p>
         </transition>
         <div class="row">
-          <div class="col-4">
+          <div class="col-8">
             <div v-if="hasImage(1)" class="text-left">
               <button @click="show(1)" class="false-button"><b-img thumbnail :src="post.imageUrls[0]" width="100"></b-img></button>
               <button v-if="hasImage(2)" @click="show(2)" class="false-button"><b-img thumbnail :src="post.imageUrls[1]" width="100"></b-img></button>
             </div>
             <div class="text-left">
-              <button v-if="!response.showInput" class="btn btn-warning mt-3" @click.prevent="showResponseInput">Post a Response</button>
+              <button v-if="!response.showInput" class="btn btn-sm btn-dark mt-3" @click.prevent="showResponseInput">Post a Response</button>
               <transition name="fade" mode="out-in">
-                <button v-if="!saved" :key="0" class="btn btn-warning mt-3" @click.prevent="addToFavs">Save This Flow</button>
-                <button v-else :key="1" class="btn btn-danger mt-3" @click.prevent="removeFromFavs">Remove From Favs</button>
+                <button v-if="!saved" :key="0" class="btn btn-sm btn-dark mt-3" @click.prevent="addToFavs">Save This Flow</button>
+                <button v-else :key="1" class="btn btn-sm btn-danger mt-3" @click.prevent="removeFromFavs">Remove From Favs</button>
               </transition>
             </div>
           </div>
@@ -80,9 +83,11 @@
 
 <script>
 import Api from '@/router/api'
+import Axios from 'axios'
 import LikeDislike from '@/components/LikeDislike.vue'
 import { mapGetters } from 'vuex'
 import Moment from 'moment'
+import parallelDots from '@/parallelDots'
 export default {
   components: {
     LikeDislike
@@ -91,6 +96,7 @@ export default {
   data () {
     return {
       edit: false,
+      keywords: [],
       post: {
         date: '',
         title: '',
@@ -254,6 +260,20 @@ export default {
         } else if (res.data.error) {
           alert(res.data.error)
         }
+      })
+    },
+    async saveEdits () {
+      const keywords = await Axios.post(`https://apis.paralleldots.com/v3/keywords?text=${this.post.text}&api_key=${parallelDots.apiKey}`)
+      let i
+      for (i = 0; i < keywords.data.keywords.length; i++) {
+        this.keywords.push(keywords.data.keywords[i].keyword)
+      }
+      Api().post('/edit-post', {
+        id: this.$router.history.current.params.postId,
+        text: this.post.text.replace(/\n\s*\n\s*\n/g, '\n\n'),
+        keywords: this.keywords
+      }).then(() => {
+        this.edit = false
       })
     },
     savedStatus () {

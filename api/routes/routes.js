@@ -83,6 +83,17 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
     });
   });
 
+  app.post('/api/edit-post', isLoggedIn, (req, res) => {
+    let query = { _id: req.body.id }
+    Post.findOneAndUpdate(query, { text: req.body.text, keywords: req.body.keywords }, (err, post) =>{
+      if (err) {
+        res.send(err)
+      } else {
+        res.send(post)
+      }
+    })
+  })
+
   app.get('/api/get-posts', isLoggedIn, (req, res) => {
     let query = {}
     let options = {
@@ -116,6 +127,22 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
   });
 
   app.get('/api/get-my-posts', isLoggedIn, (req, res) => {
+    let query = { user: req.query.user }
+    let options = {
+      sort: { date: -1 },
+      page: req.query.page,
+      limit: 5
+    }
+    Post.paginate(query, options).then((err, posts) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(posts);
+      }
+    });
+  });
+
+  app.get('/api/get-posts-by', isLoggedIn, (req, res) => {
     let query = { user: req.query.user }
     let options = {
       sort: { date: -1 },
@@ -184,7 +211,7 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
   });
 
   app.post('/api/delete-photo', isLoggedIn, (req, res) => {
-      cloudinary.v2.api.delete_resources([req.body.folder + req.body.public_id], (error, result) => {
+      cloudinary.v2.api.delete_resources(req.body.public_id, (error, result) => {
         if (error) {
           console.log(error);
           res.send(error);
@@ -271,6 +298,16 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
     User.update({ email: req.body.email }, { $pullAll: { favorites: [req.body.postId] } }, (err, user) => {
       if (err) {
         res.send(err);
+      } else {
+        res.json({ success: 'yes' })
+      }
+    })
+  })
+
+  app.post('/api/send-message', isLoggedIn, (req, res) => {
+    User.update({ userName: req.body.message.userTo }, { $push: { messages: [req.body.message] } }, (err, user) =>{
+      if (err) {
+        res.send(err)
       } else {
         res.json({ success: 'yes' })
       }

@@ -8,11 +8,12 @@
           <div class="card-body">
             <router-link to="/edit-profile" class="float-right cog"><i class="fas fa-cog"></i></router-link>
             <h5 class="card-title">{{ user.userName }}</h5>
-            <p>{{ user.userTitle }}</p>
+            <p class="mb-0">{{ user.userTitle }}</p>
           </div>
           <div class="card-footer">
-            <router-link to="/profile/posts-mine" class="btn btn-sm btn-outline-dark mt-1">&nbsp;My Posts&nbsp;</router-link>
-            <router-link to="/profile/posts-favs" class="btn btn-sm btn-outline-dark mt-1">Saved Posts</router-link>
+            <router-link to="/profile/posts-mine" class="text-sm text-dark">My Flows</router-link>
+            /
+            <router-link to="/profile/posts-favs" class="text-sm text-dark">Favorites</router-link>
           </div>
         </div>
         <div class="row mt-3">
@@ -20,14 +21,14 @@
             <div class="card shadow mb-3">
               <div class="list-group" :class="{ 'pb-3': padBottom }">
                 <p class="card-header bg-dark text-white text-center">
-                  <span class="h6">Browse All Posts</span>
+                  <span class="h6">Browse All Flows</span>
                 </p>
                 <router-link to="/profile/posts-general" class="list-group-item list-group-item-action">General Beard Discussions</router-link>
                 <router-link to="/profile/posts-styling" class="list-group-item list-group-item-action">Styling & Grooming</router-link>
                 <router-link to="/profile/posts-feedback" class="list-group-item list-group-item-action">Feedback & Help</router-link>
                 <router-link to="/profile/posts-products" class="list-group-item list-group-item-action">Beard-Related Products</router-link>
                 <router-link to="/profile/posts-recipes" class="list-group-item list-group-item-action">Beard Balm/Oil/Wax Recipes</router-link>
-                <router-link to="/profile" class="list-group-item list-group-item-action">Latest Posts</router-link>
+                <router-link to="/profile" class="list-group-item list-group-item-action">Latest Flows</router-link>
               </div>
             </div>
           </div>

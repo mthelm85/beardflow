@@ -1,14 +1,12 @@
 <template lang="html">
-  <div class="col-8 my-auto text-right h5">
+  <div class="col-4 my-auto text-right h5">
     <button @click="liked" class="false-button">
       <transition name="fade" mode="out-in">
         <i v-if="like" key="white" class="fas fa-thumbs-up"></i>
         <i v-else key="black" class="far fa-thumbs-up"></i>
       </transition>
     </button>
-    <span class="lead">I like this post</span>
     <img src="../assets/beard-black.svg" width="30px"/>
-    <span class="lead">This post sucks</span>
     <button @click="disliked" class="false-button">
       <transition name="fade" mode="out-in">
         <i v-if="dislike" key="white" class="fas fa-thumbs-down"></i>

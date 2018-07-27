@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="card shadow">
-    <p class="card-header bg-dark text-white text-center"><span class="h5">Latest Posts</span></p>
+    <p class="card-header bg-dark text-white text-center"><span class="h5">Latest Flows</span></p>
       <div class="list-group list-group-flush" :key="page">
         <router-link v-for="post in posts" :key="post._id" :to="{ name: 'ViewPost', params: { postId: post._id } }" class="list-group-item list-group-item-action flex-column align-items-start">
           <div class="d-flex w-100 justify-content-between">

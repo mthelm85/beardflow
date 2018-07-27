@@ -9,7 +9,8 @@
         <ul class="navbar-nav mr-auto">
           <span class="navbar-brand mb-0 h1">BeardFlow <img src="../assets/beard.svg" width="30"/></span>
           <router-link tag="li" to="/" class="nav-item" active-class="active" exact><a class="nav-link">Home</a></router-link>
-          <router-link tag="li" to="/profile" class="nav-item" active-class="active"><a class="nav-link">My Portal</a></router-link>
+          <router-link tag="li" to="/profile" class="nav-item" exact-active-class="active"><a class="nav-link">My Portal</a></router-link>
+          <router-link tag="li" to="/profile/mailbox" class="nav-item" active-class="active"><a class="nav-link">Mailbox</a></router-link>
         </ul>
         <form class="form-inline">
           <div class="input-group mr-2">

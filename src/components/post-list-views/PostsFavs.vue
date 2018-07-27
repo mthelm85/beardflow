@@ -69,6 +69,7 @@ export default {
         }
       })
         .then((res) => {
+          console.log(res)
           this.posts = res.data.docs
           this.totalPages = res.data.pages
         })
