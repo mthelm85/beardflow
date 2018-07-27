@@ -34,6 +34,7 @@ export default {
       message: {
         userTo: this.userTo,
         userFrom: this.userFrom.userName,
+        userFromPic: this.userFrom.profilePicUrl,
         body: this.messageBody,
         subject: this.subject
       }

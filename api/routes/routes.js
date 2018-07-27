@@ -1,4 +1,4 @@
-module.exports = (app, cloudinary, passport, Post, User, Reply) => {
+module.exports = (app, cloudinary, passport, Post, User, Reply, Message) => {
 
   function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
@@ -305,11 +305,34 @@ module.exports = (app, cloudinary, passport, Post, User, Reply) => {
   })
 
   app.post('/api/send-message', isLoggedIn, (req, res) => {
-    User.update({ userName: req.body.message.userTo }, { $push: { messages: [req.body.message] } }, (err, user) =>{
+    let newMessage = new Message()
+    newMessage.subject = req.body.message.subject
+    newMessage.message = req.body.message.body
+    newMessage.userTo = req.body.message.userTo
+    newMessage.userFrom = req.body.message.userFrom
+    newMessage.userFromPic = req.body.message.userFromPic
+    newMessage.save((err) => {
+      if (err) {
+        return res.json({ error: err })
+        throw err
+      } else {
+        res.json({ success: 'yes' })
+      }
+    })
+  })
+
+  app.get('/api/get-messages', isLoggedIn, (req, res) => {
+    let query = { userTo: req.query.user }
+    let options = {
+      sort: { date: -1 },
+      page: req.query.page,
+      limit: 5
+    }
+    Message.paginate(query, options).then((err, messages) => {
       if (err) {
         res.send(err)
       } else {
-        res.json({ success: 'yes' })
+        res.send(messages)
       }
     })
   })

@@ -44,8 +44,7 @@ const userSchema = mongoose.Schema({
     maxlength: 30
   },
   keywords: [],
-  favorites: [],
-  messages: []
+  favorites: []
 });
 
 userSchema.methods.generateHash = (password) => {
