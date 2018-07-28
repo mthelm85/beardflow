@@ -5,6 +5,7 @@ import NavbarAuthed from '@/components/NavbarAuthed'
 import HomePage from '@/components/HomePage'
 import Mailbox from '@/components/Mailbox'
 import Message from '@/components/Message'
+import MessageView from '@/components/MessageView'
 import PostsBy from '@/components/post-list-views/PostsBy'
 import PostsLatest from '@/components/post-list-views/PostsLatest'
 import PostsGeneral from '@/components/post-list-views/PostsGeneral'
@@ -173,6 +174,15 @@ export default new Router({
       components: {
         navbar: NavbarAuthed,
         body: Message
+      },
+      beforeEnter: auth
+    },
+    {
+      path: '/view-message/:messageId',
+      name: 'ViewMessage',
+      components: {
+        navbar: NavbarAuthed,
+        body: MessageView
       },
       beforeEnter: auth
     }

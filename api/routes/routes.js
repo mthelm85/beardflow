@@ -1,4 +1,4 @@
-module.exports = (app, cloudinary, passport, Post, User, Reply, Message) => {
+module.exports = (app, cloudinary, passport, Post, User, Reply, Message, MessageReply) => {
 
   function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
@@ -336,5 +336,41 @@ module.exports = (app, cloudinary, passport, Post, User, Reply, Message) => {
       }
     })
   })
+
+  app.get('/api/get-one-message', isLoggedIn, (req, res) => {
+    Message.findById(req.query.id, (err, message) => {
+      if (err) {
+        res.send(err)
+      } else {
+        res.send(message)
+      }
+    });
+  });
+
+  app.post('/api/reply-message', isLoggedIn, (req, res) => {
+    let newMessageReply = new MessageReply();
+    newMessageReply.messageId = req.body.messageId;
+    newMessageReply.user = req.body.userFrom;
+    newMessageReply.userPic = req.body.userFromPic;
+    newMessageReply.text = req.body.text;
+    newMessageReply.save((err) => {
+      if (err) {
+        return res.json({ error: err });
+        throw err;
+      } else {
+        return res.json({ success: 'yes' });
+      }
+    });
+  });
+
+  app.get('/api/get-message-replies', isLoggedIn, (req, res) => {
+    MessageReply.find({ messageId: req.query.messageId }, null, {sort: '-date', limit: 5}, (err, replies) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(replies);
+      }
+    });
+  });
 
 };

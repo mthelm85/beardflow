@@ -17,6 +17,7 @@ const User = require('./config/models/user.js');
 const Post = require('./config/models/post.js');
 const Reply = require('./config/models/post-reply.js');
 const Message = require('./config/models/messages.js')
+const MessageReply = require('./config/models/message-reply.js')
 
 mongoose.connect(configDB.url);
 
@@ -47,7 +48,7 @@ cloudinary.config({
 })
 
 require('./config/passport')(passport, User);
-require('./routes/routes.js')(app, cloudinary, passport, Post, User, Reply, Message);
+require('./routes/routes.js')(app, cloudinary, passport, Post, User, Reply, Message, MessageReply);
 
 app.listen(port, () => {
   console.log(`The server is up on port ${port}`);
