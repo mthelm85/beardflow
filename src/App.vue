@@ -3,7 +3,7 @@
     <transition name="fade" mode="out-in">
       <router-view name="navbar"></router-view>
     </transition>
-    <transition name="fade" mode="out-in">
+    <transition name="fade" :mode="transMode">
       <router-view name="body"></router-view>
     </transition>
     <transition name="fade" mode="out-in">
@@ -16,7 +16,15 @@
 export default {
   data () {
     return {
+      transMode: 'out-in'
+    }
+  },
 
+  watch: {
+    '$route' (to, from) {
+      if (from.path === '/profile' && to.name === 'ViewPost') {
+        this.transMode = ''
+      }
     }
   }
 }
