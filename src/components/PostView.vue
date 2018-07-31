@@ -76,6 +76,11 @@
             </footer>
           </b-card>
         </transition-group>
+        <ul class="pagination pagination-sm float-right mt-2">
+          <li class="page-item" :class="{ disabled: prevDisabled }"><button class="page-link" @click.prevent="previous">Previous</button></li>
+          <li class="page-item disabled"><button class="page-link">{{ page }} of {{ totalPages }}</button></li>
+          <li class="page-item" :class="{ disabled: nextDisabled }"><button class="page-link" @click.prevent="next">Next</button></li>
+        </ul>
       </div>
     </div>
   </div>
@@ -88,6 +93,7 @@ import LikeDislike from '@/components/LikeDislike.vue'
 import { mapGetters } from 'vuex'
 import Moment from 'moment'
 import parallelDots from '@/parallelDots'
+import { prevNext } from '@/mixins/prevNext'
 export default {
   components: {
     LikeDislike
@@ -189,7 +195,7 @@ export default {
       this.post.postObjectID = res.data._id
       this.post.keywords = res.data.keywords
     }).then(() => {
-      this.getReplies()
+      this.getPosts()
     }).catch((err) => {
       alert(err)
     })
@@ -217,14 +223,16 @@ export default {
     editFlow () {
       this.edit = true
     },
-    getReplies () {
+    getPosts () {
       Api().get('/get-replies', {
         params: {
-          postObjectID: this.$router.history.current.params.postId
+          postObjectID: this.$router.history.current.params.postId,
+          page: this.page
         }
       }).then((res) => {
-        this.replies = res.data
-        console.log(this.replies)
+        this.replies = res.data.docs
+        this.totalPages = res.data.pages
+        console.log(res)
       }).catch((err) => {
         alert(err)
       })
@@ -256,9 +264,9 @@ export default {
       }).then((res) => {
         this.response.text = ''
         if (res.data.success === 'yes') {
-          this.getReplies()
+          this.getPosts()
         } else if (res.data.error) {
-          alert(res.data.error)
+          console.log(res.data.error)
         }
       })
     },
@@ -293,7 +301,9 @@ export default {
     showResponseInput () {
       this.response.showInput = true
     }
-  }
+  },
+
+  mixins: [prevNext]
 }
 </script>
 

@@ -24,6 +24,8 @@ export default {
     '$route' (to, from) {
       if (from.path === '/profile' && to.name === 'ViewPost') {
         this.transMode = ''
+      } else {
+        this.transMode = 'out-in'
       }
     }
   }

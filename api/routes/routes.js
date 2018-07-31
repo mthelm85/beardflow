@@ -185,13 +185,19 @@ module.exports = (app, cloudinary, passport, Post, User, Reply, Message, Message
   });
 
   app.get('/api/get-replies', isLoggedIn, (req, res) => {
-    Reply.find({ postObjectID: req.query.postObjectID }, null, {sort: '-date', limit: 5}, (err, replies) => {
+    let query = { postObjectID: req.query.postObjectID }
+    let options = {
+      sort: { date: -1 },
+      page: req.query.page,
+      limit: 25
+    }
+    Reply.paginate(query, options).then((err, replies) => {
       if (err) {
         res.send(err);
       } else {
         res.send(replies);
       }
-    });
+    })
   });
 
   app.post('/api/reply', isLoggedIn, (req, res) => {
@@ -322,7 +328,7 @@ module.exports = (app, cloudinary, passport, Post, User, Reply, Message, Message
   })
 
   app.get('/api/get-messages', isLoggedIn, (req, res) => {
-    let query = { userTo: req.query.user }
+    let query = { $or: [ { userTo: req.query.user }, {  userFrom: req.query.user} ] }
     let options = {
       sort: { date: -1 },
       page: req.query.page,

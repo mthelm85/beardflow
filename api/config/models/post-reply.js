@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate');
 
-const postSchema = mongoose.Schema({
+const postReplySchema = mongoose.Schema({
   postObjectID: {
     type: String
   },
@@ -25,5 +26,6 @@ const postSchema = mongoose.Schema({
     default: Date.now
   }
 });
-
-module.exports = mongoose.model('Reply', postSchema);
+postReplySchema.index({ text: 'text' });
+postReplySchema.plugin(mongoosePaginate);
+module.exports = mongoose.model('Reply', postReplySchema);

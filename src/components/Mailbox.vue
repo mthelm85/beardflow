@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="card shadow">
-    <p class="card-header bg-dark text-white text-center"><span class="h5">My Inbox</span></p>
+    <p class="card-header bg-dark text-white text-center"><span class="h5">My Private Flows</span></p>
       <div class="list-group list-group-flush" :key="page">
         <router-link v-for="message in inbox" :key="message._id" :to="{ name: 'ViewMessage', params: { messageId: message._id } }" class="list-group-item list-group-item-action flex-column align-items-start">
           <div class="d-flex w-100 justify-content-between">
@@ -8,8 +8,10 @@
             <small class="text-right">{{ message.date | relativeTime }}</small>
           </div>
           <p class="mb-1">{{ `${message.message.substring(0, 70).trim()}...` }}</p>
-          <b-img :src="message.userFromPic" rounded="circle" width="40" class="ml-2 img-cropped"></b-img>
-          <small>From {{ message.userFrom }}</small>
+          <span class="badge badge-pill badge-secondary">From</span> {{ message.userFrom === user.userName ? 'You' : message.userFrom }}
+          <b-img v-if="message.userFrom !== user.userName" :src="message.userFromPic" rounded="circle" width="40" class="img-cropped"></b-img>
+          <span class="badge badge-pill badge-secondary ml-2">To</span> {{ message.userTo === user.userName ? 'You' : message.userTo }}
+          <b-img v-if="message.userTo !== user.userName" :src="message.userFromPic" rounded="circle" width="40" class="img-cropped"></b-img>
         </router-link>
       </div>
     <div class="card-footer" :key="page">
