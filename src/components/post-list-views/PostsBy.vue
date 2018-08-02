@@ -1,6 +1,9 @@
 <template lang="html">
   <div class="card shadow">
-    <p class="card-header bg-dark text-white text-center">Flows By <strong>{{ author }}</strong></p>
+    <div class="card-header bg-dark text-white text-center">
+      Flows By <strong>{{ author }}</strong>
+      <router-link :to="{ name: 'Message', params: { user: author } }" class="btn btn-success btn-sm float-right">Contact <strong>{{ author }}</strong></router-link>
+    </div>
     <transition name="post" mode="out-in">
         <div class="list-group list-group-flush" :key="page">
           <router-link v-for="post in posts" :key="post._id" :to="{ name: 'ViewPost', params: { postId: post._id } }" class="list-group-item list-group-item-action flex-column align-items-start">
@@ -21,7 +24,6 @@
         </div>
       </transition>
     <div class="card-footer">
-      <router-link :to="{ name: 'Message', params: { user: author } }" class="btn btn-success btn-sm mt-2">Contact <strong>{{ author }}</strong> privately</router-link>
       <ul class="pagination pagination-sm float-right mt-2">
         <li class="page-item" :class="{ disabled: prevDisabled }"><button class="page-link" @click.prevent="previous">Previous</button></li>
         <li class="page-item disabled"><button class="page-link">{{ page }} of {{ totalPages }}</button></li>

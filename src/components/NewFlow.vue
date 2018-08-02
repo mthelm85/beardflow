@@ -17,7 +17,17 @@
             <label class="lead font-weight-bold mt-3" for="title">Title</label>
             <textarea v-model="title" class="form-control" rows="1" id="title" maxlength="70"></textarea>
             <div class="row mt-4">
-              <div class="col-6">
+              <div class="col">
+                <vue-uppy-cloudinary
+                  class="mb-3"
+                  :preset="cloudinary.preset"
+                  :cloudName="cloudinary.cloudName"
+                  maxNumberOfFiles="2"
+                  @uploaded="saveImgUrls"
+                  buttonText="Attach Images"
+                  buttonStyle="btn btn-dark">
+                </vue-uppy-cloudinary>
+                <br>
                 <b-img
                   thumbnail
                   rounded
@@ -34,16 +44,6 @@
                   width="100"
                   :src="imageUrls[1]">
                 </b-img>
-              </div>
-              <div class="col-6 my-auto">
-                <vue-uppy-cloudinary
-                  :preset="cloudinary.preset"
-                  :cloudName="cloudinary.cloudName"
-                  maxNumberOfFiles="2"
-                  @uploaded="saveImgUrls"
-                  buttonText="Attach Images"
-                  buttonStyle="btn btn-dark">
-                </vue-uppy-cloudinary>
               </div>
             </div>
             <label class="lead font-weight-bold mt-3 mb-3" for="text">Body</label>

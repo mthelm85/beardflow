@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import About from '@/components/About'
 import NavbarHome from '@/components/NavbarHome'
 import NavbarAuthed from '@/components/NavbarAuthed'
 import HomePage from '@/components/HomePage'
@@ -49,6 +50,15 @@ export default new Router({
       components: {
         navbar: NavbarHome,
         body: HomePage,
+        footer: Footer
+      }
+    },
+    {
+      path: '/about',
+      name: 'About',
+      components: {
+        navbar: NavbarHome,
+        body: About,
         footer: Footer
       }
     },
