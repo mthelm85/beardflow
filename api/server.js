@@ -38,7 +38,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(serveStatic("../client/dist"));
+app.use(serveStatic(__dirname + "/../dist"));
 
 require('./config/passport')(passport, User);
 require('./routes/routes.js')(app, passport, Post, User, Reply, Message, MessageReply);
