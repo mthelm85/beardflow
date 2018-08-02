@@ -19,7 +19,6 @@
     "body-parser": "^1.18.2",
     "bootstrap": "^4.1.1",
     "bootstrap-vue": "^2.0.0-rc.9",
-    "cloudinary": "^1.11.0",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "epic-spinners": "^1.0.3",

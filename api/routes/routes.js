@@ -1,4 +1,4 @@
-module.exports = (app, cloudinary, passport, Post, User, Reply, Message, MessageReply) => {
+module.exports = (app, passport, Post, User, Reply, Message, MessageReply) => {
 
   function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
