@@ -2,6 +2,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const express = require('express');
+const redirectToHTTPS = require('express-http-to-https').redirectToHTTPS;
+const nakedRedirect = require('express-naked-redirect');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
@@ -20,6 +22,8 @@ const MessageReply = require('./config/models/message-reply.js')
 
 mongoose.connect(configDB.url);
 
+app.use(redirectToHTTPS([/localhost:(\d{4})/], 301));
+app.use(nakedRedirect())
 app.use(logger('dev'));
 app.use(cookieParser());
 app.use(cors({
