@@ -23,7 +23,7 @@ const MessageReply = require('./config/models/message-reply.js')
 
 mongoose.connect(configDB.url);
 
-app.use(redirectToHTTPS([/localhost:(\d{4})/], 301));
+app.use(redirectToHTTPS([/localhost:(\d{4})/], [], 301));
 app.use(nakedRedirect());
 app.use(history());
 app.use(logger('dev'));
